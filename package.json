@@ -1,0 +1,16 @@
+{
+  "name": "mycel-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "mycel frontend monorepo",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf \"**/node_modules\"",
+    "fresh": "pnpm clean && pnpm i",
+    "nuke": "rimraf pnpm-lock.yaml && pnpm fresh"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.5"
+  }
+}
