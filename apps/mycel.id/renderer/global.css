@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --c-samon: #ff8aa0;
+  --c-trinidad: #ea5500;
+  --c-saffron: #fac03d;
+  --c-jade: #00ae6f;
+  --c-lochmara: #0077be;
+  --c-piano: #2c2929;
+  --c-smoke: #f6f2f2;
+}
+
+@layer base {
+  html,
+  body,
+  div#root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-white text-piano;
+  }
+
+  *,
+  *:focus,
+  *:hover {
+    outline: none;
+  }
+
+  ::selection {
+    background: var(--c-saffron);
+  }
+
+  .content {
+    @apply container max-w-lg mx-auto;
+  }
+}
+
+.bg-g {
+  background-image: url("../assets/bg-g1.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color:rgba(246,242,242,0.66);
+  background-blend-mode: lighten
+}
+
+.bg-noise {
+  background-image: url("../assets/noise.png");
+  background-repeat: repeat;
+}
+
+@layer components {
+  .btn {
+    @apply text-piano border-piano border rounded flex items-center justify-center hover:shadow-solid-xs;
+  }
+  .btn-solid {
+    @apply text-piano border-piano border shadow-solid-sm hover:shadow-solid rounded flex items-center justify-center;
+  }
+}
