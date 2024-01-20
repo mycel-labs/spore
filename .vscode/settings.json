@@ -1,0 +1,4 @@
+"jest.shell": {
+  "path": "/usr/bin/env",
+  "args": ["zsh", "--login"]
+}
