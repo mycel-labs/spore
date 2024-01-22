@@ -3,6 +3,8 @@ import SocialLink, { Links } from '~/components/SocialLink'
 import { BaseLayout } from '~/renderer/PageShell'
 import logo from '@/assets/logo.svg'
 import { Copy, Pencil } from 'lucide-react'
+import { useState } from 'react'
+import EditRecordDialog from '~/components/dialog/EditRecordDialog'
 
 const mockRecords: RecordProps[] = [
   {
@@ -46,6 +48,7 @@ const mockSocialLinks: Links[] = [
 ]
 
 export default function Page() {
+  const [isOpen, setIsOpen] = useState(false)
   return (
     <BaseLayout title="Edit Profile">
       <div className="md:grid md:grid-cols-12 flex flex-col gap-4 md:p-10 mt-4">
@@ -57,7 +60,10 @@ export default function Page() {
               className="md:w-48 md:h-48 w-40 h-40 rounded-full"
             />
             <div className="flex md:justify-end justify-center">
-              <button className="px-2 h-12 btn-solid bg-samon text-lg items-center gap-2">
+              <button
+                className="px-2 h-12 btn-solid bg-samon text-lg items-center gap-2"
+                onClick={() => setIsOpen((prev) => !prev)}
+              >
                 <span className="flex-1 text-center">Edit</span>
                 <Pencil />
               </button>
@@ -95,6 +101,7 @@ export default function Page() {
           </div>
         </div>
       </div>
+      {isOpen && <EditRecordDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
     </BaseLayout>
   )
 }

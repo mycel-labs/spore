@@ -13,8 +13,9 @@
     "server:prod": "cross-env NODE_ENV=production pnpm run server"
   },
   "dependencies": {
-    "@mycel/shared": "workspace:^",
     "@cloudflare/kv-asset-handler": "^0.3.0",
+    "@headlessui/react": "^1.7.18",
+    "@mycel/shared": "workspace:^",
     "@vitejs/plugin-react": "^4.2.1",
     "@xmtp/react-sdk": "^3.0.0",
     "compression": "^1.7.4",
