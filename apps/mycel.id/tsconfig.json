@@ -18,9 +18,8 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "~/*": ["./*"],
+      "@/*": ["../../packages/common/*"]
     }
   },
   "ts-node": {

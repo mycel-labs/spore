@@ -39,7 +39,7 @@
 }
 
 .bg-g {
-  background-image: url("../assets/bg-g1.png");
+  background-image: url("../../../packages/shared/assets/bg-g1.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-color:rgba(246,242,242,0.66);
@@ -47,7 +47,7 @@
 }
 
 .bg-noise {
-  background-image: url("../assets/noise.png");
+  background-image: url("../../../packages/shared/assets/noise.png");
   background-repeat: repeat;
 }
 

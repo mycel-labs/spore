@@ -1,4 +1,4 @@
-import { BaseLayout } from '@/renderer/PageShell'
+import { BaseLayout } from '~/renderer/PageShell'
 
 export default function Page() {
   return (

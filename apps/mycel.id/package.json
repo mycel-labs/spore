@@ -13,12 +13,14 @@
     "server:prod": "cross-env NODE_ENV=production pnpm run server"
   },
   "dependencies": {
+    "@mycel/shared": "workspace:^",
     "@cloudflare/kv-asset-handler": "^0.3.0",
     "@vitejs/plugin-react": "^4.2.1",
     "@xmtp/react-sdk": "^3.0.0",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
+    "intmax-widget": "^0.1.3",
     "lucide-react": "^0.303.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
