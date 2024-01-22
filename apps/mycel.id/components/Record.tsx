@@ -5,7 +5,7 @@ export type RecordProps = {
 }
 export default function Record(props: RecordProps) {
   return (
-    <div className="bg-gray-200 flex md:flex-row flex-col justify-between items-center gap-2 w-max p-2 mb-2">
+    <div className="bg-gray-200 flex md:flex-row flex-col justify-between items-center gap-2 w-max p-2 mb-4 rounded">
       <p className="text-lg font-semibold">{props.recordType}</p>
       <div className="flex flex-row">
         <p className="w-max">{props.value}</p>
