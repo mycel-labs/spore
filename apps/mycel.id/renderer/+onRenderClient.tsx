@@ -2,7 +2,7 @@
 export { onRenderClient }
 
 import { hydrateRoot } from 'react-dom/client'
-import { PageShell } from '@/renderer/PageShell'
+import { PageShell } from '~/renderer/PageShell'
 import type { OnRenderClientAsync } from 'vike/types'
 
 // This onRenderClient() hook only supports SSR, see https://vike.dev/render-modes for how to modify onRenderClient()

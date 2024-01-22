@@ -1,4 +1,4 @@
-import { BaseLayout } from '@/renderer/PageShell'
+import { BaseLayout } from '~/renderer/PageShell'
 import { ChevronRight, UserCog, LogOut, FileSignature } from 'lucide-react'
 
 const MENU_ITEMS = [
@@ -25,9 +25,9 @@ export default function Page() {
   )
 }
 
-const ListItem = ({item}: {item: any}) => (
+const ListItem = ({item}: {item: any　}) => (
   <li className="border-b border-piano">
-    <a href={item.href} className="flex items-center px-5 py-5 content hover:bg-black/5">
+    <a href={item.href} className="fl items-center px-5 py-5 content hover:bg-black/5">
       <div className="flex-1 flex items-center">
         <span className="mr-4 text-trinidad">{item.icon}</span>
         {item.text}

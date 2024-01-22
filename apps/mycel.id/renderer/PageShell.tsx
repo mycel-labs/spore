@@ -1,8 +1,8 @@
 import React from 'react'
-import { PageContextProvider } from '@/renderer/usePageContext'
+import { PageContextProvider } from '~/renderer/usePageContext'
 import type { PageContext } from 'vike/types'
-import '@/renderer/global.css'
-import NavMenu from "@/components/NavMenu"
+import '~/renderer/global.css'
+import NavMenu from "~/components/NavMenu"
 import { ChevronLeft } from 'lucide-react'
 
 export { PageShell, FullLayout, BaseLayout }

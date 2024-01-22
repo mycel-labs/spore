@@ -6,7 +6,8 @@ import { UserConfig } from 'vite'
 const config: UserConfig = {
   resolve: {
     alias: {
-      '@/': `${__dirname}/`
+      '~/': `${__dirname}/`,
+      '@/': `@mycel/shared/`,
     },
   },
   plugins: [

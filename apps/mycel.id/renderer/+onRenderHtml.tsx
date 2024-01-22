@@ -3,7 +3,7 @@ export { onRenderHtml }
 
 import ReactDOMServer from 'react-dom/server'
 import { escapeInject, dangerouslySkipEscape } from 'vike/server'
-import { PageShell } from '@/renderer/PageShell'
+import { PageShell } from '~/renderer/PageShell'
 import logoUrl from '@/assets/logo.svg'
 import appleTouchIconUrl from '@/assets/icons/apple-touch-icon-180x180.png'
 import maskIconUrl from '@/assets/icons/maskable-icon-512x512.png'
