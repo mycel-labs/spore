@@ -1,6 +1,6 @@
-import Record, { RecordProps } from '@/components/Record'
-import SocialLink, { Links } from '@/components/SocialLink'
-import { BaseLayout } from '@/renderer/PageShell'
+import Record, { RecordProps } from '~/components/Record'
+import SocialLink, { Links } from '~/components/SocialLink'
+import { BaseLayout } from '~/renderer/PageShell'
 import logo from '@/assets/logo.svg'
 
 const mockRecords: RecordProps[] = [
