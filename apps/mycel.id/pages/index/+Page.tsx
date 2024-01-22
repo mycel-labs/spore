@@ -1,6 +1,6 @@
 import logo from '@/assets/logo.svg'
 // import usecaseImg from '@/assets/usecases.png'
-import { FullLayout } from '@/renderer/PageShell'
+import { FullLayout } from '~/renderer/PageShell'
 
 export default function Page() {
   return (

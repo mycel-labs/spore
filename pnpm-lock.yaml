@@ -23,6 +23,9 @@ importers:
       '@cloudflare/kv-asset-handler':
         specifier: ^0.3.0
         version: 0.3.1
+      '@mycel/shared':
+        specifier: workspace:^
+        version: link:../../packages/shared
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.11)
@@ -38,6 +41,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.18.2
+      intmax-widget:
+        specifier: ^0.1.3
+        version: 0.1.3
       lucide-react:
         specifier: ^0.303.0
         version: 0.303.0(react@18.2.0)
@@ -120,6 +126,21 @@ importers:
       wrangler:
         specifier: ^3.22.3
         version: 3.23.0
+
+  packages/shared:
+    devDependencies:
+      autoprefixer:
+        specifier: ^10.4.16
+        version: 10.4.17(postcss@8.4.33)
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.0
+      tailwind-merge:
+        specifier: ^2.2.0
+        version: 2.2.0
+      tailwindcss:
+        specifier: ^3.4.0
+        version: 3.4.1(ts-node@10.9.2)
 
 packages:
 
@@ -4407,6 +4428,10 @@ packages:
       hasown: 2.0.0
       side-channel: 1.0.4
     dev: true
+
+  /intmax-widget@0.1.3:
+    resolution: {integrity: sha512-/JhgClgixPi63QB+udAxUpwUdM24OYstx7M6cRarGgMouXWUj/d5akQldFh4YdHbbVHJ6Nm8J8RFGQrWo0l27A==}
+    dev: false
 
   /ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}

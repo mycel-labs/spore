@@ -1,7 +1,7 @@
-import { BaseLayout } from '@/renderer/PageShell'
-import SoonTm from '@/components/SoonTm'
+import { BaseLayout } from '~/renderer/PageShell'
+import SoonTm from '~/components/SoonTm'
 import { ChevronRight } from 'lucide-react'
-import { usePageContext } from '@/renderer/usePageContext'
+import { usePageContext } from '~/renderer/usePageContext'
 
 export default function Page() {
   const { urlPathname } = usePageContext()

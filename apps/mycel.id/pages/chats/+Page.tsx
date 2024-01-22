@@ -1,5 +1,5 @@
-import { BaseLayout } from '@/renderer/PageShell'
-import SoonTm from '@/components/SoonTm'
+import { BaseLayout } from '~/renderer/PageShell'
+import SoonTm from '~/components/SoonTm'
 import { ChevronRight } from 'lucide-react'
 
 export default function Page() {
