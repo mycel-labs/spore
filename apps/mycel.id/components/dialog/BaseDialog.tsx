@@ -1,14 +1,16 @@
 import { Dialog } from '@headlessui/react'
 
+type DialogProps = {
+  isOpen: boolean
+  setIsOpen: (isOpen: boolean) => void
+  children: React.ReactNode
+}
+
 export default function BaseDialog({
   isOpen,
   setIsOpen,
   children,
-}: {
-  isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
-  children: React.ReactNode
-}) {
+}: DialogProps) {
   return (
     <Dialog
       open={isOpen}
@@ -19,7 +21,17 @@ export default function BaseDialog({
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
         <Dialog.Panel className="w-full max-w-xl rounded bg-white p-4 gap-2">
           {children}
-
+          <div className="flex flex-row justify-between">
+            <button
+              className="px-2 h-12 btn-solid bg-gray-100 text-lg items-center gap-2"
+              onClick={() => setIsOpen(false)}
+            >
+              Cancel
+            </button>
+            <button className="px-2 h-12 btn-solid bg-samon text-lg items-center gap-2">
+              Confirm
+            </button>
+          </div>
         </Dialog.Panel>
       </div>
     </Dialog>
