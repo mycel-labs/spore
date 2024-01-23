@@ -1,11 +1,12 @@
-import Record, { RecordProps } from '~/components/Record'
-import SocialLink, { Links } from '~/components/SocialLink'
-import logo from '@/assets/logo.svg'
-import { ArrowLeft, Copy, Pencil, Plus } from 'lucide-react'
 import { useState } from 'react'
+import Record, { RecordProps } from '~/components/Record'
+import SocialLink from '~/components/SocialLink'
+import logo from '@/assets/logo.svg'
+import { ArrowLeft, Pencil, Plus } from 'lucide-react'
 import EditBioDialog from '~/components/dialog/EditBioDialog'
 import SocialDialog from '~/components/dialog/SocialDialog'
 import { MockSocials } from '~/public/Socials'
+import AddressBoard from '~/components/AddressBoard'
 
 const mockRecords: RecordProps[] = [
   {
@@ -47,10 +48,10 @@ export default function Page() {
               className="md:w-48 md:h-48 w-40 h-40 rounded-full"
             />
           </div>
+          {/* TODO: should be passed proper value from previous page */}
           <h1 className="text-4xl font-bold">mycel.id</h1>
           <div className="flex flex-row  items-center bg-gray-200 rounded w-max p-1 justify-between">
-            <p className="text-lg font-semibold">{'mycel123...456'}</p>
-            <Copy className="w-10 cursor-pointer" />
+            <AddressBoard address="mycel...kqww" />
           </div>
           <div>
             <div className="flex flex-row items-center justify-between">
