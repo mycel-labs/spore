@@ -17,6 +17,7 @@ export default function SocialDialog({
   const [selected, setSelected] = useState(Socials[0])
   const [username, setUsername] = useState('')
   function handleClick() {
+    if (username === '') return alert('Username cannot be empty')
     setSocials({ ...selected, id: username })
     setIsOpen(false)
   }
@@ -24,7 +25,7 @@ export default function SocialDialog({
     setUsername(e.target.value)
   }
   return (
-    <BaseDialog isOpen={isOpen} setIsOpen={setIsOpen} handleClick={handleClick}>
+    <BaseDialog isOpen={isOpen} setIsOpen={setIsOpen}>
       <div className="flex flex-col gap-2">
         <Dialog.Title className="text-lg font-semibold">
           Add Social Link
@@ -49,6 +50,20 @@ export default function SocialDialog({
               className="w-full text-sm bg-gray-100 rounded-l px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
+        </div>
+        <div className="flex flex-row justify-between">
+          <button
+            className="px-2 h-12 btn-solid bg-gray-100 text-lg items-center gap-2"
+            onClick={() => setIsOpen(false)}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-2 h-12 btn-solid bg-samon text-lg items-center gap-2"
+            onClick={() => handleClick()}
+          >
+            Confirm
+          </button>
         </div>
       </div>
     </BaseDialog>
