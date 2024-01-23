@@ -1,7 +1,7 @@
 import BaseDialog from './BaseDialog'
 import { Dialog } from '@headlessui/react'
 
-export default function EditRecordDialog({
+export default function EditBioDialog({
   isOpen,
   setIsOpen,
 }: {
@@ -10,9 +10,7 @@ export default function EditRecordDialog({
 }) {
   return (
     <BaseDialog isOpen={isOpen} setIsOpen={setIsOpen}>
-      <Dialog.Title className="text-lg font-semibold">
-        Edit Profile
-      </Dialog.Title>
+      <Dialog.Title className="text-lg font-semibold">Edit Bio</Dialog.Title>
     </BaseDialog>
   )
 }
