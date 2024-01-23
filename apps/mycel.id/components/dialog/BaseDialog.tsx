@@ -4,12 +4,14 @@ type DialogProps = {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   children: React.ReactNode
+  handleClick: () => void
 }
 
 export default function BaseDialog({
   isOpen,
   setIsOpen,
   children,
+  handleClick,
 }: DialogProps) {
   return (
     <Dialog
@@ -28,7 +30,10 @@ export default function BaseDialog({
             >
               Cancel
             </button>
-            <button className="px-2 h-12 btn-solid bg-samon text-lg items-center gap-2">
+            <button
+              className="px-2 h-12 btn-solid bg-samon text-lg items-center gap-2"
+              onClick={() => handleClick()}
+            >
               Confirm
             </button>
           </div>

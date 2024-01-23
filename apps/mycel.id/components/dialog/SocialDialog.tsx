@@ -3,17 +3,28 @@ import SelectSocial from '../select/SelectSocial'
 import BaseDialog from './BaseDialog'
 import { Dialog } from '@headlessui/react'
 import { Socials } from '~/public/Socials'
+import { Links } from '../SocialLink'
 
 export default function SocialDialog({
   isOpen,
   setIsOpen,
+  setSocials,
 }: {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
+  setSocials: (socials: Links) => void
 }) {
   const [selected, setSelected] = useState(Socials[0])
+  const [username, setUsername] = useState('')
+  function handleClick() {
+    setSocials({ ...selected, id: username })
+    setIsOpen(false)
+  }
+  function handleUsername(e: React.ChangeEvent<HTMLInputElement>) {
+    setUsername(e.target.value)
+  }
   return (
-    <BaseDialog isOpen={isOpen} setIsOpen={setIsOpen}>
+    <BaseDialog isOpen={isOpen} setIsOpen={setIsOpen} handleClick={handleClick}>
       <div className="flex flex-col gap-2">
         <Dialog.Title className="text-lg font-semibold">
           Add Social Link
@@ -34,6 +45,7 @@ export default function SocialDialog({
             <input
               type="text"
               placeholder="@username"
+              onChange={handleUsername}
               className="w-full text-sm bg-gray-100 rounded-l px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>

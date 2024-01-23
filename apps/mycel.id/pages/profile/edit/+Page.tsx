@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Record, { RecordProps } from '~/components/Record'
-import SocialLink from '~/components/SocialLink'
+import SocialLink, { Links } from '~/components/SocialLink'
 import logo from '@/assets/logo.svg'
 import { ArrowLeft, Pencil, Plus } from 'lucide-react'
 import EditBioDialog from '~/components/dialog/EditBioDialog'
 import SocialDialog from '~/components/dialog/SocialDialog'
-import { MockSocials } from '~/public/Socials'
 import AddressBoard from '~/components/AddressBoard'
+import { useAllRecords, useDomainOwnership } from '@/hooks/useMycel'
+import { MockSocials } from '~/public/Socials'
 
 const mockRecords: RecordProps[] = [
   {
@@ -23,15 +24,35 @@ const mockRecords: RecordProps[] = [
   },
 ]
 
+function backBrowser() {
+  if (confirm('Are you sure you want to go back?')) {
+    window.history.back()
+  } else {
+    return
+  }
+}
+
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)
   const [isSocialOpen, setIsSocialOpen] = useState(false)
+  const [socials, setSocials] = useState<Links[]>([])
+
+  function addSocial(social: Links) {
+    setSocials([...socials, social])
+  }
+  // const socials = MockSocials
+  function removeSocial(id: string) {
+    setSocials(socials.filter((social) => social.id !== id))
+  }
+
+  // const { data: records } = useAllRecords()
+
   return (
     <main className="md:px-20 md:py-12">
       <div className="px-10 mb-5">
         <button
           className="px-10 h-12 btn-solid bg-gray-100 text-lg items-center gap-2"
-          onClick={() => window.history.back()}
+          onClick={() => backBrowser()}
         >
           <span>
             <ArrowLeft />
@@ -76,11 +97,15 @@ export default function Page() {
           <div>
             <h1 className="text-xl font-bold mb-2">Social Links</h1>
             <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-4">
-              {MockSocials.map((link, index) => (
-                <SocialLink key={index} {...link} />
+              {socials.map((social, index) => (
+                <SocialLink
+                  key={index}
+                  Link={social}
+                  removeSocial={removeSocial}
+                />
               ))}
               <div
-                className="bg-gray-100 flex items-center justify-center h-full cursor-pointer"
+                className="bg-gray-100 flex items-center h-36 w-36 cursor-pointer"
                 onClick={() => setIsSocialOpen((prev) => !prev)}
               >
                 <Plus className="mx-auto" />
@@ -97,7 +122,11 @@ export default function Page() {
       </div>
       {isOpen && <EditBioDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
       {isSocialOpen && (
-        <SocialDialog isOpen={isSocialOpen} setIsOpen={setIsSocialOpen} />
+        <SocialDialog
+          isOpen={isSocialOpen}
+          setIsOpen={setIsSocialOpen}
+          setSocials={addSocial}
+        />
       )}
     </main>
   )
