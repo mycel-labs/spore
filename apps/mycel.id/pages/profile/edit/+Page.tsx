@@ -2,9 +2,11 @@ import Record, { RecordProps } from '~/components/Record'
 import SocialLink, { Links } from '~/components/SocialLink'
 import { BaseLayout } from '~/renderer/PageShell'
 import logo from '@/assets/logo.svg'
-import { Copy, Pencil } from 'lucide-react'
+import { Copy, Pencil, Plus } from 'lucide-react'
 import { useState } from 'react'
 import EditRecordDialog from '~/components/dialog/EditRecordDialog'
+import SocialDialog from '~/components/dialog/SocialDialog'
+import { MockSocials } from '~/public/Socials'
 
 const mockRecords: RecordProps[] = [
   {
@@ -20,35 +22,10 @@ const mockRecords: RecordProps[] = [
     value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
   },
 ]
-const mockSocialLinks: Links[] = [
-  {
-    link: 'https://github.com/mycel-domain',
-    icon: logo,
-    app: 'mycel.id',
-    id: 'user.cel',
-  },
-  {
-    link: 'https://github.com/mycel-domain',
-    icon: logo,
-    app: 'mycel.id',
-    id: 'user.cel',
-  },
-  {
-    link: 'https://github.com/mycel-domain',
-    icon: logo,
-    app: 'mycel.id',
-    id: 'user.cel',
-  },
-  {
-    link: 'https://github.com/mycel-domain',
-    icon: logo,
-    app: 'mycel.id',
-    id: 'user.cel',
-  },
-]
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isSocialOpen, setIsSocialOpen] = useState(false)
   return (
     <BaseLayout title="Edit Profile">
       <div className="md:grid md:grid-cols-12 flex flex-col gap-4 md:p-10 mt-4">
@@ -88,9 +65,15 @@ export default function Page() {
           <div>
             <h1 className="text-xl font-bold mb-2">Social Links</h1>
             <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-4">
-              {mockSocialLinks.map((link, index) => (
+              {MockSocials.map((link, index) => (
                 <SocialLink key={index} {...link} />
               ))}
+              <div
+                className="bg-gray-100 flex items-center justify-center h-full cursor-pointer"
+                onClick={() => setIsSocialOpen((prev) => !prev)}
+              >
+                <Plus className="mx-auto" />
+              </div>
             </div>
           </div>
           <div>
@@ -102,6 +85,9 @@ export default function Page() {
         </div>
       </div>
       {isOpen && <EditRecordDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {isSocialOpen && (
+        <SocialDialog isOpen={isSocialOpen} setIsOpen={setIsSocialOpen} />
+      )}
     </BaseLayout>
   )
 }

@@ -1,4 +1,6 @@
-export type Links = {
+import { Social } from '~/public/Socials'
+
+export interface Links extends Social {
   link: string
   icon: string
   app: string
@@ -7,14 +9,14 @@ export type Links = {
 export default function SocialLink(props: Links) {
   return (
     <a
-      href={props.link || 'https://github.com/mycel-domain'}
+      href={props.link + props.id}
       target="_blank"
       rel="noopener noreferrer"
       className="flex flex-col items-start gap-2 mb-2 p-4 bg-gray-100 hover:bg-gray-200 border rounded shadow-solid cursor-pointer"
     >
-      <img src={props.icon} width={50} height={50} alt="appLogo" />
-      <p className="text-lg font-bold">{props.app || 'mycel.id'}</p>
-      <p className="text-sm font-medium">{props.id || 'user.cel'}</p>
+      <img src={props.icon} width={40} height={40} alt="appLogo" />
+      <p className="text-lg font-semibold">{props.app}</p>
+      <p className="text-sm font-medium">{props.id}</p>
     </a>
   )
 }
