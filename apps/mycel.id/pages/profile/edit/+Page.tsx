@@ -8,6 +8,7 @@ import SocialDialog from '~/components/dialog/SocialDialog'
 import AddressBoard from '~/components/AddressBoard'
 import { useAllRecords, useDomainOwnership } from '@/hooks/useMycel'
 import { MockSocials } from '~/public/Socials'
+import BackBrowser from '~/components/BackBrowser'
 
 const mockRecords: RecordProps[] = [
   {
@@ -23,14 +24,6 @@ const mockRecords: RecordProps[] = [
     value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
   },
 ]
-
-function backBrowser() {
-  if (confirm('Are you sure you want to go back?')) {
-    window.history.back()
-  } else {
-    return
-  }
-}
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)
@@ -48,17 +41,9 @@ export default function Page() {
   // const { data: records } = useAllRecords()
 
   return (
-    <main className="md:px-20 md:py-12">
+    <main className="md:px-20 md:py-12 h-screen bg-smoke">
       <div className="px-10 mb-5">
-        <button
-          className="px-10 h-12 btn-solid bg-gray-100 text-lg items-center gap-2"
-          onClick={() => backBrowser()}
-        >
-          <span>
-            <ArrowLeft />
-          </span>
-          <span className="text-center font-semibold">Back</span>
-        </button>
+        <BackBrowser />
       </div>
       <div className="md:grid md:grid-cols-12 flex flex-col gap-4">
         <div className="md:col-span-4 px-10 flex flex-col gap-4">
@@ -78,7 +63,7 @@ export default function Page() {
             <div className="flex flex-row items-center justify-between">
               <p className="text-xl font-bold">Bio</p>
               <button
-                className="px-2 h-10 w-10 btn-solid bg-samon text-lg items-center gap-2"
+                className="px-2 h-10 w-10 btn-solid bg-saffron text-lg items-center gap-2"
                 onClick={() => setIsOpen((prev) => !prev)}
               >
                 {/* <span className="flex-1 text-center">Edit</span> */}
@@ -105,7 +90,7 @@ export default function Page() {
                 />
               ))}
               <div
-                className="bg-gray-100 flex items-center h-36 w-36 cursor-pointer"
+                className="bg-gray-200 flex items-center h-36 w-36 cursor-pointer"
                 onClick={() => setIsSocialOpen((prev) => !prev)}
               >
                 <Plus className="mx-auto" />
