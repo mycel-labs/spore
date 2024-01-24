@@ -56,7 +56,7 @@ export default function Page() {
           </div>
           {/* TODO: should be passed proper value from previous page */}
           <h1 className="text-4xl font-bold">mycel.id</h1>
-          <div className="flex flex-row  items-center bg-gray-200 rounded w-max p-1 justify-between">
+          <div className=" bg-white rounded w-max p-2 justify-between">
             <AddressBoard address="mycel...kqww" />
           </div>
           <div>

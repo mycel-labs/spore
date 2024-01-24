@@ -38,16 +38,18 @@ export default function SocialDialog({
               Socials={Socials}
             />
           </div>
-          <h2 className="text-sm font-medium leading-6 text-gray-900">Link</h2>
-          <div className="flex flex-row items-center rounded mb-2">
-            <span className="px-2 py-1 bg-gray-100 rounded-l text-sm">
+          <h2 className="text-sm font-semibold leading-6 text-gray-900">
+            Link
+          </h2>
+          <div className="flex flex-row items-center rounded px-2 h-12 mb-2 bg-gray-100">
+            <span className="rounded-l text-medium bg-gray-100">
               {selected.link}
             </span>
             <input
               type="text"
               placeholder="@username"
               onChange={handleUsername}
-              className="w-full text-sm bg-gray-100 rounded-l px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full text-medium rounded-l p-1 bg-gray-100"
             />
           </div>
         </div>

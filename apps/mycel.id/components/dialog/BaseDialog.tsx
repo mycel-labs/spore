@@ -19,7 +19,7 @@ export default function BaseDialog({
     >
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <Dialog.Panel className="w-full max-w-xl rounded bg-white p-4 gap-2">
+        <Dialog.Panel className="w-full max-w-lg rounded bg-white p-4 gap-2">
           {children}
         </Dialog.Panel>
       </div>
