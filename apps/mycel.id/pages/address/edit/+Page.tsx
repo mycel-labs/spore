@@ -1,21 +1,41 @@
 import { FileStack, Pencil } from 'lucide-react'
 import { useState } from 'react'
 import BackBrowser from '~/components/BackBrowser'
+import EditRecordDialog from '~/components/dialog/EditRecordDialog'
+import UpdateRecordDialog from '~/components/dialog/UpdateRecordDialog'
 
 export default function EditAddressRecord() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isUpdateRecordOpen, setIsUpdateRecordOpen] = useState(false)
+  const [selectedRecord, setSelectedRecord] = useState(undefined)
+  function handleClick(record: any) {
+    setIsUpdateRecordOpen(true)
+    setSelectedRecord(record)
+  }
   return (
     <main className="px-20 py-12 bg-smoke h-screen">
       <div className="px-10 mb-10">
         <BackBrowser />
       </div>
       <div className="px-10 flex flex-col">
-        <h3 className="text-xl text-black font-semibold py-2 px-1 flex items-center border-b-2 border-black mb-4">
-          <FileStack className="opacity-70 mr-2" size={24} />
-          Records
-        </h3>
-
-        <div className="relative overflow-x-auto shadow-solid rounded">
+        <div className="items-center border-b-2 border-black mb-4 flex justify-between flex-row">
+          <div className="flex flex-row items-center py-2">
+            <FileStack className="opacity-70 mr-2" size={24} />
+            <h3 className="text-xl text-black font-semibold">Records</h3>
+          </div>
+          <span className="py-2">
+            <button
+              className="p-2 btn-solid bg-samon text-lg items-center gap-2"
+              onClick={() => setIsOpen((prev) => !prev)}
+            >
+              <span className="flex-1 text-center text-lg font-semibold">
+                Add Records
+              </span>
+              <Pencil />
+            </button>
+          </span>
+        </div>
+        <div className="relative overflow-x-auto shadow-solid border rounded">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
               <tr>
@@ -51,8 +71,8 @@ export default function EditAddressRecord() {
                           </td>
                           <td className="px-6 py-4 text-right">
                             <button
-                              className="table-row px-2 h-10 w-10 btn-solid bg-saffron text-lg items-center gap-2"
-                              onClick={() => setIsOpen((prev) => !prev)}
+                              className=" px-2 h-10 w-10 btn-solid bg-saffron text-lg items-center gap-2"
+                              onClick={() => handleClick(record.walletRecord)}
                             >
                               <Pencil />
                             </button>
@@ -75,8 +95,8 @@ export default function EditAddressRecord() {
                           </td>
                           <td className="px-6 py-4 text-right">
                             <button
-                              className="table-row px-2 h-10 w-10 btn-solid bg-saffron text-lg items-center gap-2"
-                              onClick={() => setIsOpen((prev) => !prev)}
+                              className=" px-2 h-10 w-10 btn-solid bg-saffron text-lg items-center gap-2"
+                              onClick={() => handleClick(record.dnsRecord)}
                             >
                               <Pencil />
                             </button>
@@ -97,8 +117,8 @@ export default function EditAddressRecord() {
                           <td className="px-6 py-4">{record.metadata.value}</td>
                           <td className="px-6 py-4 text-right">
                             <button
-                              className="table-row px-2 h-10 w-10 btn-solid bg-saffron text-lg items-center gap-2"
-                              onClick={() => setIsOpen((prev) => !prev)}
+                              className=" px-2 h-10 w-10 btn-solid bg-saffron text-lg items-center gap-2"
+                              onClick={() => handleClick(record.metadata)}
                             >
                               <Pencil />
                             </button>
@@ -111,6 +131,14 @@ export default function EditAddressRecord() {
             </tbody>
           </table>
         </div>
+        {isUpdateRecordOpen && (
+          <UpdateRecordDialog
+            isOpen={isUpdateRecordOpen}
+            setIsOpen={setIsUpdateRecordOpen}
+            record={selectedRecord}
+          />
+        )}
+        {isOpen && <EditRecordDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
       </div>
     </main>
   )
@@ -122,28 +150,6 @@ const mycelRecords = {
     walletRecord: {
       walletRecordType: 'ETHEREUM_TESTNET_SEPOLIA',
       value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
-    },
-    dnsRecord: {
-      dnsRecordType: 'Type2',
-      value: 'Value2',
-    },
-    metadata: {
-      key: 'Key1',
-      value: 'Value3',
-    },
-  },
-  2: {
-    walletRecord: {
-      walletRecordType: 'ETHEREUM_TESTNET_SEPOLIA',
-      value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
-    },
-    dnsRecord: {
-      dnsRecordType: 'Type4',
-      value: 'Value5',
-    },
-    metadata: {
-      key: 'Key2',
-      value: 'Value6',
     },
   },
 }

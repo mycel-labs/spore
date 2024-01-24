@@ -4,8 +4,7 @@ import { Copy } from 'lucide-react'
 export default function AddressBoard({ address }: { address: string }) {
   return (
     <div className="flex flex-row">
-      <p className="w-max">{address}</p>
-      {/* TODO: copy to clipboard */}
+      <p className="w-max text-right">{address}</p>
       <Copy
         className="w-10 cursor-pointer"
         onClick={() => copyClipboard(address)}
