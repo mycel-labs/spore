@@ -7,7 +7,7 @@ import EditBioDialog from '~/components/dialog/EditBioDialog'
 import SocialDialog from '~/components/dialog/SocialDialog'
 import AddressBoard from '~/components/AddressBoard'
 import { useAllRecords, useDomainOwnership } from '@/hooks/useMycel'
-import { MockSocials } from '~/public/Socials'
+import { MockSocials } from '~/lib/social/utils'
 import BackBrowser from '~/components/BackBrowser'
 
 const mockRecords: RecordProps[] = [

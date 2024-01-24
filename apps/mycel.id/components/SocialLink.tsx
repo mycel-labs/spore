@@ -1,5 +1,5 @@
 import { Trash2 } from 'lucide-react'
-import { Social } from '~/public/Socials'
+import { Social } from '~/lib/social/utils'
 
 export interface Links extends Social {
   link: string

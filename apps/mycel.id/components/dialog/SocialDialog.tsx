@@ -2,7 +2,7 @@ import { useState } from 'react'
 import SelectSocial from '../select/SelectSocial'
 import BaseDialog from './BaseDialog'
 import { Dialog } from '@headlessui/react'
-import { Socials } from '~/public/Socials'
+import { Socials } from '~/lib/social/utils'
 import { Links } from '../SocialLink'
 
 export default function SocialDialog({

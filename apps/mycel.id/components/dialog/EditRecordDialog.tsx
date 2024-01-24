@@ -6,7 +6,7 @@ import { Dialog } from '@headlessui/react'
 import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, ChevronsUpDown } from 'lucide-react'
-import { Network, Networks } from '~/lib/utils'
+import { Network, Networks } from '~/lib/token/utils'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')

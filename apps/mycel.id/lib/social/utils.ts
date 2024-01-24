@@ -1,8 +1,8 @@
-import TwitterLogo from './socialLogo/logo-black.png'
-import FacebookLogo from './socialLogo/facebookLogo.png'
-import GithubLogo from './socialLogo/github-mark.svg'
-import LinkedinLogo from './socialLogo/linkedinLogo.png'
-import InstagramLogo from './socialLogo/instagramLogo.svg'
+import TwitterLogo from './logo-black.png'
+import FacebookLogo from './facebookLogo.png'
+import GithubLogo from './github-mark.svg'
+import LinkedinLogo from './linkedinLogo.png'
+import InstagramLogo from './instagramLogo.svg'
 import { Links } from '~/components/SocialLink'
 
 export interface Social {
