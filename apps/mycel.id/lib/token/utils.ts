@@ -1,6 +1,7 @@
 import BitcoinIcon from './bitcoin-btc-logo.svg'
 import EthereumIcon from './ethereum-eth-logo.svg'
 import PolygonIcon from './polygon-matic-logo.svg'
+
 export type Network = {
   networkType: string
   id: number

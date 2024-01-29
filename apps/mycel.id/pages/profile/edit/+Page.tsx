@@ -6,8 +6,7 @@ import { ArrowLeft, Pencil, Plus } from 'lucide-react'
 import EditBioDialog from '~/components/dialog/EditBioDialog'
 import SocialDialog from '~/components/dialog/SocialDialog'
 import AddressBoard from '~/components/AddressBoard'
-import { useAllRecords, useDomainOwnership } from '@/hooks/useMycel'
-import { MockSocials } from '~/lib/social/utils'
+import { useAllRecords } from '../../../../../packages/shared/hooks/useMycel'
 import BackBrowser from '~/components/BackBrowser'
 
 const mockRecords: RecordProps[] = [
@@ -38,7 +37,11 @@ export default function Page() {
     setSocials(socials.filter((social) => social.id !== id))
   }
 
-  // const { data: records } = useAllRecords()
+  const { data: records } = useAllRecords({
+    name: 'shutanaka',
+    parent: 'cel',
+  })
+  console.log('Records: ', records)
 
   return (
     <main className="md:px-20 md:py-12 h-screen bg-smoke">
