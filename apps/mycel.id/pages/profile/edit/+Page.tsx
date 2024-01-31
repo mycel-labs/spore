@@ -8,12 +8,15 @@ import SocialDialog from '~/components/dialog/SocialDialog'
 import AddressBoard from '~/components/AddressBoard'
 import BackBrowser from '~/components/BackBrowser'
 import { fetchAllRecords } from '~/utils/fetch'
+import { RegistryRecord } from 'mycel-client-ts/mycel.resolver/rest'
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)
   const [isSocialOpen, setIsSocialOpen] = useState(false)
   const [socials, setSocials] = useState<Links[]>([])
-  const [mycelRecords, setMycelRecords] = useState(undefined)
+  const [mycelRecords, setMycelRecords] = useState<
+    RegistryRecord[] | undefined
+  >(undefined)
 
   function addSocial(social: Links) {
     setSocials([...socials, social])

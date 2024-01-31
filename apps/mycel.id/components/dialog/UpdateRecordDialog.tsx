@@ -2,12 +2,9 @@ import React, { useState } from 'react'
 import BaseDialog from './BaseDialog'
 import { Dialog } from '@headlessui/react'
 import { RegistryRecord } from 'mycel-client-ts/mycel.resolver/rest'
-import { Domain } from '~/types/domain'
 
 export interface EditRecordDialogProps {
-  domain: Domain
   records: Record<string, RegistryRecord> | undefined
-  address: string
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
 }
@@ -17,7 +14,6 @@ export default function EditRecordDialog(props: EditRecordDialogProps) {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setNewRecord(e.target.value)
   }
-  console.log('records', props.records)
   // TODO: update record
   // check if address is valid
   async function updateRecord() {
@@ -42,7 +38,7 @@ export default function EditRecordDialog(props: EditRecordDialogProps) {
           <input
             type="text"
             className="px-2 h-12 btn-solid bg-gray-100 text-lg items-center gap-2"
-            value={props.record?.value}
+            value={props.records?.value as string}
             disabled
           />
         </div>

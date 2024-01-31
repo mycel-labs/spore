@@ -3,16 +3,19 @@ import { useEffect, useState } from 'react'
 import BackBrowser from '~/components/BackBrowser'
 import EditRecordDialog from '~/components/dialog/EditRecordDialog'
 import UpdateRecordDialog from '~/components/dialog/UpdateRecordDialog'
-import { DnsRecordType } from 'mycel-client-ts/mycel.registry/types/mycel/registry/dns_record'
-import { NetworkName } from 'mycel-client-ts/mycel.registry/types/mycel/registry/network_name'
 import { RegistryRecord } from 'mycel-client-ts/mycel.resolver/rest'
 import { fetchAllRecords } from '~/utils/fetch'
 
 export default function EditAddressRecord() {
   const [isOpen, setIsOpen] = useState(false)
   const [isUpdateRecordOpen, setIsUpdateRecordOpen] = useState(false)
-  const [selectedRecord, setSelectedRecord] = useState(undefined)
-  const [mycelRecords, setMycelRecords] = useState(undefined)
+  const [selectedRecord, setSelectedRecord] = useState<
+    Record<string, RegistryRecord> | undefined
+  >(undefined)
+
+  const [mycelRecords, setMycelRecords] = useState<
+    RegistryRecord[] | undefined
+  >(undefined)
   function handleClick(record: any) {
     setIsUpdateRecordOpen(true)
     setSelectedRecord(record)
@@ -118,7 +121,7 @@ export default function EditAddressRecord() {
                           </td>
                         </tr>
                       )}
-                      {record.metadata && (
+                      {record.textRecord && (
                         <tr
                           key={`dns-${i}`}
                           className="bg-white border-b  hover:bg-gray-50 "
@@ -127,13 +130,15 @@ export default function EditAddressRecord() {
                             scope="row"
                             className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                           >
-                            {record.metadata.key}
+                            {record.textRecord.key}
                           </th>
-                          <td className="px-6 py-4">{record.metadata.value}</td>
+                          <td className="px-6 py-4">
+                            {record.textRecord.value}
+                          </td>
                           <td className="px-6 py-4 text-right">
                             <button
                               className=" px-2 h-10 w-10 btn-solid bg-saffron text-lg items-center gap-2"
-                              onClick={() => handleClick(record.metadata)}
+                              onClick={() => handleClick(record.textRecord)}
                             >
                               <Pencil />
                             </button>
@@ -150,7 +155,7 @@ export default function EditAddressRecord() {
           <UpdateRecordDialog
             isOpen={isUpdateRecordOpen}
             setIsOpen={setIsUpdateRecordOpen}
-            record={selectedRecord}
+            records={selectedRecord}
           />
         )}
         {isOpen && <EditRecordDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
@@ -158,13 +163,3 @@ export default function EditAddressRecord() {
     </main>
   )
 }
-
-// // Mock mycelRecords
-// const mycelRecords = {
-//   1: {
-//     walletRecord: {
-//       walletRecordType: 'ETHEREUM_TESTNET_SEPOLIA',
-//       value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
-//     },
-//   },
-// }
