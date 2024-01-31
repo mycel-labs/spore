@@ -1,33 +1,19 @@
 import { useEffect, useState } from 'react'
-import Record, { RecordProps } from '~/components/Record'
+import Record from '~/components/Record'
 import SocialLink, { Links } from '~/components/SocialLink'
 import logo from '@/assets/logo.svg'
-import { ArrowLeft, Pencil, Plus } from 'lucide-react'
+import { Pencil, Plus } from 'lucide-react'
 import EditBioDialog from '~/components/dialog/EditBioDialog'
 import SocialDialog from '~/components/dialog/SocialDialog'
 import AddressBoard from '~/components/AddressBoard'
-import { useAllRecords } from '../../../../../packages/shared/hooks/useMycel'
 import BackBrowser from '~/components/BackBrowser'
-
-const mockRecords: RecordProps[] = [
-  {
-    recordType: 'Ethereum Mainnet',
-    value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
-  },
-  {
-    recordType: 'Optimism',
-    value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
-  },
-  {
-    recordType: 'Arbitrum',
-    value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
-  },
-]
+import { fetchAllRecords } from '~/utils/fetch'
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false)
   const [isSocialOpen, setIsSocialOpen] = useState(false)
   const [socials, setSocials] = useState<Links[]>([])
+  const [mycelRecords, setMycelRecords] = useState(undefined)
 
   function addSocial(social: Links) {
     setSocials([...socials, social])
@@ -36,12 +22,14 @@ export default function Page() {
   function removeSocial(id: string) {
     setSocials(socials.filter((social) => social.id !== id))
   }
-
-  const { data: records } = useAllRecords({
-    name: 'shutanaka',
-    parent: 'cel',
-  })
-  console.log('Records: ', records)
+  useEffect(() => {
+    async function getRecords() {
+      const fetchedRecords = await fetchAllRecords('shutanaka', 'cel')
+      setMycelRecords(fetchedRecords)
+      console.log('fetchedRecords', mycelRecords)
+    }
+    getRecords()
+  }, [mycelRecords])
 
   return (
     <main className="md:px-20 md:py-12 h-screen bg-smoke">
@@ -102,9 +90,16 @@ export default function Page() {
           </div>
           <div>
             <h1 className="text-xl font-bold mb-2">Records</h1>
-            {mockRecords.map((record, index) => (
-              <Record key={index} {...record} />
-            ))}
+            {mycelRecords &&
+              Object.values(mycelRecords).map((record, i) => {
+                return (
+                  <>
+                    {record.walletRecord && (
+                      <Record key={i} {...record.walletRecord} />
+                    )}
+                  </>
+                )
+              })}
           </div>
         </div>
       </div>

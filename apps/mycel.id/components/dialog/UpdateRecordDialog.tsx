@@ -1,20 +1,23 @@
 import React, { useState } from 'react'
 import BaseDialog from './BaseDialog'
 import { Dialog } from '@headlessui/react'
+import { RegistryRecord } from 'mycel-client-ts/mycel.resolver/rest'
+import { Domain } from '~/types/domain'
 
-export default function EditRecordDialog({
-  isOpen,
-  setIsOpen,
-  record,
-}: {
+export interface EditRecordDialogProps {
+  domain: Domain
+  records: Record<string, RegistryRecord> | undefined
+  address: string
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  record: any
-}) {
+}
+
+export default function EditRecordDialog(props: EditRecordDialogProps) {
   const [newRecord, setNewRecord] = useState('')
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setNewRecord(e.target.value)
   }
+  console.log('records', props.records)
   // TODO: update record
   // check if address is valid
   async function updateRecord() {
@@ -26,7 +29,7 @@ export default function EditRecordDialog({
   }
 
   return (
-    <BaseDialog isOpen={isOpen} setIsOpen={setIsOpen}>
+    <BaseDialog isOpen={props.isOpen} setIsOpen={props.setIsOpen}>
       <Dialog.Title className="text-lg font-semibold">
         Update Record
       </Dialog.Title>
@@ -39,7 +42,7 @@ export default function EditRecordDialog({
           <input
             type="text"
             className="px-2 h-12 btn-solid bg-gray-100 text-lg items-center gap-2"
-            value={record.value}
+            value={props.record?.value}
             disabled
           />
         </div>
@@ -58,7 +61,7 @@ export default function EditRecordDialog({
       <div className="flex flex-row justify-between">
         <button
           className="px-2 h-12 btn-solid bg-gray-100 text-lg items-center gap-2"
-          onClick={() => setIsOpen(false)}
+          onClick={() => props.setIsOpen(false)}
         >
           Cancel
         </button>

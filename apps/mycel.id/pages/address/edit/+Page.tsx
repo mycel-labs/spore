@@ -1,17 +1,32 @@
 import { FileStack, Pencil } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import BackBrowser from '~/components/BackBrowser'
 import EditRecordDialog from '~/components/dialog/EditRecordDialog'
 import UpdateRecordDialog from '~/components/dialog/UpdateRecordDialog'
+import { DnsRecordType } from 'mycel-client-ts/mycel.registry/types/mycel/registry/dns_record'
+import { NetworkName } from 'mycel-client-ts/mycel.registry/types/mycel/registry/network_name'
+import { RegistryRecord } from 'mycel-client-ts/mycel.resolver/rest'
+import { fetchAllRecords } from '~/utils/fetch'
 
 export default function EditAddressRecord() {
   const [isOpen, setIsOpen] = useState(false)
   const [isUpdateRecordOpen, setIsUpdateRecordOpen] = useState(false)
   const [selectedRecord, setSelectedRecord] = useState(undefined)
+  const [mycelRecords, setMycelRecords] = useState(undefined)
   function handleClick(record: any) {
     setIsUpdateRecordOpen(true)
     setSelectedRecord(record)
   }
+  // TODO: handle if mycelRecords is undefined
+  useEffect(() => {
+    async function getRecords() {
+      // TODO: should be passed proper value from previous page
+      const fetchedRecords = await fetchAllRecords('shutanaka', 'cel')
+      setMycelRecords(fetchedRecords)
+    }
+    getRecords()
+  }, [mycelRecords])
+
   return (
     <main className="px-20 py-12 bg-smoke h-screen">
       <div className="px-10 mb-10">
@@ -144,12 +159,12 @@ export default function EditAddressRecord() {
   )
 }
 
-// Mock mycelRecords
-const mycelRecords = {
-  1: {
-    walletRecord: {
-      walletRecordType: 'ETHEREUM_TESTNET_SEPOLIA',
-      value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
-    },
-  },
-}
+// // Mock mycelRecords
+// const mycelRecords = {
+//   1: {
+//     walletRecord: {
+//       walletRecordType: 'ETHEREUM_TESTNET_SEPOLIA',
+//       value: '0x06aa005386F53Ba7b980c61e0D067CaBc7602a62',
+//     },
+//   },
+// }
