@@ -2,6 +2,7 @@ import BitcoinIcon from './bitcoin-btc-logo.svg'
 import EthereumIcon from './ethereum-eth-logo.svg'
 import SolanaIcon from './solana-sol-logo.svg'
 import SuiIcon from './sui-logo.svg'
+import AptosIcon from './aptos-apt-logo.svg'
 import { NetworkName } from 'mycel-client-ts/mycel.registry/types/mycel/registry/network_name'
 
 export type Network = {
@@ -26,6 +27,18 @@ export const Networks: Network[] = [
     icon: EthereumIcon,
   },
   {
+    networkType: 'BITCOIN_MAINNET_MAINNET',
+    id: NetworkName.BITCOIN_MAINNET_MAINNET,
+    chainName: 'Bitcoin Mainnet',
+    icon: BitcoinIcon,
+  },
+  {
+    networkType: 'ETHEREUM_MAINNET_MAINNET',
+    id: NetworkName.ETHEREUM_MAINNET_MAINNET,
+    chainName: 'Ethereum Mainnet',
+    icon: EthereumIcon,
+  },
+  {
     networkType: 'SOLANA_MAINNET_MAINNET',
     id: NetworkName.SOLANA_MAINNET_MAINNET,
     chainName: 'Solana Mainnet',
@@ -36,5 +49,11 @@ export const Networks: Network[] = [
     id: NetworkName.SUI_MAINNET_MAINNET,
     chainName: 'Sui Mainnet',
     icon: SuiIcon,
+  },
+  {
+    networkType: 'APTOS_MAINNET_MAINNET',
+    id: NetworkName.APTOS_MAINNET_MAINNET,
+    chainName: 'Aptos Mainnet',
+    icon: AptosIcon,
   },
 ]

@@ -39,7 +39,7 @@ export default function EditRecordDialog({
       <Dialog.Title className="text-lg font-semibold">
         Add Address Record
       </Dialog.Title>
-      {/* TODO: support DNS, other metadata */}
+      {/* TODO: support DNS, other textRecord */}
       {/* <div className="inline-flex rounded-md shadow-sm">
         <button
           className={`px-4 py-2 text-sm font-semibold text-gray-400 bg-white border border-gray-200 rounded-l hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 ${
