@@ -1,6 +1,7 @@
 import BaseDialog from './BaseDialog'
 import { Dialog } from '@headlessui/react'
 
+// Upload avatar, bio
 export default function EditBioDialog({
   isOpen,
   setIsOpen,

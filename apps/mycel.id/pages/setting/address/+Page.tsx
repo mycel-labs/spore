@@ -31,7 +31,7 @@ export default function EditAddressRecord() {
   }, [mycelRecords])
 
   return (
-    <main className="px-20 py-12 bg-smoke h-screen">
+    <main className="lg:px-20 lg:py-12 bg-smoke h-screen">
       <div className="px-10 mb-10">
         <BackBrowser />
       </div>

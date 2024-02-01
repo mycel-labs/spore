@@ -7,10 +7,10 @@ function backBrowser() {
   }
 }
 
-export default function BackBrowser() {
+export default function BackBrowser({ className }: { className?: string }) {
   return (
     <button
-      className="px-10 h-12 btn-solid bg-gray-100 text-lg items-center gap-2"
+      className={`px-10 h-12 btn-solid bg-gray-100 text-lg items-center gap-2 ${className}`}
       onClick={() => backBrowser()}
     >
       <span>
