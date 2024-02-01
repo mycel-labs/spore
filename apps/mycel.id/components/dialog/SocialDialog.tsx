@@ -4,6 +4,7 @@ import BaseDialog from './BaseDialog'
 import { Dialog } from '@headlessui/react'
 import { Socials } from '~/lib/social/utils'
 import { Links } from '../SocialLink'
+import { showPromiseToast } from '~/utils/notification'
 
 export default function SocialDialog({
   isOpen,
@@ -18,6 +19,11 @@ export default function SocialDialog({
   const [username, setUsername] = useState('')
   function handleClick() {
     if (username === '') return alert('Username cannot be empty')
+    // TODO: manage promise
+    const resolveAfter3Sec = new Promise((resolve) =>
+      setTimeout(resolve, 10000)
+    )
+    showPromiseToast(resolveAfter3Sec)
     setSocials({ ...selected, id: username })
     setIsOpen(false)
   }
