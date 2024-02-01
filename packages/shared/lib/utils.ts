@@ -4,7 +4,8 @@ import resolveConfig from 'tailwindcss/resolveConfig'
 
 export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs))
 
-export const wait = (msec: number) => new Promise(resolve => setTimeout(resolve, msec))
+export const wait = (msec: number) =>
+  new Promise((resolve) => setTimeout(resolve, msec))
 
 export const twConfig = (config: any) => resolveConfig(config)
 

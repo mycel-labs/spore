@@ -28,7 +28,7 @@ async function handleStaticAssets(event) {
     if (DEBUG) {
       // customize caching
       options.cacheControl = {
-        bypassCache: true
+        bypassCache: true,
       }
     }
     const page = await getAssetFromKV(event, options)
@@ -48,14 +48,17 @@ async function handleStaticAssets(event) {
     if (!DEBUG) {
       try {
         let notFoundResponse = await getAssetFromKV(event, {
-          mapRequestToAsset: (req) => new Request(`${new URL(req.url).origin}/404.html`, req)
+          mapRequestToAsset: (req) =>
+            new Request(`${new URL(req.url).origin}/404.html`, req),
         })
 
         return new Response(notFoundResponse.body, {
           ...notFoundResponse,
-          status: 404
+          status: 404,
         })
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     }
 
     return new Response(e.message || e.toString(), { status: 500 })

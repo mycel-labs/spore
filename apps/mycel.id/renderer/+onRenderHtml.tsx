@@ -9,7 +9,9 @@ import appleTouchIconUrl from '@/assets/icons/apple-touch-icon-180x180.png'
 import maskIconUrl from '@/assets/icons/maskable-icon-512x512.png'
 import type { OnRenderHtmlAsync } from 'vike/types'
 
-const onRenderHtml: OnRenderHtmlAsync = async (pageContext): ReturnType<OnRenderHtmlAsync> => {
+const onRenderHtml: OnRenderHtmlAsync = async (
+  pageContext
+): ReturnType<OnRenderHtmlAsync> => {
   let pageHtml
   if (!pageContext.Page) {
     // SPA
@@ -17,7 +19,9 @@ const onRenderHtml: OnRenderHtmlAsync = async (pageContext): ReturnType<OnRender
   } else {
     // SSR / HTML-only
     const { Page, pageProps } = pageContext
-    if (!Page) throw new Error('My render() hook expects pageContext.Page to be defined')
+    if (!Page)
+      throw new Error('My render() hook expects pageContext.Page to be defined')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const pageHtml = ReactDOMServer.renderToString(
       <PageShell pageContext={pageContext}>
         <Page {...pageProps} />
@@ -55,6 +59,6 @@ const onRenderHtml: OnRenderHtmlAsync = async (pageContext): ReturnType<OnRender
     documentHtml,
     pageContext: {
       // We can add some `pageContext` here, which is useful if we want to do page redirection https://vike.dev/page-redirection
-    }
+    },
   }
 }

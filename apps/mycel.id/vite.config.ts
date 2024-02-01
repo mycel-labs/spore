@@ -1,7 +1,8 @@
 import react from '@vitejs/plugin-react'
 import vike from 'vike/plugin'
 import { VitePWA } from 'vite-plugin-pwa'
-import { UserConfig } from 'vite'
+import nodePolyfills from 'vite-plugin-node-stdlib-browser'
+import type { UserConfig } from 'vite'
 
 const config: UserConfig = {
   resolve: {
@@ -22,23 +23,27 @@ const config: UserConfig = {
         description: 'Get mycel.id, use anywhere',
         theme_color: '#ffffff',
         background_color: '#ffffff',
-        start_url: "/home",
-        display: "fullscreen",
+        start_url: '/home',
+        display: 'fullscreen',
         icons: [
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
-      }
-    })
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
+    nodePolyfills(),
   ],
+  define: {
+    global: 'window',
+  },
 }
 
 export default config

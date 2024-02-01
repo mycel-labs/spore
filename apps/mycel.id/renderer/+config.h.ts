@@ -13,15 +13,18 @@ export default {
         if (configValue === 'HTML') env = { server: true }
         if (configValue === 'SPA') env = { client: true }
         if (configValue === 'SSR') env = { server: true, client: true }
-        if (!env) throw new Error(`${configDefinedAt} should be 'SSR', 'SPA', or 'HTML'`)
+        if (!env)
+          throw new Error(
+            `${configDefinedAt} should be 'SSR', 'SPA', or 'HTML'`
+          )
         return {
           meta: {
-            Page: { env }
-          }
+            Page: { env },
+          },
         }
-      }
-    }
+      },
+    },
   },
   // See https://vike.dev/data-fetching
-  passToClient: ['pageProps', 'urlPathname']
+  passToClient: ['pageProps', 'urlPathname'],
 } satisfies Config

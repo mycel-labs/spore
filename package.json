@@ -9,7 +9,8 @@
     "clean": "rimraf \"**/node_modules\"",
     "fresh": "pnpm clean && pnpm i",
     "nuke": "rimraf pnpm-lock.yaml && pnpm fresh",
-    "app": "pnpm -F \"mycel.id\""
+    "app": "pnpm -F \"mycel.id\"",
+    "shared": "pnpm -F \"@mycel/shared\""
   },
   "devDependencies": {
     "lefthook": "^1.5.6",
