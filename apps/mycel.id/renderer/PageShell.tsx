@@ -2,14 +2,23 @@ import React from 'react'
 import { PageContextProvider } from '~/renderer/usePageContext'
 import type { PageContext } from 'vike/types'
 import '~/renderer/global.css'
-import NavMenu from "~/components/NavMenu"
+import NavMenu from '~/components/NavMenu'
 import { ChevronLeft } from 'lucide-react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export { PageShell, FullLayout, BaseLayout }
 
-function PageShell({ children, pageContext }: { children: React.ReactNode; pageContext: PageContext }) {
+function PageShell({
+  children,
+  pageContext,
+}: {
+  children: React.ReactNode
+  pageContext: PageContext
+}) {
   return (
     <React.StrictMode>
+      <ToastContainer newestOnTop />
       <PageContextProvider pageContext={pageContext}>
         {children}
       </PageContextProvider>
@@ -28,24 +37,31 @@ type BaseLayoutProps = PageHeaderProps & {
   backUrl?: string
 }
 
-function BaseLayout ({title, hideNav = false, children, backUrl = ""}: BaseLayoutProps) {
+function BaseLayout({
+  title,
+  hideNav = false,
+  children,
+  backUrl = '',
+}: BaseLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
       {!hideNav && <NavMenu />}
       <PageHeader title={title} backUrl={backUrl} />
-      <main className="flex-grow">
-        {children}
-      </main>
+      <main className="flex-grow">{children}</main>
     </div>
   )
 }
 
-function PageHeader({title, backUrl}: PageHeaderProps) {
+function PageHeader({ title, backUrl }: PageHeaderProps) {
   return title ? (
     <div className="bg-smoke opacity-95 backdrop-blur z-30 flex items-center h-14 sticky top-0 sm:relative sm:top-auto sm:h-60 w-full px-4 border-b border-piano">
       <div className="w-6">
         {backUrl && (
-          <a type="button" className="bg-samon rounded-full btn flex sm:hidden w-6 h-6" href={backUrl}>
+          <a
+            type="button"
+            className="bg-samon rounded-full btn flex sm:hidden w-6 h-6"
+            href={backUrl}
+          >
             <ChevronLeft />
           </a>
         )}
@@ -55,15 +71,13 @@ function PageHeader({title, backUrl}: PageHeaderProps) {
       </div>
       <div className="w-6 flex sm:hidden" />
     </div>
-  ): null
+  ) : null
 }
 
-function FullLayout ({children}: {children: React.ReactNode}) {
+function FullLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-grow">
-        {children}
-      </main>
+      <main className="flex-grow">{children}</main>
     </div>
   )
 }
