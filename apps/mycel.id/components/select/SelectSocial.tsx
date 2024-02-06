@@ -2,7 +2,7 @@
 import { Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { Check, ChevronsUpDown } from 'lucide-react'
-import { Social } from '~/lib/social/utils'
+import { Social } from '@/lib/social/utils'
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
