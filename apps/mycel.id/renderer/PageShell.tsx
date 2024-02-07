@@ -4,6 +4,8 @@ import type { PageContext } from 'vike/types'
 import '~/renderer/global.css'
 import NavMenu from '~/components/NavMenu'
 import { ChevronLeft } from 'lucide-react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export { PageShell, FullLayout, BaseLayout }
 
@@ -16,6 +18,7 @@ function PageShell({
 }) {
   return (
     <React.StrictMode>
+      <ToastContainer newestOnTop />
       <PageContextProvider pageContext={pageContext}>
         {children}
       </PageContextProvider>

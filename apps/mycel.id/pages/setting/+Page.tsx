@@ -5,16 +5,16 @@ const MENU_ITEMS = [
   {
     id: 'editProfile',
     text: 'Edit profile',
-    href: '/profile/edit',
+    href: '/setting/profile',
     icon: <UserCog />,
   },
   {
     id: 'editAddress',
     text: 'Edit address',
-    href: '/address/edit',
+    href: 'setting/address',
     icon: <FileSignature />,
   },
-  { id: 'signout', text: 'Logout', href: '/profile/edit', icon: <LogOut /> },
+  { id: 'signout', text: 'Logout', href: '/setting/profile', icon: <LogOut /> },
 ]
 
 export default function Page() {
@@ -36,12 +36,11 @@ export default function Page() {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ListItem = ({ item }: { item: any }) => (
   <li className="border-b border-piano">
     <a
       href={item.href}
-      className="fl items-center px-5 py-5 content hover:bg-black/5"
+      className="flex items-center px-5 py-5 content hover:bg-black/5"
     >
       <div className="flex-1 flex items-center">
         <span className="mr-4 text-trinidad">{item.icon}</span>

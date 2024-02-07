@@ -1,6 +1,4 @@
-import { BaseLayout } from '~/renderer/PageShell'
-import Providers from '@/components/Providers'
-import { useBalance } from '@/hooks/useMycelQuery'
+import { BaseLayout } from '@/renderer/PageShell'
 
 export default function Page() {
   // const { data } = useBalance()

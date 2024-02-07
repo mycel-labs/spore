@@ -7,6 +7,7 @@
   "dependencies": {
     "@cosmjs/proto-signing": "^0.32.2",
     "@dydxprotocol/v4-client-js": "^1.0.17",
+    "@keplr-wallet/types": "^0.12.64",
     "@lit-protocol/auth-helpers": "^2.2.63",
     "@lit-protocol/lit-auth-client": "^2.2.63",
     "@lit-protocol/lit-node-client": "^2.2.63",
