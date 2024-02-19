@@ -18,7 +18,7 @@ importers:
         specifier: ^5.0.5
         version: 5.0.5
 
-  apps/mycel.id:
+  apps/spore:
     dependencies:
       '@cloudflare/kv-asset-handler':
         specifier: ^0.3.0

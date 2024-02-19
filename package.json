@@ -9,7 +9,7 @@
     "clean": "rimraf \"**/node_modules\"",
     "fresh": "pnpm clean && pnpm i",
     "nuke": "rimraf pnpm-lock.yaml && pnpm fresh",
-    "app": "pnpm -F \"mycel.id\"",
+    "spore": "pnpm -F \"spore\"",
     "shared": "pnpm -F \"@mycel/shared\""
   },
   "devDependencies": {
