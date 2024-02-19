@@ -1,10 +1,13 @@
 import type { Config } from 'vike/types'
+import vikeReact from 'vike-react/config'
+import vikeReactQuery from 'vike-react-query/config'
 
 // https://vike.dev/config
 export default {
   /* To enable Client-side Routing:
   clientRouting: true,
   // !! WARNING !! Before doing so, read https://vike.dev/clientRouting */
+  clientRouting: true,
   meta: {
     renderMode: {
       env: { config: true },
@@ -26,5 +29,6 @@ export default {
     },
   },
   // See https://vike.dev/data-fetching
-  passToClient: ['pageProps', 'urlPathname'],
+  passToClient: ['pageProps'],
+  extends: [vikeReact, vikeReactQuery],
 } satisfies Config

@@ -3,13 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --c-samon: #ff8aa0;
+  --c-samon: hsl(349, 100%, 77%);
   --c-trinidad: #ea5500;
   --c-saffron: #fac03d;
   --c-jade: #00ae6f;
-  --c-lochmara: #0077be;
-  --c-piano: #2c2929;
-  --c-smoke: #f6f2f2;
+  --c-lochmara: hsl(202, 100%, 37%);
+  --c-piano: hsl(0, 4%, 17%);
+  --c-smoke: hsl(0, 20%, 96%);
+  --background: : #f2f2f2;
+  --foreground: : var(--c-piano);
+  --border: var(--c-piano);
+  --input: var(--c-piano);
 }
 
 @layer base {
@@ -20,7 +24,7 @@
   }
 
   body {
-    @apply bg-white text-piano;
+    @apply bg-background text-foreground;
   }
 
   *,

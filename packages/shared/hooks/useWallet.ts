@@ -4,11 +4,10 @@ import {
   useConnect as useConnectWagmi,
   useAccount as useAccountWagmi,
   useDisconnect as useDisconnectWagmi,
-  // usePublicClient as usePublicClientWagmi,
   useWalletClient as useWalletClientWagmi,
   useSignTypedData,
-  useNetwork as useNetworkWagmi,
-  useSwitchNetwork as useSwitchNetworkWagmi,
+  useAccount as useAccountWagmi,
+  useSwitchChain as useSwitchChainWagmi,
 } from 'wagmi'
 import {
   useSuggestChainAndConnect as useConnectGraz,
@@ -29,7 +28,7 @@ import {
   type MycelAddress,
   type PrivateInformation,
   type WalletType,
-} from '~/utils/wallets'
+} from '../lib/wallets'
 import { AES, enc } from 'crypto-js'
 
 export const useWallet = () => {
@@ -221,18 +220,15 @@ export const useWallet = () => {
   }, [evmAddressWagmi, mycelAddressGraz])
 
   // Change EVM network
-  const { chain: chainWagmi } = useNetworkWagmi()
-  const { switchNetworkAsync: switchNetworkAsyncWagmi } = useSwitchNetworkWagmi(
-    { chainId: EVM_CHAINID }
-  )
-  const switchEvmNetworkAsync = useCallback(() => {
+  const { chain: chainWagmi } = useAccountWagmi()
+  const { switchChainAsync } = useSwitchChainWagmi({ chainId: EVM_CHAINID })
+  const switchEvmNetworkAsync = useCallback(async () => {
     if (chainWagmi?.id !== EVM_CHAINID) {
-      switchNetworkAsyncWagmi && switchNetworkAsyncWagmi()
+      switchChainAsync && (await switchChainAsync())
     }
   }, [chainWagmi?.id])
 
   // LocalWallet
-  const updateDialog = useStore((state) => state.updateDialog)
   useEffect(() => {
     ;(async () => {
       if (mycelAddress && signerGraz?.offlineSigner) {
@@ -257,8 +253,6 @@ export const useWallet = () => {
               console.log(error)
               forgetEvmSignature()
             }
-          } else {
-            updateDialog('wallet2')
           }
         }
       }
@@ -279,7 +273,7 @@ export const useWallet = () => {
     signerWagmi,
     connectorsWagmi,
     evmChainId: chainWagmi?.id,
-    switchEvmNetworkAsync,
+    // switchEvmNetworkAsync,
     // Cosmos
     mycelAddress,
     mycelAddressGraz,

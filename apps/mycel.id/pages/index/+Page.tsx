@@ -1,8 +1,6 @@
 import logo from '@/assets/logo.svg'
-// import usecaseImg from '@/assets/usecases.png'
 import { FullLayout } from '~/renderer/PageShell'
-import MoneyIcon from '@/components/svgs/Money'
-import MessageIcon from '@/components/svgs/Message'
+import { Users, PiggyBank } from 'lucide-react'
 
 export default function Page() {
   return (
@@ -53,7 +51,7 @@ export default function Page() {
           <div className="text-center">
             <div className="text-3xl font-bold mb-8">Friends pool</div>
             <div className="flex justify-center">
-              <MoneyIcon />
+              <PiggyBank size={64} strokeWidth={1} />
             </div>
           </div>
         </div>
@@ -76,7 +74,7 @@ export default function Page() {
           <div className="text-center">
             <div className="text-3xl font-bold mb-8">Profile & Message</div>
             <div className="flex justify-center">
-              <MessageIcon />
+              <Users size={64} strokeWidth={1} />
             </div>
           </div>
         </div>

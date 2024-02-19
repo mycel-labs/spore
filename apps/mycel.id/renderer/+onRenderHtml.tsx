@@ -39,7 +39,7 @@ const onRenderHtml: OnRenderHtmlAsync = async (
       <head>
         <meta charset="UTF-8" />
         <link rel="icon" href="${logoUrl}" />
-        <link rel="manifest" href="/manifest.webmanifest" />
+        <!--<link rel="manifest" href="/manifest.webmanifest" />-->
         <link rel="apple-touch-icon" href="${appleTouchIconUrl}" sizes="180x180">
         <link rel="mask-icon" href="${maskIconUrl}" color="#ff8aa0">
         <meta name="theme-color" content="#ff8aa0">
