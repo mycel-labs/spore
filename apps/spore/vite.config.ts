@@ -18,9 +18,9 @@ const config: UserConfig = {
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'mycel.id',
-        short_name: 'mycel.id',
-        description: 'Get mycel.id, use anywhere',
+        name: 'SPORE',
+        short_name: 'SPORE',
+        description: 'Welcome to SPORE',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         start_url: '/home',

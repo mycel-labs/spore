@@ -1,5 +1,5 @@
 main="./worker/index.js"
-name = "mycelid"
+name = "spore"
 compatibility_date = "2021-09-29"
 workers_dev = true
 send_metrics = false

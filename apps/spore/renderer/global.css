@@ -1,19 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: 'pixChicago';
+  src:
+    url('../../../packages/shared/assets/fonts/pixChicago.woff2')
+      format('woff2'),
+    url('../../../packages/shared/assets/fonts/pixChicago.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'VCR_OSD_MONO';
+  src:
+    url('../../../packages/shared/assets/fonts/VCR_OSD_MONO.woff2')
+      format('woff2'),
+    url('../../../packages/shared/assets/fonts/VCR_OSD_MONO.woff')
+      format('woff');
+}
+
+@font-face {
+  font-family: 'VCRosdNEUE';
+  src:
+    url('../../../packages/shared/assets/fonts/VCRosdNEUE.woff2')
+      format('woff2'),
+    url('../../../packages/shared/assets/fonts/VCRosdNEUE.woff') format('woff');
+}
 
 :root {
-  --c-samon: hsl(349, 100%, 77%);
-  --c-trinidad: #ea5500;
-  --c-saffron: #fac03d;
-  --c-jade: #00ae6f;
-  --c-lochmara: hsl(202, 100%, 37%);
-  --c-piano: hsl(0, 4%, 17%);
-  --c-smoke: hsl(0, 20%, 96%);
-  --background: : #f2f2f2;
-  --foreground: : var(--c-piano);
-  --border: var(--c-piano);
-  --input: var(--c-piano);
+  --c-primary: #ff4615;
+  --c-secondary: #00efd1;
+  --c-light: #f9f4be;
+  --c-dark: #000050;
+
+  --background: : #f7f3f3;
+  --foreground: : #121212;
+  --border: var(--c-dark);
+  --input: var(--c-dark);
 }
 
 @layer base {
@@ -24,7 +46,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-primary text-dark;
   }
 
   *,
@@ -34,32 +56,85 @@
   }
 
   ::selection {
-    background: var(--c-saffron);
+    background: var(--c-primary);
   }
 
   .content {
     @apply container max-w-lg mx-auto;
   }
 }
-
-.bg-g {
-  background-image: url('../../../packages/shared/assets/bg-g1.png');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: rgba(246, 242, 242, 0.66);
-  background-blend-mode: lighten;
-}
-
-.bg-noise {
-  background-image: url('../../../packages/shared/assets/noise.png');
-  background-repeat: repeat;
-}
-
 @layer components {
   .btn {
-    @apply text-piano border-piano border rounded flex items-center justify-center hover:shadow-solid-xs;
+    @apply border-dark border-2 rounded-xl flex items-center justify-center shadow-solid hover:shadow-solid-sm shadow-current	hover:translate-y-0.5 relative;
   }
-  .btn-solid {
-    @apply text-piano border-piano border shadow-solid-sm hover:shadow-solid rounded flex items-center justify-center;
+  .btn-s {
+    @apply border-dark border-2 rounded-xl flex items-center justify-center shadow-solid-xs shadow-current hover:shadow-solid-xxs hover:translate-y-px relative;
+  }
+
+  span.btn-inner {
+    @apply absolute top-0.5 left-0.5 opacity-70;
+    border-radius: 8px 0 0 0;
+    border-top: 2px solid var(--c-dark);
+    border-left: 2px solid var(--c-dark);
+  }
+  .bg-line {
+    background: linear-gradient(var(--c-text) 50%, transparent 0);
+    background-clip: content-box;
+    background-size: 6.6666666667% 13.3333333333%;
+    display: flex;
+    margin: 0.1rem 0;
+    padding: 0.2rem 0.1rem;
+  }
+
+  .bg-dot {
+    background: linear-gradient(
+        45deg,
+        var(--c-dark) 55%,
+        transparent 0,
+        transparent 85%,
+        var(--c-dark) 0,
+        var(--c-dark)
+      ),
+      linear-gradient(
+        45deg,
+        var(--c-dark) 55%,
+        transparent 0,
+        transparent 85%,
+        var(--c-dark) 0,
+        var(--c-dark)
+      );
+    background-position:
+      0 0,
+      2px 2px;
+    background-size: 2px 2px;
+    background-repeat: repeat;
+  }
+
+  .bg-g {
+    background-image: url('../../../packages/shared/assets/bg-g1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(246, 242, 242, 0.66);
+    background-blend-mode: lighten;
+  }
+
+  .bg-noise {
+    background-image: url('../../../packages/shared/assets/noise.png');
+    background-repeat: repeat;
+  }
+
+  @keyframes pulse-border {
+    0%,
+    100% {
+      border-color: var(--c-dark);
+    }
+    50% {
+      border-color: transparent;
+    }
+  }
+
+  .border-pulse {
+    animation: pulse-border 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    transition: border-color;
   }
 }

@@ -31,7 +31,7 @@ export default function EditAddressRecord() {
   }, [mycelRecords])
 
   return (
-    <main className="lg:px-20 lg:py-12 bg-smoke h-screen">
+    <main className="lg:px-20 lg:py-12 bg-light h-screen">
       <div className="px-10 mb-10">
         <BackBrowser />
       </div>
@@ -43,7 +43,7 @@ export default function EditAddressRecord() {
           </div>
           <span className="py-2">
             <button
-              className="p-2 btn-solid bg-samon text-lg items-center gap-2"
+              className="p-2 btn-solid bg-primary text-lg items-center gap-2"
               onClick={() => setIsOpen((prev) => !prev)}
             >
               <span className="flex-1 text-center text-lg font-semibold">

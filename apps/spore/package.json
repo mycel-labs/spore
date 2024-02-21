@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite build && wrangler dev",
-    "deploy": "vite build && wrangler publish",
+    "deploy": "vite build && wrangler deploy",
+    "only-deploy": "wrangler deploy",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
@@ -40,7 +41,7 @@
     "tailwindcss-animate": "^1.0.7",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.3",
-    "vike": "^0.4.160",
+    "vike": "^0.4.162",
     "vike-react": "^0.4.4",
     "vike-react-query": "^0.0.3",
     "vite": "^5.0.10"
@@ -60,10 +61,11 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "postcss": "^8.4.32",
+    "postcss-hexrgba": "^2.1.0",
     "postcss-import": "^15.1.0",
     "tailwindcss": "^3.4.0",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vite-plugin-pwa": "^0.17.4",
-    "wrangler": "^3.22.3"
+    "wrangler": "^3.28.4"
   }
 }

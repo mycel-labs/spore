@@ -4,7 +4,6 @@ export { onRenderClient }
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { PageShell } from '~/renderer/PageShell'
 import type { OnRenderClientAsync } from 'vike/types'
-import Providers from '~/components/Providers'
 
 // This onRenderClient() hook only supports SSR, see https://vike.dev/render-modes for how to modify onRenderClient()
 // to support SPA

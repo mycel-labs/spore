@@ -12,9 +12,9 @@ module.exports = {
   prefix: '',
   theme: {
     fontFamily: {
-      sans: ['Inter', ...defaultTheme.fontFamily.sans],
-      title: ['"Paytone One"', ...defaultTheme.fontFamily.sans],
-      mono: ['Inconsolata', ...defaultTheme.fontFamily.mono],
+      sans: ['DotGothic16', ...defaultTheme.fontFamily.sans],
+      title: ['VCRosdNEUE', ...defaultTheme.fontFamily.sans],
+      mono: ['DotGothic16', ...defaultTheme.fontFamily.mono],
     },
     container: {
       center: true,
@@ -25,22 +25,16 @@ module.exports = {
     },
     extend: {
       colors: {
-        samon: 'var(--c-samon)',
-        trinidad: 'var(--c-trinidad)',
-        saffron: 'var(--c-saffron)',
-        jade: 'var(--c-jade)',
-        lochmara: 'var(--c-lochmara)',
-        piano: 'var(--c-piano)',
-        smoke: 'var(--c-smoke)',
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
-        input: 'var(--input)',
-        border: 'var(--border)',
+        primary: 'var(--c-primary)',
+        secondary: 'var(--c-secondary)',
+        dark: 'var(--c-dark)',
+        light: 'var(--c-light)',
       },
       boxShadow: {
-        solid: '4px 4px var(--c-piano)',
-        'solid-sm': '2px 2px var(--c-piano)',
-        'solid-xs': '1px 1px var(--c-piano)',
+        solid: '0px 6px var(--c-dark)',
+        'solid-sm': '0px 4px var(--c-dark)',
+        'solid-xs': '0px 2px var(--c-dark)',
+        'solid-xxs': '0px 1px var(--c-dark)',
       },
       keyframes: {
         'accordion-down': {

@@ -20,7 +20,7 @@ export default function EditBioDialog({
           Cancel
         </button>
         <button
-          className="px-2 h-12 btn-solid bg-samon text-lg items-center gap-2"
+          className="px-2 h-12 btn-solid bg-primary text-lg items-center gap-2"
           // onClick={() => handleClick()}
         >
           Confirm

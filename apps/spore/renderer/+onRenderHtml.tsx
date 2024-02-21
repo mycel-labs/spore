@@ -31,8 +31,8 @@ const onRenderHtml: OnRenderHtmlAsync = async (
 
   // See https://vike.dev/head
   const { documentProps } = pageContext.exports
-  const title = documentProps?.title || 'mycel.id'
-  const desc = documentProps?.description || 'Get mycel.id, use anywhere'
+  const title = documentProps?.title || 'SPORE'
+  const desc = documentProps?.description || 'welcome to SPORE!'
 
   const documentHtml = escapeInject`<!DOCTYPE html>
     <html lang="en">
@@ -48,7 +48,7 @@ const onRenderHtml: OnRenderHtmlAsync = async (
         <title>${title}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Inter:wght@400;600;700&family=Paytone+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Inter:wght@400;600;700&family=DotGothic16&display=swap" rel="stylesheet">
       </head>
       <body>
         <div id="react-root">${dangerouslySkipEscape(pageHtml)}</div>

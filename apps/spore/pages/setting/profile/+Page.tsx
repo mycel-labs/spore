@@ -35,7 +35,7 @@ export default function Page() {
   }, [mycelRecords])
 
   return (
-    <main className="h-full w-screen bg-smoke">
+    <main className="h-full w-screen bg-light">
       <div className="xl:px-56 px-10 mb-5 xl:pt-12 py-5 flex justify-between">
         <BackBrowser />
         <button
