@@ -31,6 +31,7 @@
   --c-secondary: #00efd1;
   --c-light: #f9f4be;
   --c-dark: #000050;
+  --c-overlay: rgba(0, 0, 80, 0.15);
 
   --background: : #f7f3f3;
   --foreground: : #121212;
@@ -46,7 +47,7 @@
   }
 
   body {
-    @apply bg-primary text-dark;
+    @apply bg-primary text-dark overlay-dot-l;
   }
 
   *,
@@ -65,10 +66,10 @@
 }
 @layer components {
   .btn {
-    @apply border-dark border-2 rounded-xl flex items-center justify-center shadow-solid hover:shadow-solid-sm shadow-current	hover:translate-y-0.5 relative;
+    @apply border-dark border-2 rounded-xl flex items-center justify-center shadow-solid hover:shadow-solid-sm shadow-current	hover:translate-y-0.5 relative hover:opacity-90;
   }
   .btn-s {
-    @apply border-dark border-2 rounded-xl flex items-center justify-center shadow-solid-xs shadow-current hover:shadow-solid-xxs hover:translate-y-px relative;
+    @apply border-dark border-2 rounded-xl flex items-center justify-center shadow-solid-xs shadow-current hover:shadow-solid-xxs hover:translate-y-px relative hover:opacity-90;
   }
 
   span.btn-inner {
@@ -77,6 +78,16 @@
     border-top: 2px solid var(--c-dark);
     border-left: 2px solid var(--c-dark);
   }
+
+  .centerline {
+    @apply text-center uppercase font-title;
+    &::before,
+    &::after {
+      @apply px-3;
+      content: '-';
+    }
+  }
+
   .bg-line {
     background: linear-gradient(var(--c-text) 50%, transparent 0);
     background-clip: content-box;
@@ -86,27 +97,51 @@
     padding: 0.2rem 0.1rem;
   }
 
-  .bg-dot {
+  .overlay-dot {
     background: linear-gradient(
         45deg,
-        var(--c-dark) 55%,
+        var(--c-dark) 25%,
         transparent 0,
-        transparent 85%,
+        transparent 75%,
         var(--c-dark) 0,
         var(--c-dark)
       ),
       linear-gradient(
         45deg,
-        var(--c-dark) 55%,
+        var(--c-dark) 25%,
         transparent 0,
-        transparent 85%,
+        transparent 75%,
         var(--c-dark) 0,
         var(--c-dark)
       );
     background-position:
       0 0,
       2px 2px;
-    background-size: 2px 2px;
+    background-size: 4px 4px;
+    background-repeat: repeat;
+  }
+
+  .overlay-dot-l {
+    background: linear-gradient(
+        45deg,
+        var(--c-overlay) 25%,
+        transparent 0,
+        transparent 75%,
+        var(--c-overlay) 0,
+        var(--c-overlay)
+      ),
+      linear-gradient(
+        45deg,
+        var(--c-overlay) 25%,
+        transparent 0,
+        transparent 75%,
+        var(--c-overlay) 0,
+        var(--c-overlay)
+      );
+    background-position:
+      0 0,
+      2px 2px;
+    background-size: 4px 4px;
     background-repeat: repeat;
   }
 
@@ -123,10 +158,18 @@
     background-repeat: repeat;
   }
 
+  .list-menu {
+    @apply flex;
+
+    a {
+      @apply flex items-center;
+    }
+  }
+
   @keyframes pulse-border {
     0%,
     100% {
-      border-color: var(--c-dark);
+      border-color: var(--c-light);
     }
     50% {
       border-color: transparent;

@@ -1,27 +1,56 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Menu } from 'lucide-react'
 import ImgLogo from '@/assets/spore-logo.svg'
+import PlayFill from '@/components/svg/PlayFill'
+import Play from '@/components/svg/Play'
 import { cn } from '@/lib/utils'
+import {
+  useLockBodyScroll,
+  useWindowScroll,
+  useWindowSize,
+} from '@uidotdev/usehooks'
+import { usePageContext } from '~/renderer/usePageContext'
+
+type NavItem = {
+  name: string | JSX.Element
+  link: string
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { name: 'Home', link: '/home' },
+  {
+    name: (
+      <span>
+        Deposit<span className="text-lg px-1">&</span>Withdraw
+      </span>
+    ),
+    link: '/bank',
+  },
+  { name: 'Referral', link: '/refferral' },
+  { name: 'Setting', link: '/setting' },
+  { name: 'About', link: '/about' },
+]
 
 export default function NavMenu() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [scrolled, setScrolled] = useState<boolean>(false)
+  const [{ y }] = useWindowScroll()
+
+  useEffect(() => {
+    y > 15 ? setScrolled(true) : setScrolled(false)
+  }, [y, scrolled, setScrolled])
 
   return (
     <>
-      <div
+      {isOpen && <MenuOverlay setIsOpen={setIsOpen} />}
+      <nav
         className={cn(
-          isOpen ? 'flex sm:hidden' : 'hidden',
-          'bg-dot fixed top-0 bottom-0 right-0 left-0 z-40'
+          scrolled
+            ? 'bg-primary/95 overlay-dot-l backdrop-blur'
+            : 'bg-transparent',
+          'h-20 fixed right-0 left-0 top-0 w-full flex sm:hidden z-30 justify-between px-6 py-3'
         )}
       >
-        <button
-          className="bg-secondary w-12 h-12 rounded-full btn-s fixed bottom-6 right-6 flex items-center justify-center"
-          onClick={() => setIsOpen(false)}
-        >
-          <span className="font-title text-2xl">x</span>
-        </button>
-      </div>
-      <nav className="h-20 fixed right-0 left-0 bottom-0 bg-primary w-full flex sm:hidden z-30 justify-between px-6 py-3">
         <img src={ImgLogo} className="" />
         <button
           className="btn w-12 h-12 bg-secondary"
@@ -35,40 +64,70 @@ export default function NavMenu() {
         <div
           className={cn(
             isOpen ? 'flex' : 'hidden sm:flex',
-            'overflow-hidden fixed w-72 top-0 bottom-0'
+            'fixed w-72 top-0 bottom-0'
           )}
         >
           <ul
             className={cn(
-              'bottom-0 top-auto sm:bottom-auto sm:top-0',
-              'font-title text-2xl border-dark border-2 rounded-xl shadow-solid-xs space-y-1 bg-secondary pt-8 px-6 pb-6 my-6 h-auto absolute left-0 right-8'
+              'bottom-auto top-0',
+              'font-title text-2xl rounded space-y-1 bg-dark text-light pt-7 pl-4 pr-2 pb-5 my-6 h-auto absolute left-0 right-8 outline outline-3 outline-dark border-3 border-light'
             )}
           >
-            <li className="border-b-4 border-transparent hover:border-dark hover:border-pulse">
-              <a>▶ Home</a>
-            </li>
-            <li className="border-b-4 border-transparent hover:border-dark hover:border-pulse">
-              <a>▷ Set address</a>
-            </li>
-            <li className="border-b-4 border-transparent hover:border-dark hover:border-pulse">
-              <a>▷ Referral</a>
-            </li>
-            <li className="border-b-4 border-transparent hover:border-dark hover:border-pulse">
-              <a>▷ Deposit</a>
-            </li>
-            <li className="border-b-4 border-transparent hover:border-dark hover:border-pulse">
-              <a>▷ ?</a>
-            </li>
+            {NAV_ITEMS.map((item, i) => (
+              <ListItem key={i} item={item} />
+            ))}
           </ul>
           <img
             src={ImgLogo}
             className={cn(
-              'top-5 bottom-auto sm:top-auto sm:bottom-5',
-              'absolute pr-8'
+              'hidden sm:flex top-6 bottom-auto sm:bottom-6 sm:top-auto absolute pr-8 opacity-90'
             )}
           />
         </div>
       </nav>
     </>
+  )
+}
+
+const ListItem = ({ item }: { item: NavItem }) => {
+  const { urlPathname } = usePageContext()
+
+  return (
+    <li className="group">
+      <a href={item.link} className="flex items-center">
+        {urlPathname === item.link ? (
+          <PlayFill className="w-3 h-3 mr-2 -mt-1 group-hover:animate-pulse" />
+        ) : (
+          <Play className="w-3 h-3 mr-2 -mt-1 group-hover:animate-pulse" />
+        )}
+        {item.name}
+      </a>
+    </li>
+  )
+}
+
+const MenuOverlay = ({ setIsOpen }: { setIsOpen: () => void }) => {
+  useLockBodyScroll()
+  const { width } = useWindowSize()
+
+  useEffect(() => {
+    width > 640 && setIsOpen(false)
+  }, [width, setIsOpen])
+
+  return (
+    <div
+      className={cn(
+        'flex sm:hidden',
+        'overlay-dot backdrop-blur-sm bg-black/40 fixed top-0 bottom-0 right-0 left-0 z-40'
+      )}
+      onClick={() => setIsOpen(false)}
+    >
+      <button
+        className="bg-secondary w-12 h-12 rounded-full btn-s fixed top-2 right-6 flex items-center justify-center"
+        onClick={() => setIsOpen(false)}
+      >
+        <span className="font-title text-2xl">x</span>
+      </button>
+    </div>
   )
 }

@@ -3,31 +3,31 @@ import {
   DialogOverlay,
   DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+  // DialogDescription,
+  // DialogFooter,
+  // DialogHeader,
+  // DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Fingerprint, Wallet } from 'lucide-react'
 import { useState } from 'react'
+import { useLockBodyScroll } from '@uidotdev/usehooks'
 
 export default function UiDialog({ trigger }: { trigger: React.ReactNode }) {
   const [mode, setMode] = useState<'default' | 'wallet'>('default')
+  useLockBodyScroll()
 
   return (
     <Dialog>
-      <DialogOverlay className="bg-dot" />
+      <DialogOverlay className="overlay-dot bg-black/40 backdrop-blur-sm" />
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="bg-light sm:max-w-md p-8">
-        <DialogClose className="absolute right-1.5 sm:-right-2.5 top-1.5 sm:-top-2.5 rounded-full disabled:pointer-events-none font-title text-xl bg-secondary btn-s w-6 h-6 flex justify-center items-center">
+        <DialogClose className="absolute right-2 sm:-right-2.5 top-2 sm:-top-2.5 rounded-full disabled:pointer-events-none font-title text-xl bg-secondary btn-s w-6 h-6 flex justify-center items-center">
           x
         </DialogClose>
         {mode === 'default' && (
           <>
-            <div className="font-title text-2xl text-center mb-6 uppercase">
-              Connect
-            </div>
+            <div className="font-title text-3xl mb-6 centerline">Start</div>
             <div className="flex items-center space-x-4 border-b border-dark border-dashed pb-6 mb-6">
               <button className="btn-s w-full h-12 bg-secondary">
                 <Fingerprint className="mr-2" />

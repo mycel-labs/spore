@@ -4,6 +4,7 @@ import type { PageContext } from 'vike/types'
 import '~/renderer/global.css'
 import NavMenu from '~/components/NavMenu'
 import { ToastContainer } from 'react-toastify'
+import { Toaster } from '@/components/ui/sonner'
 import Providers from '@/components/Providers'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -22,6 +23,7 @@ function PageShell({
       <PageContextProvider pageContext={pageContext}>
         {children}
       </PageContextProvider>
+      <Toaster />
     </React.StrictMode>
   )
 }
@@ -41,9 +43,9 @@ function BaseLayout({ children }: BaseLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-grow">
-        <div className="sm:max-w-4xl mx-auto flex px-6">
+        <div className="sm:max-w-4xl mx-auto flex px-4 sm:px-6">
           <NavMenu />
-          <div className="flex-1 sm:ml-72 pb-20 sm:pb-0">{children}</div>
+          <div className="flex-1 sm:ml-72 pt-16 sm:pt-0">{children}</div>
         </div>
       </main>
     </div>

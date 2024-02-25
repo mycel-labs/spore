@@ -1,5 +1,8 @@
 import { BaseLayout } from '~/renderer/PageShell'
-import { ChevronRight, UserCog, LogOut, FileSignature } from 'lucide-react'
+import Logout from '@/components/svg/Logout'
+import { UserCog, FileSignature } from 'lucide-react'
+import Profile from '~/components/Profile'
+import { toast } from '@/components/ui/sonner'
 
 const MENU_ITEMS = [
   {
@@ -14,38 +17,40 @@ const MENU_ITEMS = [
     href: 'setting/address',
     icon: <FileSignature />,
   },
-  { id: 'signout', text: 'Logout', href: '/setting/profile', icon: <LogOut /> },
+  {
+    id: 'signout',
+    text: 'Logout',
+    href: '/setting/profile',
+    icon: <Logout className="w-6 h-6" />,
+  },
 ]
 
 export default function Page() {
   return (
-    <BaseLayout title="Setting">
-      <div className="text-center py-10">
-        <div className="mx-auto rounded-full h-24 w-24 border">
-          <div className="bg-noise rounded-full h-full w-full text-gray-50/60 flex justify-center items-center bg-light"></div>
+    <BaseLayout>
+      <div className="bg-light rounded-xl my-6 py-8">
+        <h2 className="centerline text-3xl">Setting</h2>
+        <Profile />
+        <div className="space-y-6 py-6">
+          {MENU_ITEMS.map((item) => (
+            <ListItem key={item.id} item={item} />
+          ))}
         </div>
-        <h2 className="mt-4 font-bold">xxxx.cel</h2>
       </div>
-      <ul className="border-t border-dark">
-        {MENU_ITEMS.map((item) => (
-          <ListItem key={item.id} item={item} />
-        ))}
-      </ul>
+      <button onClick={() => toast('aaaaa')}>aaaa</button>
     </BaseLayout>
   )
 }
 
 const ListItem = ({ item }: { item: any }) => (
-  <li className="border-b border-dark">
-    <a
-      href={item.href}
-      className="flex items-center px-5 py-5 content hover:bg-black/5"
-    >
-      <div className="flex-1 flex items-center">
-        <span className="mr-4 text-trinidad">{item.icon}</span>
-        {item.text}
-      </div>
-      <ChevronRight className="rounded-full border border-dark" />
-    </a>
-  </li>
+  <a
+    href={item.href}
+    className="btn bg-secondary mx-10 pt-2.5 pb-1.5 px-6 h-14"
+  >
+    <span className="btn-inner h-2/3 w-1/4" />
+    <div className="flex items-center font-title text-xl">
+      <span className="mr-2">{item.icon}</span>
+      {item.text}
+    </div>
+  </a>
 )

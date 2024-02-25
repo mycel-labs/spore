@@ -2,6 +2,7 @@ import ImgMashroom from '@/assets/mushroom.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
 import { FullLayout } from '~/renderer/PageShell'
 import LoginDialog from '~/components/dialog/LoginDialog'
+import Play from '@/components/svg/PlayFill'
 
 export default function TopPage() {
   return (
@@ -12,11 +13,14 @@ export default function TopPage() {
             <img src={ImgLogo} />
           </div>
           <div className="-mt-36 text-center">
-            <p className="mb-6">Write something here.</p>
+            <p className="font-title mb-2 text-xl uppercase">Press Start</p>
             <LoginDialog
               trigger={
-                <button className="btn font-title text-xl bg-secondary mx-auto mb-6 pt-3 pb-1.5 px-8">
+                <button className="btn font-title text-xl bg-secondary mx-auto mb-6 pt-3 pb-1.5 pl-6 pr-8 flex items-center">
                   <span className="btn-inner h-2/3 w-5/6" />
+                  <span className="transiton animate-pulse mr-1.5 -mt-0.5">
+                    <Play />
+                  </span>
                   START
                 </button>
               }

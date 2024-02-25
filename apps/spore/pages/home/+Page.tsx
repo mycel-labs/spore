@@ -1,96 +1,49 @@
 import { BaseLayout } from '~/renderer/PageShell'
+import Profile from '~/components/Profile'
+import TotalTab from '~/components/TotalTab'
 import ImgMrIcon from '@/assets/mr-icon.svg'
-import ImgEnoki from '@/assets/enoki.svg'
 
 export default function Page() {
   return (
     <BaseLayout>
       <div className="py-6 space-y-8">
-        <div className="bg-light rounded-xl py-6">
-          <h2 className="text-center font-title uppercase text-2xl">
-            - Your Board -
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="px-4 py-2">
-              <img src={ImgMrIcon} className="w-auto" />
+        <div className="bg-light rounded-xl py-8">
+          <h2 className="centerline text-3xl">Your Board</h2>
+          <Profile />
+          <div className="font-title mx-4 sm:mx-6 rounded border-dark border [&>div]:px-6 my-4">
+            <div className="text-lg pt-2">Deposited USDC</div>
+            <div className="text-right text-2xl border-b border-dark">
+              $1,000
             </div>
-            <div className="p-4">
-              <ul className="border-dark border rounded">
-                <li className="border-b border-dark px-3 py-2 w-full font-title">
-                  <div className="font-title text-xl">RANK</div>
-                  <div className="font-title">Mycellian</div>
-                </li>
-                <li className="border-b border-dark px-3 py-2 w-full font-title">
-                  <div className="font-title text-xl">NEXT LEVEL</div>
-                  <div className="font-title">Mycellian</div>
-                </li>
-                <li className="px-3 py-2 w-full font-title">
-                  <div className="font-title text-xl">HOGE</div>
-                  <div className="font-title">FUGA</div>
-                </li>
-              </ul>
-            </div>
+            <div className="text-lg pt-2">Invited Friends</div>
+            <div className="text-right text-2xl">12</div>
           </div>
-          <div className="px-6 py-2 grid gap-6 grid-cols-2">
+          <div className="px-4 sm:px-6 py-2 grid gap-6 grid-cols-2">
             <div>
-              <button
+              <a
                 type="button"
-                className="btn bg-primary font-title px-6 pt-2.5 pb-1 w-full flex flex-col"
+                className="btn bg-primary font-title px-6 pt-2.5 pb-0.5 w-full flex flex-col leading-none"
+                href="/bank"
               >
                 <span className="btn-inner h-2/3 w-5/6" />
-
-                <p>Deposit</p>
-                <p className="text-2xl">USDC</p>
-              </button>
+                <div>Deposit</div>
+                <div className="text-3xl">USDC</div>
+              </a>
             </div>
             <div>
-              <button
+              <a
                 type="button"
-                className="btn bg-secondary font-title w-full px-6 pt-2.5 pb-1 flex flex-col"
+                className="btn bg-secondary font-title w-full px-6 pt-2.5 pb-0.5 flex flex-col leading-none"
+                href="/bank#withdraw"
               >
                 <span className="btn-inner h-2/3 w-5/6" />
-                <p>Withdraw</p>
-                <p className="text-2xl">USDC</p>
-              </button>
+                <div>Withdraw</div>
+                <div className="text-3xl">USDC</div>
+              </a>
             </div>
           </div>
         </div>
-        <div className="bg-light rounded-xl py-6">
-          <h2 className="text-center font-title uppercase text-2xl mb-4">
-            - Total Board -
-          </h2>
-          <div className="grid grid-cols-4 gap-4 px-4">
-            <img src={ImgEnoki} />
-            <div className="col-span-3 pt-2 px-4">
-              <ul className="border-dark border rounded">
-                <li className="border-b border-dark w-full font-title">
-                  <div className="font-title text-xl bg-dark text-light px-4">
-                    POOL VALUE
-                  </div>
-                  <div className="font-title text-3xl text-right px-4 pt-4 pb-2">
-                    $100,000,000
-                  </div>
-                </li>
-                <li className="border-b border-dark w-full font-title">
-                  <div className="font-title text-xl bg-dark text-light px-4">
-                    TOTAL ESTIMATED REWARD
-                  </div>
-                  <div className="font-title text-3xl text-right px-4 pt-4 pb-2">
-                    $123,000
-                  </div>
-                </li>
-                <li className="w-full font-title">
-                  <div className="font-title text-xl bg-dark text-light px-4">
-                    PAYOUT DATE
-                  </div>
-                  <div className="font-title text-3xl text-right px-4 pt-4 pb-2">
-                    23:59:59
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <TotalTab />
       </div>
     </BaseLayout>
   )
