@@ -1,19 +1,19 @@
 import react from '@vitejs/plugin-react'
-import vike from 'vike/plugin'
 import { VitePWA } from 'vite-plugin-pwa'
 import nodePolyfills from 'vite-plugin-node-stdlib-browser'
 import type { UserConfig } from 'vite'
+import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 
 const config: UserConfig = {
   resolve: {
     alias: {
-      '~/': `${__dirname}/`,
+      '~/': `${__dirname}/src/`,
       '@/': `@mycel/shared/`,
     },
   },
   plugins: [
     react(),
-    vike(),
+    TanStackRouterVite(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
