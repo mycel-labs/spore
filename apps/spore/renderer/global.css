@@ -1,7 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
+  font-family: 'Minecraft';
+  src:
+    url('../../../packages/shared/assets/fonts/Minecraft.woff2') format('woff2'),
+    url('../../../packages/shared/assets/fonts/Minecraft.woff') format('woff');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Minecraft';
+  src:
+    url('../../../packages/shared/assets/fonts/Minecraft-Bold.woff2')
+      format('woff2'),
+    url('../../../packages/shared/assets/fonts/Minecraft-Bold.woff')
+      format('woff');
+  font-weight: bold;
+}
+
+/* @font-face {
   font-family: 'pixChicago';
   src:
     url('../../../packages/shared/assets/fonts/pixChicago.woff2')
@@ -24,7 +43,7 @@
     url('../../../packages/shared/assets/fonts/VCRosdNEUE.woff2')
       format('woff2'),
     url('../../../packages/shared/assets/fonts/VCRosdNEUE.woff') format('woff');
-}
+} */
 
 :root {
   --c-primary: #ff4615;
@@ -73,10 +92,13 @@
   }
 
   span.btn-inner {
-    @apply absolute top-0.5 left-0.5 opacity-70;
+    @apply absolute top-0.5 left-0.5 opacity-70 border-t-2 border-l-2 border-dark;
     border-radius: 8px 0 0 0;
-    border-top: 2px solid var(--c-dark);
-    border-left: 2px solid var(--c-dark);
+  }
+
+  span.btn-inner-active {
+    @apply absolute bottom-0.5 right-0.5 opacity-70 border-b-2 border-r-2 border-dark;
+    border-radius: 0 0 8px 0;
   }
 
   .centerline {
@@ -163,6 +185,22 @@
 
     a {
       @apply flex items-center;
+    }
+  }
+
+  .list-table {
+    @apply rounded border-dark border font-title text-xl;
+    .header {
+      @apply font-bold uppercase text-lg;
+    }
+
+    li {
+      > div {
+        @apply px-3 py-2;
+      }
+    }
+    li + li {
+      @apply border-dark border-t;
     }
   }
 

@@ -14,18 +14,20 @@ import { usePageContext } from '~/renderer/usePageContext'
 type NavItem = {
   name: string | JSX.Element
   link: string
+  klass: string
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { name: 'Home', link: '/home' },
-  { name: 'Leader Board', link: '/board' },
+  { name: 'Home', link: '/home', klass: 'bg-rose-500' },
+  { name: 'Leader Board', link: '/board', klass: 'bg-rose-500' },
   {
     name: 'Reward',
     link: '/reward',
+    klass: 'bg-secondary',
   },
-  { name: 'Referral', link: '/refferral' },
-  { name: 'Setting', link: '/setting' },
-  { name: 'About', link: '/about' },
+  { name: 'Referral', link: '/refferral', klass: 'bg-secondary' },
+  { name: 'Setting', link: '/setting', klass: 'bg-[#fefe82]' },
+  { name: 'About', link: '/about', klass: 'bg-[#fefe82]' },
 ]
 
 export default function NavMenu() {
@@ -64,22 +66,22 @@ export default function NavMenu() {
             'fixed w-72 top-0 bottom-0'
           )}
         >
-          <ul
-            className={cn(
-              'bottom-auto top-0',
-              'font-title text-xl rounded space-y-2.5 bg-dark text-light pt-7 pl-4 pr-2 pb-5 my-6 h-auto absolute left-0 right-8 outline outline-3 outline-dark border-3 border-light font-bold'
-            )}
-          >
-            {NAV_ITEMS.map((item, i) => (
-              <ListItem key={i} item={item} />
-            ))}
-          </ul>
-          <img
-            src={ImgLogo}
-            className={cn(
-              'hidden sm:flex top-6 bottom-auto sm:bottom-6 sm:top-auto absolute pr-8 opacity-90'
-            )}
-          />
+          <div className="absolute top-0 w-full pt-7">
+            <img
+              src={ImgLogo}
+              className={cn('hidden sm:flex pr-8 opacity-90')}
+            />
+            <ul
+              className={cn(
+                // 'bottom-auto top-0',
+                'font-bold uppercase font-title text-2xl rounded space-y-4 mr-8 mt-0 sm:mt-6'
+              )}
+            >
+              {NAV_ITEMS.map((item, i) => (
+                <ListItem key={i} item={item} />
+              ))}
+            </ul>
+          </div>
         </div>
       </nav>
     </>
@@ -91,11 +93,10 @@ const ListItem = ({ item }: { item: NavItem }) => {
 
   return (
     <li className="group">
-      <a href={item.link} className="flex items-center">
-        {urlPathname === item.link ? (
-          <PlayFill className="w-3 h-3 mr-2 -mt-1 group-hover:animate-pulse" />
-        ) : (
-          <Play className="w-3 h-3 mr-2 -mt-1 group-hover:animate-pulse" />
+      <a href={item.link} className={`flex btn tems-center h-14 ${item.klass}`}>
+        <span className="btn-inner h-2/3 w-2/5" />
+        {urlPathname === item.link && (
+          <span className="btn-inner-active h-1/3 w-1/5" />
         )}
         {item.name}
       </a>

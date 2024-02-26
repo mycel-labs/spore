@@ -28,7 +28,7 @@ export default function Page() {
   return (
     <BaseLayout>
       <div className="bg-light rounded-xl my-6 py-8">
-        <h2 className="centerline text-3xl">Setting</h2>
+        <h2 className="centerline font-bold text-2xl">Setting</h2>
         <Profile />
         <div className="space-y-6 py-6">
           {MENU_ITEMS.map((item) => (

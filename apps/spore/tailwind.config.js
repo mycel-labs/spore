@@ -13,7 +13,7 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: ['DotGothic16', ...defaultTheme.fontFamily.sans],
-      title: ['VCRosdNEUE', ...defaultTheme.fontFamily.sans],
+      title: ['Minecraft', ...defaultTheme.fontFamily.sans],
       mono: ['DotGothic16', ...defaultTheme.fontFamily.mono],
     },
     container: {

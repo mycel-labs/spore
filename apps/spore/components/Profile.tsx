@@ -8,17 +8,19 @@ export default function Profile() {
       </div>
       <div className="">
         <ul className="font-title">
-          <li className="border-b border-dark px-3 py-2 w-full">
-            <div className="text-xl uppercase">Name</div>
-            <div className="text-3xl pt-2 break-words">akira.cel</div>
+          <li className="border-b border-dark w-full">
+            <div className="text-xl font-bold uppercase bg-dark text-light px-3 py-1">
+              Name
+            </div>
+            <div className="text-2xl px-3 py-3 break-words">akira.cel</div>
           </li>
           <li className="border-b border-dark px-3 py-2 w-full">
-            <div className="text-xl">RANK</div>
-            <div className="break-words">Mycellian</div>
+            <div className="text-lg font-bold uppercase">Rank</div>
+            <div className="text-xl break-words pt-2">Mycellian</div>
           </li>
           <li className="px-3 py-2 w-full">
-            <div className="text-xl">NEXT LEVEL</div>
-            <div className="">Mycellian</div>
+            <div className="text-lg font-bold uppercase">Next Level</div>
+            <div className="pt-2 text-xl">100/1000</div>
           </li>
         </ul>
       </div>
