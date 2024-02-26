@@ -45,15 +45,19 @@ const DepositTabContent = () => {
   return (
     <>
       <ul className="border-dark border rounded font-title">
-        <li className="border-b border-dark w-full">
-          <div className="text-xl bg-dark text-light px-4">TOTAL POOL</div>
-          <div className="text-3xl text-right px-4 pt-4 pb-2">$100,000,000</div>
-        </li>
-        <li className="w-full">
-          <div className="text-xl bg-dark text-light px-4">
+        <li className="w-full border-b border-dark">
+          <div className="text-xl bg-dark px-4 pt-1 text-light">
             ESTIMATED REWARD
           </div>
-          <div className="text-3xl text-right px-4 pt-4 pb-2">$123,000</div>
+          <div className="text-4xl text-right px-4 pt-4 pb-1.5">$123,000</div>
+        </li>
+        <li className="border-b border-dark w-full">
+          <div className="text-xl pt-1 px-4">TOTAL POOL</div>
+          <div className="text-3xl text-right px-4 pb-1.5">$100,000,000</div>
+        </li>
+        <li className="w-full">
+          <div className="text-xl pt-1 px-4">PAYOUT DATE</div>
+          <div className="text-3xl text-right px-4 pb-1.5">23:59:59</div>
         </li>
       </ul>
       <div className="border-dark border rounded px-6 py-8 mt-6">

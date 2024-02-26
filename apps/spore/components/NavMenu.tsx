@@ -18,13 +18,10 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { name: 'Home', link: '/home' },
+  { name: 'Leader Board', link: '/board' },
   {
-    name: (
-      <span>
-        Deposit<span className="text-lg px-1">&</span>Withdraw
-      </span>
-    ),
-    link: '/bank',
+    name: 'Reward',
+    link: '/reward',
   },
   { name: 'Referral', link: '/refferral' },
   { name: 'Setting', link: '/setting' },

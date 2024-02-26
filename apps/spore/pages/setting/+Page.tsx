@@ -2,7 +2,6 @@ import { BaseLayout } from '~/renderer/PageShell'
 import Logout from '@/components/svg/Logout'
 import { UserCog, FileSignature } from 'lucide-react'
 import Profile from '~/components/Profile'
-import { toast } from '@/components/ui/sonner'
 
 const MENU_ITEMS = [
   {
@@ -37,7 +36,6 @@ export default function Page() {
           ))}
         </div>
       </div>
-      <button onClick={() => toast('aaaaa')}>aaaa</button>
     </BaseLayout>
   )
 }

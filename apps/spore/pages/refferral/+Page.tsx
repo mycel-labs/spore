@@ -1,12 +1,13 @@
 import { BaseLayout } from '~/renderer/PageShell'
+import { toast } from '@/components/ui/sonner'
 
 export default function Page() {
   return (
     <BaseLayout>
       <div className="py-6 space-y-8">
-        <div className="bg-light rounded-xl pb-6 pt-6">
+        <div className="bg-light rounded-xl pb-8">
           <div className="bg-light rounded-xl">
-            <h2 className="centerline text-3xl mb-4">Refferal</h2>
+            <h2 className="centerline text-3xl py-8">Refferal</h2>
           </div>
           <div className="font-title mx-4 sm:mx-6 rounded border-dark border [&>div]:px-6">
             <div className="text-lg pt-2">Invited Friends</div>
@@ -22,7 +23,7 @@ export default function Page() {
             />
             <button
               className="btn bg-secondary h-14 pt-1 px-10 font-title w-full mt-4"
-              onClick={(e) => console.log(e)}
+              onClick={() => toast('URL Copied!')}
             >
               <span className="btn-inner h-2/3 w-1/3" />
               Copy referral url
