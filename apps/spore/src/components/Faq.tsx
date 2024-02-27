@@ -14,7 +14,7 @@ export default function AccordionDemo() {
       className="w-full border-b-2 border-dotted border-dark"
     >
       <AccordionItem value="item-1">
-        <AccordionTrigger>Waht is SPORE?</AccordionTrigger>
+        <AccordionTrigger>What is SPORE?</AccordionTrigger>
         <AccordionContent>
           Yes. It adheres to the WAI-ARIA design pattern.
         </AccordionContent>
