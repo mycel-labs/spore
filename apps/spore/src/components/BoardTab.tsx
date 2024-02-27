@@ -65,22 +65,24 @@ const TotalTabContent = () => (
       </div>
     </div>
     <table className="border-dark border font-title w-full mt-8">
-      <tr className="bg-dark text-light uppercase [&>th]:p-1">
-        <th>Team Rank</th>
-        <th>Point</th>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>Team A</td>
-        <td className="text-right">1,000</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>Team B</td>
-        <td className="text-right">900</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>Team C</td>
-        <td className="text-right">750</td>
-      </tr>
+      <tbody>
+        <tr className="bg-dark text-light uppercase [&>th]:p-1">
+          <th>Team Rank</th>
+          <th>Point</th>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>Team A</td>
+          <td className="text-right">1,000</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>Team B</td>
+          <td className="text-right">900</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>Team C</td>
+          <td className="text-right">750</td>
+        </tr>
+      </tbody>
     </table>
   </>
 )
@@ -108,22 +110,24 @@ const TeamTabContent = () => (
       </div>
     </div>
     <table className="border-dark border font-title w-full mt-8">
-      <tr className="bg-dark text-light uppercase [&>th]:p-1">
-        <th>Player</th>
-        <th>Point</th>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>akira.cel</td>
-        <td className="text-right">200</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>taro.cel</td>
-        <td className="text-right">190</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>yosui.cel</td>
-        <td className="text-right">140</td>
-      </tr>
+      <tbody>
+        <tr className="bg-dark text-light uppercase [&>th]:p-1">
+          <th>Player</th>
+          <th>Point</th>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>akira.cel</td>
+          <td className="text-right">200</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>taro.cel</td>
+          <td className="text-right">190</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>yosui.cel</td>
+          <td className="text-right">140</td>
+        </tr>
+      </tbody>
     </table>
   </>
 )
@@ -132,34 +136,36 @@ const PlayerTabContent = () => (
   <>
     <h2 className="centerline font-bold text-2xl py-4">Player Board</h2>
     <table className="border-dark border font-title w-full mt-8">
-      <tr className="bg-dark text-light uppercase [&>th]:p-1">
-        <th>Player</th>
-        <th>Point</th>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>akira.cel</td>
-        <td className="text-right">200</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>taro.cel</td>
-        <td className="text-right">190</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>yosui.cel</td>
-        <td className="text-right">140</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>xxxx.cel</td>
-        <td className="text-right">100</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>xxxx.cel</td>
-        <td className="text-right">90</td>
-      </tr>
-      <tr className="[&>td]:py-2 [&>td]:px-6">
-        <td>xxxx.cel</td>
-        <td className="text-right">80</td>
-      </tr>
+      <tbody>
+        <tr className="bg-dark text-light uppercase [&>th]:p-1">
+          <th>Player</th>
+          <th>Point</th>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>akira.cel</td>
+          <td className="text-right">200</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>taro.cel</td>
+          <td className="text-right">190</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>yosui.cel</td>
+          <td className="text-right">140</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>xxxx.cel</td>
+          <td className="text-right">100</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>xxxx.cel</td>
+          <td className="text-right">90</td>
+        </tr>
+        <tr className="[&>td]:py-2 [&>td]:px-6">
+          <td>xxxx.cel</td>
+          <td className="text-right">80</td>
+        </tr>
+      </tbody>
     </table>
   </>
 )

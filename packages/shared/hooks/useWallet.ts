@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useStore } from '../store/index'
 import {
   useConnect as useConnectWagmi,
-  useAccount as useAccountWagmi,
   useDisconnect as useDisconnectWagmi,
   useWalletClient as useWalletClientWagmi,
   useSignTypedData,
@@ -83,7 +82,7 @@ export const useWallet = () => {
           if (!isConnectedWagmi) {
             await connectWagmi({
               connector: connectorsWagmi.find(
-                (cn: any) => cn.name === WALLET_CONFIG[walletType].name
+                (cn: any) => cn.id === WALLET_CONFIG[walletType].id
               ),
             })
           }

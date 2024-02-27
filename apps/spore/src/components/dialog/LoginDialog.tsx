@@ -10,22 +10,49 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Fingerprint, Wallet } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLockBodyScroll } from '@uidotdev/usehooks'
+import useWallet from '@/hooks/useWallet'
+import { WALLET_CONFIG, type WalletType, shortAddress } from '@/lib/wallets'
+import {
+  cn,
+  copyClipboard,
+  isBitGetApp,
+  isMobile,
+  isOKXApp,
+  isPC,
+} from '@/lib/utils'
+import { useNavigate } from '@tanstack/react-router'
 
-export default function UiDialog({ trigger }: { trigger: React.ReactNode }) {
-  const [mode, setMode] = useState<'default' | 'wallet'>('default')
+export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
+  const [mode, setMode] = useState<'default' | 'wallet'>('wallet')
   useLockBodyScroll()
+  const {
+    connectWallet,
+    disconnectWallet,
+    isConnected,
+    evmAddress,
+    deriveKeys,
+    mycelAccount,
+    connectorsWagmi,
+  } = useWallet()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isConnected) {
+      navigate({ to: '/home' })
+    }
+  }, [isConnected])
 
   return (
     <Dialog>
       <DialogOverlay className="overlay-dot bg-black/40 backdrop-blur-sm" />
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="bg-light sm:max-w-md p-8">
-        <DialogClose className="absolute right-2 sm:-right-2.5 top-2 sm:-top-2.5 rounded-full disabled:pointer-events-none font-title text-xl bg-secondary btn-s w-6 h-6 flex justify-center items-center">
+        <DialogClose className="absolute right-2 sm:-right-2.5 top-2 sm:-top-2.5 rounded-full disabled:pointer-events-none font-title text-xl bg-secondary btn-s w-8 h-8 pb-0.5 flex justify-center items-center">
           x
         </DialogClose>
-        {mode === 'default' && (
+        {/* {mode === 'default' && (
           <>
             <div className="font-title font-bold text-2xl mb-6 centerline">
               Start
@@ -52,24 +79,82 @@ export default function UiDialog({ trigger }: { trigger: React.ReactNode }) {
               Connect with Wallet <span className="ml-2">→</span>
             </button>
           </>
-        )}
+        )} */}
         {mode === 'wallet' && (
           <div className="space-y-4">
-            <button onClick={() => setMode('default')}>
-              <span className="mr-2">←</span>
-            </button>
-            <button className="btn-s h-12 w-full bg-secondary">
-              <Wallet className="mr-2" />
-              Metamask
-            </button>
-            <button className="btn-s h-12 w-full bg-secondary">
-              <Wallet className="mr-2" />
-              Keplr
-            </button>
-            <button className="btn-s h-12 w-full bg-secondary">
-              <Wallet className="mr-2" />
-              OKX
-            </button>
+            {/* <button onClick={() => setMode('default')}>
+              <span className="mr-2 font-title font-bold text-2xl">&lt;</span>
+            </button> */}
+            <div className="font-title font-bold text-2xl mb-6 centerline">
+              Start
+            </div>
+
+            {Object.entries(WALLET_CONFIG).map(([key, val]) => (
+              <button
+                key={val.id}
+                className={cn(
+                  'btn-s bg-secondary font-bold font-title w-full h-12',
+                  ((isMobile() && !val.showMobile) || (isPC() && val.hidePC)) &&
+                    'hidden'
+                )}
+                disabled={val?.disabled}
+                onClick={async () => {
+                  if (val.name === 'OKXWallet') {
+                    if (isOKXApp()) {
+                      connectWallet({ walletType: key as WalletType })
+                    } else if (isMobile()) {
+                      window.open(
+                        `https://okex.com/web3/connect-dapp?uri=${encodeURIComponent(window.location.href)}`
+                      )
+                    } else if (isPC()) {
+                      window.open('https://www.okx.com/web3')
+                    }
+                  } else if (val.name === 'BitGetWallet') {
+                    if (isBitGetApp()) {
+                      connectWallet({ walletType: key as WalletType })
+                    } else if (isMobile()) {
+                      window.open(
+                        `https://bkcode.vip/?action=dapp&url=${encodeURIComponent(window.location.href)}`
+                      )
+                    } else {
+                      window.open('https://web3.bitget.com')
+                    }
+                  } else {
+                    // TODO: refactor this
+                    if (
+                      val.chainType === 'evm' ||
+                      (val.chainType === 'cosmos' && window.keplr)
+                    ) {
+                      console.log('connect', key)
+                      connectWallet({ walletType: key as WalletType })
+                    } else {
+                      console.log('Conn::', connectorsWagmi, val)
+                      window.open(val.getUrl)
+                    }
+                  }
+                }}
+              >
+                <span className="btn-inner h-2/3 w-1/4" />
+                <span className="flex items-center justify-center px-6 mr-2">
+                  {Array.isArray(val.icon) ? (
+                    val.icon.map((item, index) => (
+                      <img
+                        key={`wallet-${index}`}
+                        src={item}
+                        width={24}
+                        height={24}
+                        alt={val.name}
+                        className={cn(index > 0 && '-ml-2')}
+                        style={{ zIndex: 2 - index }}
+                      />
+                    ))
+                  ) : (
+                    <img src={val.icon} width={24} height={24} alt={val.name} />
+                  )}
+                  <span className="ml-3">{val.display}</span>
+                </span>
+              </button>
+            ))}
           </div>
         )}
       </DialogContent>
