@@ -25,7 +25,7 @@ import {
 import { useNavigate } from '@tanstack/react-router'
 
 export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
-  const [mode, setMode] = useState<'default' | 'wallet'>('default')
+  const [mode, setMode] = useState<'default' | 'wallet'>('wallet')
   useLockBodyScroll()
   const {
     connectWallet,
@@ -52,7 +52,7 @@ export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
         <DialogClose className="absolute right-2 sm:-right-2.5 top-2 sm:-top-2.5 rounded-full disabled:pointer-events-none font-title text-xl bg-secondary btn-s w-8 h-8 pb-0.5 flex justify-center items-center">
           x
         </DialogClose>
-        {mode === 'default' && (
+        {/* {mode === 'default' && (
           <>
             <div className="font-title font-bold text-2xl mb-6 centerline">
               Start
@@ -79,12 +79,16 @@ export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
               Connect with Wallet <span className="ml-2">→</span>
             </button>
           </>
-        )}
+        )} */}
         {mode === 'wallet' && (
           <div className="space-y-4">
-            <button onClick={() => setMode('default')}>
+            {/* <button onClick={() => setMode('default')}>
               <span className="mr-2 font-title font-bold text-2xl">&lt;</span>
-            </button>
+            </button> */}
+            <div className="font-title font-bold text-2xl mb-6 centerline">
+              Start
+            </div>
+
             {Object.entries(WALLET_CONFIG).map(([key, val]) => (
               <button
                 key={val.id}
