@@ -61,6 +61,7 @@ const DepositTabContent = () => {
         <input
           type="number"
           value="123"
+          readOnly
           className="border-dark border rounded w-full text-2xl text-right px-6 pt-2 pb-1 font-title bg-transparent"
         />
         <button
@@ -83,6 +84,7 @@ const WithdrawTabContent = () => (
       <input
         type="number"
         value="123"
+        readOnly
         className="border-dark border rounded w-full text-2xl text-right px-6 pt-2 pb-1 font-title bg-transparent"
       />
       <button

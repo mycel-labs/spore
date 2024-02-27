@@ -71,7 +71,7 @@ export default function NavMenu() {
             )}
           >
             {NAV_ITEMS.map((item, i) => (
-              <ListItem key={i} item={item} />
+              <ListItem key={i} item={item} setIsOpen={setIsOpen} />
             ))}
           </ul>
           <img
@@ -86,10 +86,20 @@ export default function NavMenu() {
   )
 }
 
-const ListItem = ({ item }: { item: NavItem }) => {
+const ListItem = ({
+  item,
+  setIsOpen,
+}: {
+  item: NavItem
+  setIsOpen: (flg: boolean) => void
+}) => {
   return (
     <li className="group">
-      <Link to={item.link} className="flex items-center">
+      <Link
+        to={item.link}
+        className="flex items-center"
+        onClick={() => setIsOpen(false)}
+      >
         {({ isActive }) => (
           <>
             {isActive ? (
@@ -105,7 +115,7 @@ const ListItem = ({ item }: { item: NavItem }) => {
   )
 }
 
-const MenuOverlay = ({ setIsOpen }: { setIsOpen: () => void }) => {
+const MenuOverlay = ({ setIsOpen }: { setIsOpen: (flg: boolean) => void }) => {
   useLockBodyScroll()
   const { width } = useWindowSize()
 

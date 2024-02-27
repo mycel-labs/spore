@@ -65,7 +65,7 @@ export const MYCEL_CHAIN_INFO: ChainInfo = {
 }
 
 export const WALLET_CONFIG = {
-  MetaMask: {
+  injected: {
     id: 'injected',
     name: 'Injected',
     display: 'EVM Wallet',
@@ -110,15 +110,15 @@ export const WALLET_CONFIG = {
     getUrl: 'https://www.keplr.app/download',
     showMobile: false,
   },
-  Passkey: {
-    id: 'passkey',
-    name: 'Passkey',
-    display: 'Passkey',
-    chainType: '',
-    icon: PasskeyIcon,
-    getUrl: '',
-    showMobile: true,
-  },
+  // Passkey: {
+  //   id: 'passkey',
+  //   name: 'Passkey',
+  //   display: 'Passkey',
+  //   chainType: '',
+  //   icon: PasskeyIcon,
+  //   getUrl: '',
+  //   showMobile: true,
+  // },
   // KeplrMobile: {
   //   id: CosmosWalletType.WC_KEPLR_MOBILE,
   //   name: "KeplrMobile",

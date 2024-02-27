@@ -12,7 +12,7 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
+      "~/*": ["./src/*"],
       "@/*": ["../../packages/shared/*"],
     },
   },

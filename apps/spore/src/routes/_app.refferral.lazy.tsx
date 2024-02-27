@@ -26,6 +26,7 @@ function About() {
           <input
             type="text"
             value="https://spore.xxxx/?invite=akira.cel"
+            readOnly
             className="border-dark border rounded w-full text-lg px-6 py-2 bg-transparent"
           />
           <button
