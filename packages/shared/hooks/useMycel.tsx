@@ -1,7 +1,7 @@
 import useSWR from 'swr'
-import { useClient } from './useClient'
+import { useClient } from '../hooks/useClient'
 import { Domain } from '../types/domain'
-import { useWallet } from './useWallet'
+import { useWallet } from '../hooks/useWallet'
 
 export const useAllRecords = (domain: Domain | undefined) => {
   const client = useClient()

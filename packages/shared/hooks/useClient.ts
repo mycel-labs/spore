@@ -1,7 +1,7 @@
 import { Client } from 'mycel-client-ts'
 import { OfflineSigner } from '@cosmjs/proto-signing'
-import { env } from 'env'
-import useWallet from './useWallet'
+import { env } from '../lib/env'
+import useWallet from '../hooks/useWallet'
 
 const useClientInstance = (signer?: OfflineSigner) => {
   const { mycelOfflineSigner } = useWallet()
