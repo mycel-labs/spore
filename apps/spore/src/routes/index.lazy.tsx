@@ -24,7 +24,7 @@ function Index() {
             trigger={
               <button className="btn font-title text-xl bg-secondary mx-auto mb-6 pt-3 pb-2 pl-6 pr-8 flex items-center font-bold">
                 <span className="btn-inner h-2/3 w-5/6" />
-                <span className="transiton animate-pulse mr-1.5 -mt-0.5">
+                <span className="transition animate-pulse mr-1.5 -mt-0.5">
                   <Play />
                 </span>
                 START
@@ -33,7 +33,7 @@ function Index() {
           />
         </div>
         <div className="bg-primary px-6 py-2 mb-6 text-center mx-auto font-title text-sm">
-          Powerd by{' '}
+          Powered by{' '}
           <a href="https://mycel.domains" target="_blank" rel="noreferrer">
             Mycel
           </a>
