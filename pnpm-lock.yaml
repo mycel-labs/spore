@@ -83,6 +83,9 @@ importers:
       vite:
         specifier: ^5.0.10
         version: 5.0.11(@types/node@20.11.5)
+      vite-plugin-radar:
+        specifier: ^0.9.3
+        version: 0.9.3(vite@5.0.11)
     devDependencies:
       '@types/node':
         specifier: ^20.10.4
@@ -14708,6 +14711,14 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vite-plugin-radar@0.9.3(vite@5.0.11):
+    resolution: {integrity: sha512-o/7F0gHQW9yUxpExXYwQLxFYOSxiWIPs3Uh24sg+wl5ikghzLKMQ2Xldak/rsT0o06rzdrAqP9+XSOwfCbwz2Q==}
+    peerDependencies:
+      vite: ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+    dependencies:
+      vite: 5.0.11(@types/node@20.11.5)
+    dev: false
 
   /vite@5.0.11(@types/node@20.11.5):
     resolution: {integrity: sha512-XBMnDjZcNAw/G1gEiskiM1v6yzM4GE5aMGvhWTlHAYYhxb7S3/V1s3m2LDHa8Vh6yIWYYB0iJwsEaS523c4oYA==}
