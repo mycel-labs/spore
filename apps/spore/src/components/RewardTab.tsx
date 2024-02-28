@@ -43,7 +43,7 @@ const TabsTrigger = ({ ...props }) => (
 
 const TabsContent = ({ ...props }) => (
   <TabsContent_
-    className="bg-light overlay-dot-ll p-6 rounded-xl mt-8"
+    className="bg-light overlay-dot-ll p-6 rounded-xl mt-6"
     {...props}
   />
 )
