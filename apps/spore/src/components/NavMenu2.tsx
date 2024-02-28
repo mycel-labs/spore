@@ -81,7 +81,7 @@ export default function NavMenu() {
             />
             <ul
               className={cn(
-                'font-bold uppercase font-title text-2xl rounded space-y-5 mr-0 sm:mr-8 mt-14 sm:mt-10'
+                'font-bold uppercase font-title text-2xl rounded space-y-5 mr-0 sm:mr-8 mt-14 sm:mt-7'
               )}
             >
               <div className="hidden sm:grid sm:grid-cols-2 gap-4 pb-1">
