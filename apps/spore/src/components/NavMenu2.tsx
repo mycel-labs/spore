@@ -1,15 +1,13 @@
+import { Link } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
-import { Menu } from 'lucide-react'
+import { Menu, Home, Cog } from 'lucide-react'
 import ImgLogo from '@/assets/spore-logo.svg'
-import PlayFill from '@/components/svg/PlayFill'
-import Play from '@/components/svg/Play'
 import { cn } from '@/lib/utils'
 import {
   useLockBodyScroll,
   useWindowScroll,
   useWindowSize,
 } from '@uidotdev/usehooks'
-import { usePageContext } from '~/renderer/usePageContext'
 
 type NavItem = {
   name: string | JSX.Element
@@ -18,16 +16,16 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { name: 'Home', link: '/home', klass: 'bg-rose-500' },
-  { name: 'Leader Board', link: '/board', klass: 'bg-rose-500' },
+  // { name: 'Home', link: '/home', klass: 'bg-light' },
+  { name: 'LeaderBoard', link: '/board', klass: 'bg-light' },
   {
     name: 'Reward',
     link: '/reward',
-    klass: 'bg-secondary',
+    klass: 'bg-light',
   },
-  { name: 'Referral', link: '/refferral', klass: 'bg-secondary' },
-  { name: 'Setting', link: '/setting', klass: 'bg-[#fefe82]' },
-  { name: 'About', link: '/about', klass: 'bg-[#fefe82]' },
+  { name: 'Refereal', link: '/refferral', klass: 'bg-light' },
+  // { name: 'Setting', link: '/setting', klass: 'bg-light' },
+  { name: 'About', link: '/about', klass: 'bg-light' },
 ]
 
 export default function NavMenu() {
@@ -51,19 +49,29 @@ export default function NavMenu() {
         )}
       >
         <img src={ImgLogo} className="" />
-        <button
-          className="btn w-12 h-12 bg-secondary"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <span className="btn-inner h-2/3 w-2/3" />
-          <Menu size={30} strokeWidth={3} />
-        </button>
+        <div className="flex space-x-2">
+          <Link className="btn w-12 h-12 bg-light" to="/home">
+            <span className="btn-inner h-2/3 w-2/3" />
+            <Home size={30} strokeWidth={3} />
+          </Link>
+          <Link className="btn w-12 h-12 bg-light" to="/setting">
+            <span className="btn-inner h-2/3 w-2/3" />
+            <Cog size={30} strokeWidth={3} />
+          </Link>
+          <button
+            className="btn w-12 h-12 bg-secondary"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span className="btn-inner h-2/3 w-2/3" />
+            <Menu size={30} strokeWidth={3} />
+          </button>
+        </div>
       </nav>
       <nav className="relative h-screen z-50">
         <div
           className={cn(
-            isOpen ? 'flex' : 'hidden sm:flex',
-            'fixed w-72 top-0 bottom-0'
+            isOpen ? 'flex px-6' : 'hidden sm:flex',
+            'fixed top-0 bottom-0 w-72'
           )}
         >
           <div className="absolute top-0 w-full pt-7">
@@ -73,12 +81,47 @@ export default function NavMenu() {
             />
             <ul
               className={cn(
-                // 'bottom-auto top-0',
-                'font-bold uppercase font-title text-2xl rounded space-y-4 mr-8 mt-0 sm:mt-6'
+                'font-bold uppercase font-title text-2xl rounded space-y-5 mr-0 sm:mr-8 mt-14 sm:mt-10'
               )}
             >
+              <div className="hidden sm:grid sm:grid-cols-2 gap-4 pb-1">
+                <Link
+                  className="btn bg-light h-14"
+                  to="/home"
+                  activeProps={{
+                    className: 'shadow-solid-sm translate-y-0.5 opacity-90',
+                  }}
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span className="btn-inner h-1/3 w-3/5" />
+                      {isActive && (
+                        <span className="btn-inner-active h-1/3 w-1/5" />
+                      )}
+                      <Home size={30} strokeWidth={3} />
+                    </>
+                  )}
+                </Link>
+                <Link
+                  className="btn bg-light h-14"
+                  to="/setting"
+                  activeProps={{
+                    className: 'shadow-solid-sm translate-y-0.5 opacity-90',
+                  }}
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span className="btn-inner h-1/3 w-3/5" />
+                      {isActive && (
+                        <span className="btn-inner-active h-1/3 w-1/5" />
+                      )}
+                      <Cog size={30} strokeWidth={3} />
+                    </>
+                  )}
+                </Link>
+              </div>
               {NAV_ITEMS.map((item, i) => (
-                <ListItem key={i} item={item} />
+                <ListItem setIsOpen={setIsOpen} key={i} item={item} />
               ))}
             </ul>
           </div>
@@ -88,18 +131,31 @@ export default function NavMenu() {
   )
 }
 
-const ListItem = ({ item }: { item: NavItem }) => {
-  const { urlPathname } = usePageContext()
-
+const ListItem = ({
+  item,
+  setIsOpen,
+}: {
+  item: NavItem
+  setIsOpen: (flg: boolean) => void
+}) => {
   return (
     <li className="group">
-      <a href={item.link} className={`flex btn tems-center h-14 ${item.klass}`}>
-        <span className="btn-inner h-2/3 w-2/5" />
-        {urlPathname === item.link && (
-          <span className="btn-inner-active h-1/3 w-1/5" />
+      <Link
+        to={item.link}
+        className="flex items-center btn bg-light h-14"
+        activeProps={{
+          className: 'shadow-solid-sm translate-y-0.5 opacity-90',
+        }}
+        onClick={() => setIsOpen(false)}
+      >
+        {({ isActive }) => (
+          <>
+            <span className="btn-inner h-1/3 w-2/5" />
+            {isActive && <span className="btn-inner-active h-1/3 w-1/5" />}
+            {item.name}
+          </>
         )}
-        {item.name}
-      </a>
+      </Link>
     </li>
   )
 }

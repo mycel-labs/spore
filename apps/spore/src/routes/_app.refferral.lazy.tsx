@@ -2,17 +2,17 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { toast } from '@/components/ui/sonner'
 
 export const Route = createLazyFileRoute('/_app/refferral')({
-  component: About,
+  component: Referral,
 })
 
-function About() {
+function Referral() {
   return (
     <div className="py-6 space-y-8">
-      <div className="bg-light rounded-xl pb-8">
+      <div className="bg-light overlay-dot-ll rounded-xl pb-8">
         <div className="bg-light rounded-xl">
-          <h2 className="centerline text-2xl font-bold py-8">Refferal</h2>
+          <h2 className="centerline text-2xl font-bold py-8">Refferral</h2>
         </div>
-        <ul className="list-table mx-4 sm:mx-6">
+        <ul className="list-table bg-light mx-4 sm:mx-6">
           <li>
             <div className="header">Invited friends</div>
             <div className="text-right">12</div>

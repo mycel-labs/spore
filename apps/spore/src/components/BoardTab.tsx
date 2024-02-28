@@ -13,7 +13,7 @@ export default function BoardTab({
 }) {
   return (
     <Tabs defaultValue={tab ?? 'total'} className="w-full">
-      <TabsList className="h-12 text-xl bg-transparent space-x-px font-title">
+      <TabsList className="text-xl bg-transparent space-x-px font-title">
         <TabsTrigger value="total">Total</TabsTrigger>
         <TabsTrigger value="team">Team</TabsTrigger>
         <TabsTrigger value="player">Player</TabsTrigger>
@@ -33,7 +33,7 @@ export default function BoardTab({
 
 const TabsTrigger = ({ ...props }) => (
   <TabsTrigger_
-    className="flex-1 border-b border-blue-800/20 bg-light data-[state=inactive]:opacity-85 h-full rounded-tr rounded-tl-3xl data-[state=active]:border-transparent uppercase font-bold"
+    className="flex-1 border-b border-blue-800/20 bg-light data-[state=inactive]:opacity-85 h-full rounded-tr rounded-tl-3xl data-[state=active]:border-transparent uppercase font-bold pt-5 pb-3 relative"
     {...props}
   />
 )

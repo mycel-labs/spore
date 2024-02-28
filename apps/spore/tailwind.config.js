@@ -4,6 +4,7 @@ import defaultTheme from 'tailwindcss/defaultTheme'
 module.exports = {
   darkMode: ['class'],
   content: [
+    './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
     './../../packages/shared/**/*.{js,jsx,ts,tsx}',
   ],

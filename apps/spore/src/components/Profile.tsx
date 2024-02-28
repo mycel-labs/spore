@@ -2,7 +2,7 @@ import ImgMrIcon from '@/assets/mr-icon.svg'
 
 export default function Profile() {
   return (
-    <div className="grid grid-cols-2 border-dark border rounded my-6 mx-4 sm:mx-6">
+    <div className="grid grid-cols-2 border-dark border rounded my-6 mx-4 sm:mx-6 bg-light">
       <div className="px-3 py-2 border-r border-dark flex items-center justify-center">
         <img src={ImgMrIcon} />
       </div>
