@@ -23,7 +23,7 @@ const NAV_ITEMS: NavItem[] = [
     link: '/reward',
     klass: 'bg-light',
   },
-  { name: 'Refereal', link: '/refferral', klass: 'bg-light' },
+  { name: 'Referral', link: '/refferral', klass: 'bg-light' },
   // { name: 'Setting', link: '/setting', klass: 'bg-light' },
   { name: 'About', link: '/about', klass: 'bg-light' },
 ]
@@ -50,20 +50,20 @@ export default function NavMenu() {
       >
         <img src={ImgLogo} className="" />
         <div className="flex space-x-2">
-          <Link className="btn w-12 h-12 bg-light" to="/home">
+          <Link className="btn w-12 h-12 bg-light pt-px pr-px" to="/home">
             <span className="btn-inner h-2/3 w-2/3" />
-            <Home size={30} strokeWidth={3} />
+            <Home size={26} strokeWidth={3} />
           </Link>
-          <Link className="btn w-12 h-12 bg-light" to="/setting">
+          <Link className="btn w-12 h-12 bg-light pt-px pr-px" to="/setting">
             <span className="btn-inner h-2/3 w-2/3" />
-            <Cog size={30} strokeWidth={3} />
+            <Cog size={26} strokeWidth={3} />
           </Link>
           <button
-            className="btn w-12 h-12 bg-secondary"
+            className="btn w-12 h-12 bg-secondary pt-px pr-px"
             onClick={() => setIsOpen(!isOpen)}
           >
             <span className="btn-inner h-2/3 w-2/3" />
-            <Menu size={30} strokeWidth={3} />
+            <Menu size={26} strokeWidth={3} />
           </button>
         </div>
       </nav>
@@ -90,15 +90,12 @@ export default function NavMenu() {
                   to="/home"
                   activeProps={{
                     className:
-                      'bg-secondary shadow-none translate-y-2 opacity-90',
+                      'bg-secondary shadow-solid-xxs translate-y-2 opacity-90',
                   }}
                 >
                   {({ isActive }) => (
                     <>
                       <span className="btn-inner h-1/3 w-3/5" />
-                      {isActive && (
-                        <span className="btn-inner-active h-1/3 w-1/5" />
-                      )}
                       <Home size={30} strokeWidth={3} />
                     </>
                   )}
@@ -108,15 +105,12 @@ export default function NavMenu() {
                   to="/setting"
                   activeProps={{
                     className:
-                      'bg-secondary shadow-none translate-y-2 opacity-90',
+                      'bg-secondary shadow-solid-xxs translate-y-2 opacity-90',
                   }}
                 >
                   {({ isActive }) => (
                     <>
                       <span className="btn-inner h-1/3 w-3/5" />
-                      {isActive && (
-                        <span className="btn-inner-active h-1/3 w-1/5" />
-                      )}
                       <Cog size={30} strokeWidth={3} />
                     </>
                   )}
@@ -146,14 +140,13 @@ const ListItem = ({
         to={item.link}
         className="flex items-center btn bg-light h-14"
         activeProps={{
-          className: 'bg-secondary shadow-none translate-y-2 opacity-90',
+          className: 'bg-secondary shadow-solid-xxs translate-y-2 opacity-90',
         }}
         onClick={() => setIsOpen(false)}
       >
         {({ isActive }) => (
           <>
             <span className="btn-inner h-1/3 w-2/5" />
-            {isActive && <span className="btn-inner-active h-1/3 w-1/5" />}
             {item.name}
           </>
         )}

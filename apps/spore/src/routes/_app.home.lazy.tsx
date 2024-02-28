@@ -8,7 +8,7 @@ export const Route = createLazyFileRoute('/_app/home')({
 
 function Home() {
   return (
-    <div className="py-6 space-y-8">
+    <div className="py-8 space-y-8">
       <div className="bg-light rounded-xl py-8 overlay-dot-ll">
         <h2 className="centerline text-2xl font-bold">Home</h2>
         <Profile />

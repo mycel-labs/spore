@@ -9,7 +9,7 @@ function Board() {
   const { t } = Route.useSearch()
 
   return (
-    <div className="py-6 space-y-8">
+    <div className="py-8 space-y-8">
       <BoardTab tab={t} />
     </div>
   )
