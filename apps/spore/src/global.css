@@ -94,12 +94,12 @@
 
   span.btn-inner {
     @apply absolute top-1 left-1 opacity-70 border-t-2 border-l-2 border-dark;
-    border-radius: 6px 0 0 0;
+    border-radius: 4px 0 0 0;
   }
 
   span.btn-inner-active {
     @apply absolute bottom-1 right-1 opacity-70 border-b-2 border-r-2 border-dark;
-    border-radius: 0 0 6px 0;
+    border-radius: 0 0 4px 0;
   }
 
   .centerline {
