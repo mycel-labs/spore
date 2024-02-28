@@ -1,7 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import ImgMashroom from '@/assets/mushroom.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
-// import { FullLayout } from '~/renderer/PageShell'
 import LoginDialog from '~/components/dialog/LoginDialog'
 import Play from '@/components/svg/PlayFill'
 

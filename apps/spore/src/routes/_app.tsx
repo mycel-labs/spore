@@ -1,5 +1,5 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router'
-import NavMenu from '~/components/NavMenu'
+import NavMenu from '~/components/NavMenu2'
 import useWallet from '@/hooks/useWallet'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect } from 'react'

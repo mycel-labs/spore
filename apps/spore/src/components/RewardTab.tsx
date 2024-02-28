@@ -12,7 +12,7 @@ export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
       defaultValue={tab === 'withdraw' ? 'withdraw' : 'deposit'}
       className="w-full"
     >
-      <TabsList className="h-12 text-xl font-title bg-transparent space-x-px font-bold">
+      <TabsList className="text-xl font-title bg-transparent space-x-px font-bold">
         <TabsTrigger value="deposit">Deposit</TabsTrigger>
         <TabsTrigger value="withdraw">Withdraw</TabsTrigger>
       </TabsList>
@@ -28,20 +28,23 @@ export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
 
 const TabsTrigger = ({ ...props }) => (
   <TabsTrigger_
-    className="flex-1 border-b border-blue-800/20 bg-light data-[state=inactive]:opacity-85 h-full rounded-tr rounded-tl-3xl data-[state=active]:border-transparent uppercase"
+    className="flex-1 border-b border-blue-800/20 bg-light overlay-dot-ll data-[state=inactive]:opacity-85 h-full rounded-tr rounded-tl-3xl data-[state=active]:border-transparent uppercase pt-5 pb-3"
     {...props}
   />
 )
 
 const TabsContent = ({ ...props }) => (
-  <TabsContent_ className="bg-light p-6 rounded-b-xl mt-0" {...props} />
+  <TabsContent_
+    className="bg-light overlay-dot-ll p-6 rounded-b-xl mt-0"
+    {...props}
+  />
 )
 
 const DepositTabContent = () => {
   const { runConfetti, runSparkles } = useConfetti()
   return (
     <>
-      <ul className="list-table">
+      <ul className="list-table bg-light">
         <li className="p-0">
           <div className="header bg-dark text-light">Estimated Reward</div>
           <div className="text-right text-3xl mt-4 mb-2">$123,000</div>
@@ -55,7 +58,7 @@ const DepositTabContent = () => {
           <div className="text-right">23:55:10</div>
         </li>
       </ul>
-      <div className="border-dark border rounded px-6 py-8 mt-6">
+      <div className="border-dark bg-light border rounded px-6 py-8 mt-6">
         <h2 className="centerline text-2xl font-bold pb-2">Deposit</h2>
         <p className="text-right p-1">Balance:100</p>
         <input
@@ -78,7 +81,7 @@ const DepositTabContent = () => {
 
 const WithdrawTabContent = () => (
   <>
-    <div className="border-dark border rounded px-6 pb-8">
+    <div className="border-dark bg-light border rounded px-6 pb-8">
       <h2 className="centerline font-bold text-2xl pt-6 pb-4">Withdraw</h2>
       <p className="text-right p-1">Balance:100</p>
       <input

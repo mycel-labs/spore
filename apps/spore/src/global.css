@@ -50,7 +50,8 @@
   --c-secondary: #00efd1;
   --c-light: #f9f4be;
   --c-dark: #000050;
-  --c-overlay: rgba(0, 0, 80, 0.15);
+  --c-overlay-l: rgba(0, 0, 80, 0.15);
+  --c-overlay-ll: rgba(0, 0, 80, 0.05);
 
   --background: : #f7f3f3;
   --foreground: : #121212;
@@ -146,19 +147,43 @@
   .overlay-dot-l {
     background: linear-gradient(
         45deg,
-        var(--c-overlay) 25%,
+        var(--c-overlay-l) 25%,
         transparent 0,
         transparent 75%,
-        var(--c-overlay) 0,
-        var(--c-overlay)
+        var(--c-overlay-l) 0,
+        var(--c-overlay-l)
       ),
       linear-gradient(
         45deg,
-        var(--c-overlay) 25%,
+        var(--c-overlay-l) 25%,
         transparent 0,
         transparent 75%,
-        var(--c-overlay) 0,
-        var(--c-overlay)
+        var(--c-overlay-l) 0,
+        var(--c-overlay-l)
+      );
+    background-position:
+      0 0,
+      2px 2px;
+    background-size: 4px 4px;
+    background-repeat: repeat;
+  }
+
+  .overlay-dot-ll {
+    background: linear-gradient(
+        45deg,
+        var(--c-overlay-ll) 25%,
+        transparent 0,
+        transparent 75%,
+        var(--c-overlay-ll) 0,
+        var(--c-overlay-ll)
+      ),
+      linear-gradient(
+        45deg,
+        var(--c-overlay-ll) 25%,
+        transparent 0,
+        transparent 75%,
+        var(--c-overlay-ll) 0,
+        var(--c-overlay-ll)
       );
     background-position:
       0 0,
