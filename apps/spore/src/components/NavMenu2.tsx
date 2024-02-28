@@ -89,7 +89,8 @@ export default function NavMenu() {
                   className="btn bg-light h-14"
                   to="/home"
                   activeProps={{
-                    className: 'shadow-solid-sm translate-y-0.5 opacity-90',
+                    className:
+                      'bg-secondary shadow-none translate-y-2 opacity-90',
                   }}
                 >
                   {({ isActive }) => (
@@ -106,7 +107,8 @@ export default function NavMenu() {
                   className="btn bg-light h-14"
                   to="/setting"
                   activeProps={{
-                    className: 'shadow-solid-sm translate-y-0.5 opacity-90',
+                    className:
+                      'bg-secondary shadow-none translate-y-2 opacity-90',
                   }}
                 >
                   {({ isActive }) => (
@@ -144,7 +146,7 @@ const ListItem = ({
         to={item.link}
         className="flex items-center btn bg-light h-14"
         activeProps={{
-          className: 'shadow-solid-sm translate-y-0.5 opacity-90',
+          className: 'bg-secondary shadow-none translate-y-2 opacity-90',
         }}
         onClick={() => setIsOpen(false)}
       >

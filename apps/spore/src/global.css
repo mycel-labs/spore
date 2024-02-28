@@ -86,19 +86,19 @@
 }
 @layer components {
   .btn {
-    @apply border-dark border-2 rounded-xl flex items-center justify-center shadow-solid hover:shadow-solid-sm shadow-current	hover:translate-y-0.5 relative hover:opacity-90;
+    @apply border-dark border-4 rounded-xl flex items-center justify-center shadow-solid hover:shadow-none shadow-current	hover:translate-y-2 relative hover:opacity-90;
   }
   .btn-s {
-    @apply border-dark border-2 rounded-xl flex items-center justify-center shadow-solid-xs shadow-current hover:shadow-solid-xxs hover:translate-y-px relative hover:opacity-90;
+    @apply border-dark border-3 rounded-xl flex items-center justify-center shadow-solid-xs shadow-current hover:shadow-none hover:translate-y-1 relative hover:opacity-90;
   }
 
   span.btn-inner {
-    @apply absolute top-0.5 left-0.5 opacity-70 border-t-2 border-l-2 border-dark;
+    @apply absolute top-1 left-1 opacity-70 border-t-2 border-l-2 border-dark;
     border-radius: 8px 0 0 0;
   }
 
   span.btn-inner-active {
-    @apply absolute bottom-0.5 right-0.5 opacity-70 border-b-2 border-r-2 border-dark;
+    @apply absolute bottom-1 right-1 opacity-70 border-b-2 border-r-2 border-dark;
     border-radius: 0 0 8px 0;
   }
 

@@ -13,10 +13,20 @@ export default function BoardTab({
 }) {
   return (
     <Tabs defaultValue={tab ?? 'total'} className="w-full">
-      <TabsList className="text-xl bg-transparent space-x-px font-title">
-        <TabsTrigger value="total">Total</TabsTrigger>
-        <TabsTrigger value="team">Team</TabsTrigger>
-        <TabsTrigger value="player">Player</TabsTrigger>
+      <TabsList className="text-xl bg-transparent space-x-3 font-title">
+        <TabsTrigger value="total">
+          <span className="btn-inner h-1/3 w-2/5" />
+          Total
+        </TabsTrigger>
+        <TabsTrigger value="team">
+          {' '}
+          <span className="btn-inner h-1/3 w-2/5" />
+          Team
+        </TabsTrigger>
+        <TabsTrigger value="player">
+          <span className="btn-inner h-1/3 w-2/5" />
+          Player
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="total">
         <TotalTabContent />
@@ -33,13 +43,16 @@ export default function BoardTab({
 
 const TabsTrigger = ({ ...props }) => (
   <TabsTrigger_
-    className="flex-1 border-b border-blue-800/20 bg-light data-[state=inactive]:opacity-85 h-full rounded-tr rounded-tl-3xl data-[state=active]:border-transparent uppercase font-bold pt-5 pb-3 relative"
+    className="btn flex-1 data-[state=inactive]:bg-light h-full data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-none uppercase font-bold py-2 relative"
     {...props}
   />
 )
 
 const TabsContent = ({ ...props }) => (
-  <TabsContent_ className="bg-light p-6 rounded-b-xl mt-0" {...props} />
+  <TabsContent_
+    className="bg-light overlay-dot-ll p-6 rounded-xl mt-5"
+    {...props}
+  />
 )
 
 const TotalTabContent = () => (
@@ -48,7 +61,7 @@ const TotalTabContent = () => (
     <div className="grid grid-cols-4 gap-4">
       <img src={ImgEnoki} />
       <div className="col-span-3 pt-2">
-        <ul className="list-table">
+        <ul className="list-table bg-light">
           <li>
             <div className="header">Pool Value</div>
             <div className="text-right">$100,000,000</div>
@@ -64,7 +77,7 @@ const TotalTabContent = () => (
         </ul>
       </div>
     </div>
-    <table className="border-dark border font-title w-full mt-8">
+    <table className="bg-light border-dark border font-title w-full mt-8">
       <tbody>
         <tr className="bg-dark text-light uppercase [&>th]:p-1">
           <th>Team Rank</th>
@@ -93,7 +106,7 @@ const TeamTabContent = () => (
     <div className="grid grid-cols-4 gap-4">
       <img src={ImgEnoki} />
       <div className="col-span-3 pt-2">
-        <ul className="list-table">
+        <ul className="list-table bg-light">
           <li>
             <div className="header">Pool Value</div>
             <div className="text-right">$9,100,000</div>
@@ -109,7 +122,7 @@ const TeamTabContent = () => (
         </ul>
       </div>
     </div>
-    <table className="border-dark border font-title w-full mt-8">
+    <table className="bg-light border-dark border font-title w-full mt-8">
       <tbody>
         <tr className="bg-dark text-light uppercase [&>th]:p-1">
           <th>Player</th>
@@ -135,7 +148,7 @@ const TeamTabContent = () => (
 const PlayerTabContent = () => (
   <>
     <h2 className="centerline font-bold text-2xl py-4">Player Board</h2>
-    <table className="border-dark border font-title w-full mt-8">
+    <table className="bg-light border-dark border font-title w-full mt-8">
       <tbody>
         <tr className="bg-dark text-light uppercase [&>th]:p-1">
           <th>Player</th>
