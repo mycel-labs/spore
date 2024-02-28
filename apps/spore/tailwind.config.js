@@ -33,10 +33,10 @@ module.exports = {
         3: '3px',
       },
       boxShadow: {
-        solid: '0px 8px var(--c-dark)',
+        solid: '0px 10px var(--c-dark)',
         'solid-sm': '0px 6px var(--c-dark)',
         'solid-xs': '0px 4px var(--c-dark)',
-        'solid-xxs': '0px 1px var(--c-dark)',
+        'solid-xxs': '0px 2px var(--c-dark)',
       },
       keyframes: {
         'accordion-down': {

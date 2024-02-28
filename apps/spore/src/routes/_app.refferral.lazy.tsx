@@ -7,7 +7,7 @@ export const Route = createLazyFileRoute('/_app/refferral')({
 
 function Referral() {
   return (
-    <div className="py-6 space-y-8">
+    <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl pb-8">
         <div className="bg-light rounded-xl">
           <h2 className="centerline text-2xl font-bold py-8">Refferral</h2>

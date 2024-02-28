@@ -19,7 +19,6 @@ export default function BoardTab({
           Total
         </TabsTrigger>
         <TabsTrigger value="team">
-          {' '}
           <span className="btn-inner h-1/3 w-2/5" />
           Team
         </TabsTrigger>
@@ -43,7 +42,7 @@ export default function BoardTab({
 
 const TabsTrigger = ({ ...props }) => (
   <TabsTrigger_
-    className="btn flex-1 data-[state=inactive]:bg-light h-full data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-none uppercase font-bold py-2 relative"
+    className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold py-2 relative"
     {...props}
   />
 )
