@@ -12,9 +12,17 @@ export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
       defaultValue={tab === 'withdraw' ? 'withdraw' : 'deposit'}
       className="w-full"
     >
-      <TabsList className="text-xl font-title bg-transparent space-x-px font-bold">
-        <TabsTrigger value="deposit">Deposit</TabsTrigger>
-        <TabsTrigger value="withdraw">Withdraw</TabsTrigger>
+      <TabsList className="text-xl bg-transparent space-x-3 font-title">
+        <TabsTrigger value="deposit">
+          {' '}
+          <span className="btn-inner h-1/3 w-2/5" />
+          Deposit
+        </TabsTrigger>
+        <TabsTrigger value="withdraw">
+          {' '}
+          <span className="btn-inner h-1/3 w-2/5" />
+          Withdraw
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="deposit">
         <DepositTabContent />
@@ -28,14 +36,14 @@ export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
 
 const TabsTrigger = ({ ...props }) => (
   <TabsTrigger_
-    className="flex-1 border-b border-blue-800/20 bg-light overlay-dot-ll data-[state=inactive]:opacity-85 h-full rounded-tr rounded-tl-3xl data-[state=active]:border-transparent uppercase pt-5 pb-3"
+    className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold py-2 relative"
     {...props}
   />
 )
 
 const TabsContent = ({ ...props }) => (
   <TabsContent_
-    className="bg-light overlay-dot-ll p-6 rounded-b-xl mt-0"
+    className="bg-light overlay-dot-ll p-6 rounded-xl mt-8"
     {...props}
   />
 )
