@@ -214,7 +214,7 @@
   }
 
   .list-table {
-    @apply rounded border-dark border font-title text-xl;
+    @apply rounded border-dark border-2 font-title text-xl;
     .header {
       @apply font-bold uppercase text-lg;
     }
@@ -225,7 +225,7 @@
       }
     }
     li + li {
-      @apply border-dark border-t;
+      @apply border-dark border-t-2;
     }
   }
 

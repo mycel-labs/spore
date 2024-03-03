@@ -76,7 +76,7 @@ const TotalTabContent = () => (
         </ul>
       </div>
     </div>
-    <table className="bg-light border-dark border font-title w-full mt-8">
+    <table className="bg-light border-dark border-2 font-title w-full mt-8">
       <tbody>
         <tr className="bg-dark text-light uppercase [&>th]:p-1">
           <th>Team Rank</th>
@@ -121,7 +121,7 @@ const TeamTabContent = () => (
         </ul>
       </div>
     </div>
-    <table className="bg-light border-dark border font-title w-full mt-8">
+    <table className="bg-light border-dark border-2 font-title w-full mt-8">
       <tbody>
         <tr className="bg-dark text-light uppercase [&>th]:p-1">
           <th>Player</th>
@@ -147,7 +147,7 @@ const TeamTabContent = () => (
 const PlayerTabContent = () => (
   <>
     <h2 className="centerline font-bold text-2xl py-4">Player Board</h2>
-    <table className="bg-light border-dark border font-title w-full mt-8">
+    <table className="bg-light border-dark border-2 font-title w-full mt-8">
       <tbody>
         <tr className="bg-dark text-light uppercase [&>th]:p-1">
           <th>Player</th>

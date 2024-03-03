@@ -49,7 +49,7 @@ export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
       <DialogOverlay className="overlay-dot bg-black/40 backdrop-blur-sm" />
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="bg-light sm:max-w-md p-8">
-        <DialogClose className="absolute right-2 sm:-right-2.5 top-2 sm:-top-2.5 rounded-full disabled:pointer-events-none font-title text-xl bg-secondary btn w-8 h-8 pb-0.5 flex justify-center items-center">
+        <DialogClose className="absolute right-2 sm:-right-2.5 top-2 sm:-top-2.5 rounded-full disabled:pointer-events-none font-title text-xl bg-secondary btn-s w-8 h-8 pb-0.5 flex justify-center items-center">
           x
         </DialogClose>
         {/* {mode === 'default' && (
