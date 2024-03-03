@@ -42,7 +42,7 @@ export default function BoardTab({
 
 const TabsTrigger = ({ ...props }) => (
   <TabsTrigger_
-    className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold py-2 relative"
+    className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold text-base py-2 px-2.5 relative text-nowrap"
     {...props}
   />
 )
