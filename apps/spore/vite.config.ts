@@ -3,6 +3,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import nodePolyfills from 'vite-plugin-node-stdlib-browser'
 import type { UserConfig } from 'vite'
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
+import { VitePluginRadar } from 'vite-plugin-radar'
 
 const config: UserConfig = {
   resolve: {
@@ -14,6 +15,11 @@ const config: UserConfig = {
   plugins: [
     react(),
     TanStackRouterVite(),
+    VitePluginRadar({
+      analytics: {
+        id: 'G-9LRZ9KB92V',
+      },
+    }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],

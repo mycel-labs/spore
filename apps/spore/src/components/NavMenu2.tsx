@@ -45,18 +45,18 @@ export default function NavMenu() {
           scrolled
             ? 'bg-primary/95 overlay-dot-l backdrop-blur'
             : 'bg-transparent',
-          'h-20 fixed right-0 left-0 top-0 w-full flex sm:hidden z-30 justify-between px-6 py-3'
+          'h-20 fixed right-0 left-0 top-0 w-full flex items-center sm:hidden z-30 justify-between px-4 py-2'
         )}
       >
-        <img src={ImgLogo} className="" />
-        <div className="flex space-x-2">
+        <img src={ImgLogo} className="h-full" />
+        <div className="flex space-x-2 -mt-3">
           <Link className="btn w-12 h-12 bg-light pt-px pr-px" to="/home">
             <span className="btn-inner h-2/3 w-2/3" />
-            <Home size={26} strokeWidth={3} />
+            <Home size={28} strokeWidth={3} />
           </Link>
           <Link className="btn w-12 h-12 bg-light pt-px pr-px" to="/setting">
             <span className="btn-inner h-2/3 w-2/3" />
-            <Cog size={26} strokeWidth={3} />
+            <Cog size={28} strokeWidth={3} />
           </Link>
           <button
             className="btn w-12 h-12 bg-secondary pt-px pr-px"

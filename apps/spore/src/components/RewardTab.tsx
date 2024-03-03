@@ -43,7 +43,7 @@ const TabsTrigger = ({ ...props }) => (
 
 const TabsContent = ({ ...props }) => (
   <TabsContent_
-    className="bg-light overlay-dot-ll p-6 rounded-xl mt-8"
+    className="bg-light overlay-dot-ll p-6 rounded-xl mt-6"
     {...props}
   />
 )
@@ -66,7 +66,7 @@ const DepositTabContent = () => {
           <div className="text-right">23:55:10</div>
         </li>
       </ul>
-      <div className="border-dark bg-light border rounded px-6 py-8 mt-6">
+      <div className="border-dark bg-light border-2 rounded px-6 py-8 mt-6">
         <h2 className="centerline text-2xl font-bold pb-2">Deposit</h2>
         <p className="text-right p-1">Balance:100</p>
         <input
@@ -89,7 +89,7 @@ const DepositTabContent = () => {
 
 const WithdrawTabContent = () => (
   <>
-    <div className="border-dark bg-light border rounded px-6 pb-8">
+    <div className="border-dark bg-light border-2 rounded px-6 pb-8">
       <h2 className="centerline font-bold text-2xl pt-6 pb-4">Withdraw</h2>
       <p className="text-right p-1">Balance:100</p>
       <input
