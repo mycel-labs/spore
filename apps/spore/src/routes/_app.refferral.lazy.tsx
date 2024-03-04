@@ -10,7 +10,7 @@ function Referral() {
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl pb-8">
         <div className="bg-light rounded-xl">
-          <h2 className="centerline text-2xl font-bold py-8">Refferral</h2>
+          <h2 className="centerline text-3xl font-bold py-8">Refferral</h2>
         </div>
         <ul className="list-table bg-light mx-4 sm:mx-6">
           <li>

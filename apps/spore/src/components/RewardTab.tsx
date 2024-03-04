@@ -59,15 +59,15 @@ const DepositTabContent = () => {
         </li>
         <li>
           <div className="header">Total Pool</div>
-          <div className="text-right">$100,000,000</div>
+          <div className="text-right text-3xl">$100,000,000</div>
         </li>
         <li>
           <div className="header">Payout Date</div>
-          <div className="text-right">23:55:10</div>
+          <div className="text-right text-3xl">23:55:10</div>
         </li>
       </ul>
       <div className="border-dark bg-light border-2 rounded px-6 py-8 mt-6">
-        <h2 className="centerline text-2xl font-bold pb-2">Deposit</h2>
+        <h2 className="centerline text-3xl font-bold pb-2">Deposit</h2>
         <p className="text-right p-1">Balance:100</p>
         <input
           type="number"

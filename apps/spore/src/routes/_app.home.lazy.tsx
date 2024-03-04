@@ -10,7 +10,7 @@ function Home() {
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light rounded-xl py-8 overlay-dot-ll">
-        <h2 className="centerline text-2xl font-bold">Home</h2>
+        <h2 className="centerline text-3xl font-bold">Home</h2>
         <Profile />
         <ul className="list-table mx-4 sm:mx-6 mb-4 bg-light">
           <li>

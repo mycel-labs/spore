@@ -49,14 +49,14 @@ const TabsTrigger = ({ ...props }) => (
 
 const TabsContent = ({ ...props }) => (
   <TabsContent_
-    className="bg-light overlay-dot-ll p-6 rounded-xl mt-6"
+    className="bg-light overlay-dot-ll p-6 rounded-xl mt-6 pb-10"
     {...props}
   />
 )
 
 const TotalTabContent = () => (
   <>
-    <h2 className="centerline text-2xl py-4 font-bold">Total Board</h2>
+    <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
     <div className="grid grid-cols-4 gap-4">
       <img src={ImgEnoki} />
       <div className="col-span-3 pt-2">
@@ -101,7 +101,7 @@ const TotalTabContent = () => (
 
 const TeamTabContent = () => (
   <>
-    <h2 className="centerline text-2xl py-4 font-bold">Team Board</h2>
+    <h2 className="centerline text-3xl py-4 font-bold">Team Board</h2>
     <div className="grid grid-cols-4 gap-4">
       <img src={ImgEnoki} />
       <div className="col-span-3 pt-2">

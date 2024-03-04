@@ -39,7 +39,7 @@ function Setting() {
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl py-8">
-        <h2 className="centerline font-bold text-2xl">Setting</h2>
+        <h2 className="centerline font-bold text-3xl">Setting</h2>
         <Profile />
         <div className="space-y-6 py-6 px-6">
           {MENU_ITEMS.map((item) => (
