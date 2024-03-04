@@ -72,7 +72,7 @@ export const WALLET_CONFIG = {
     chainType: 'evm',
     icon: [MetamaskIcon, CoinbaseWalltIcon, GenericWalletWalltIcon],
     getUrl: 'https://metamask.io/download.html',
-    showMobile: true,
+    showMobile: false,
   },
   WalletConnect: {
     id: 'walletConnect',

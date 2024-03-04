@@ -15,11 +15,11 @@ function Home() {
         <ul className="list-table mx-4 sm:mx-6 mb-4 bg-light">
           <li>
             <div className="header">Estimated Reward</div>
-            <div className="text-right text-3xl">$123,456</div>
+            <div className="text-right text-4xl">$123,456</div>
           </li>
           <li>
             <div className="header">Deposited USDC</div>
-            <div className="text-right">$1,000</div>
+            <div className="text-right text-3xl">$1,000</div>
           </li>
         </ul>
         <div className="px-4 sm:px-6 py-2 grid gap-6 grid-cols-2">

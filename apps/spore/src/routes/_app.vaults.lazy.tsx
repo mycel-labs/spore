@@ -1,11 +1,11 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import RewardTab from '~/components/RewardTab'
 
-export const Route = createLazyFileRoute('/_app/reward')({
-  component: Reward,
+export const Route = createLazyFileRoute('/_app/vaults')({
+  component: Vaults,
 })
 
-function Reward() {
+function Vaults() {
   const { t } = Route.useSearch()
 
   return (

@@ -216,7 +216,7 @@
   .list-table {
     @apply rounded border-dark border-2 font-title text-xl;
     .header {
-      @apply font-bold uppercase text-lg;
+      @apply uppercase font-bold text-lg;
     }
 
     li {

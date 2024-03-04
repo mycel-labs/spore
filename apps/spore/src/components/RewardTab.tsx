@@ -55,7 +55,7 @@ const DepositTabContent = () => {
       <ul className="list-table bg-light">
         <li className="p-0">
           <div className="header bg-dark text-light">Estimated Reward</div>
-          <div className="text-right text-3xl mt-4 mb-2">$123,000</div>
+          <div className="text-right text-4xl mt-4 mb-2">$123,000</div>
         </li>
         <li>
           <div className="header">Total Pool</div>

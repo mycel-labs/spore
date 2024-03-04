@@ -42,7 +42,7 @@ export default function BoardTab({
 
 const TabsTrigger = ({ ...props }) => (
   <TabsTrigger_
-    className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold text-base py-2 px-2.5 relative text-nowrap"
+    className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold py-2 px-2.5 relative text-nowrap tracking-tight"
     {...props}
   />
 )
@@ -63,15 +63,15 @@ const TotalTabContent = () => (
         <ul className="list-table bg-light">
           <li>
             <div className="header">Pool Value</div>
-            <div className="text-right">$100,000,000</div>
+            <div className="text-right text-3xl">$100,000,000</div>
           </li>
           <li>
             <div className="header">Total Estimated Reward</div>
-            <div className="text-right">$123,000</div>
+            <div className="text-right text-4xl">$123,000</div>
           </li>
           <li>
             <div className="header">Payout Date</div>
-            <div className="text-right">23:55:10</div>
+            <div className="text-right text-3xl">23:55:10</div>
           </li>
         </ul>
       </div>
@@ -108,15 +108,15 @@ const TeamTabContent = () => (
         <ul className="list-table bg-light">
           <li>
             <div className="header">Pool Value</div>
-            <div className="text-right">$9,100,000</div>
+            <div className="text-right text-3xl">$9,100,000</div>
           </li>
           <li>
             <div className="header">Team member</div>
-            <div className="text-right">123</div>
+            <div className="text-right text-3xl">123</div>
           </li>
           <li>
             <div className="header">Bonus</div>
-            <div className="text-right">x 2.15</div>
+            <div className="text-right text-3xl">x 2.15</div>
           </li>
         </ul>
       </div>
