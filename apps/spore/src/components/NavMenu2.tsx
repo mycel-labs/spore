@@ -16,15 +16,13 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  // { name: 'Home', link: '/home', klass: 'bg-light' },
-  { name: 'LeaderBoard', link: '/board', klass: 'bg-light' },
   {
-    name: 'Reward',
-    link: '/reward',
+    name: 'Vaults',
+    link: '/vaults',
     klass: 'bg-light',
   },
   { name: 'Referral', link: '/refferral', klass: 'bg-light' },
-  // { name: 'Setting', link: '/setting', klass: 'bg-light' },
+  { name: 'LeaderBoard', link: '/board', klass: 'bg-light' },
   { name: 'About', link: '/about', klass: 'bg-light' },
 ]
 

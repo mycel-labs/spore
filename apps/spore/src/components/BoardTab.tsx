@@ -63,15 +63,15 @@ const TotalTabContent = () => (
         <ul className="list-table bg-light">
           <li>
             <div className="header">Pool Value</div>
-            <div className="text-right">$100,000,000</div>
+            <div className="text-right text-3xl">$100,000,000</div>
           </li>
           <li>
             <div className="header">Total Estimated Reward</div>
-            <div className="text-right">$123,000</div>
+            <div className="text-right text-4xl">$123,000</div>
           </li>
           <li>
             <div className="header">Payout Date</div>
-            <div className="text-right">23:55:10</div>
+            <div className="text-right text-3xl">23:55:10</div>
           </li>
         </ul>
       </div>
@@ -108,15 +108,15 @@ const TeamTabContent = () => (
         <ul className="list-table bg-light">
           <li>
             <div className="header">Pool Value</div>
-            <div className="text-right">$9,100,000</div>
+            <div className="text-right text-3xl">$9,100,000</div>
           </li>
           <li>
             <div className="header">Team member</div>
-            <div className="text-right">123</div>
+            <div className="text-right text-3xl">123</div>
           </li>
           <li>
             <div className="header">Bonus</div>
-            <div className="text-right">x 2.15</div>
+            <div className="text-right text-3xl">x 2.15</div>
           </li>
         </ul>
       </div>

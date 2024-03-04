@@ -18,8 +18,8 @@ import { Route as AppImport } from './routes/_app'
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
+const AppVaultsLazyImport = createFileRoute('/_app/vaults')()
 const AppSettingLazyImport = createFileRoute('/_app/setting')()
-const AppRewardLazyImport = createFileRoute('/_app/reward')()
 const AppRefferralLazyImport = createFileRoute('/_app/refferral')()
 const AppHomeLazyImport = createFileRoute('/_app/home')()
 const AppBoardLazyImport = createFileRoute('/_app/board')()
@@ -37,15 +37,15 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const AppVaultsLazyRoute = AppVaultsLazyImport.update({
+  path: '/vaults',
+  getParentRoute: () => AppRoute,
+} as any).lazy(() => import('./routes/_app.vaults.lazy').then((d) => d.Route))
+
 const AppSettingLazyRoute = AppSettingLazyImport.update({
   path: '/setting',
   getParentRoute: () => AppRoute,
 } as any).lazy(() => import('./routes/_app.setting.lazy').then((d) => d.Route))
-
-const AppRewardLazyRoute = AppRewardLazyImport.update({
-  path: '/reward',
-  getParentRoute: () => AppRoute,
-} as any).lazy(() => import('./routes/_app.reward.lazy').then((d) => d.Route))
 
 const AppRefferralLazyRoute = AppRefferralLazyImport.update({
   path: '/refferral',
@@ -97,12 +97,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRefferralLazyImport
       parentRoute: typeof AppImport
     }
-    '/_app/reward': {
-      preLoaderRoute: typeof AppRewardLazyImport
-      parentRoute: typeof AppImport
-    }
     '/_app/setting': {
       preLoaderRoute: typeof AppSettingLazyImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/vaults': {
+      preLoaderRoute: typeof AppVaultsLazyImport
       parentRoute: typeof AppImport
     }
   }
@@ -117,8 +117,8 @@ export const routeTree = rootRoute.addChildren([
     AppBoardLazyRoute,
     AppHomeLazyRoute,
     AppRefferralLazyRoute,
-    AppRewardLazyRoute,
     AppSettingLazyRoute,
+    AppVaultsLazyRoute,
   ]),
 ])
 
