@@ -1,7 +1,15 @@
-import React, { Suspense } from 'react'
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import React, { Suspense, useEffect } from 'react'
+import {
+  createRootRoute,
+  Outlet,
+  useNavigate,
+  useRouterState,
+} from '@tanstack/react-router'
 import Providers from '@/components/Providers'
 import { Toaster } from '@/components/ui/sonner'
+import useWallet from '@/hooks/useWallet'
+import { useStore } from '@/store'
+import Loading from '~/components/Loading'
 import '~/global.css'
 
 const TanStackRouterDevtools =
@@ -16,18 +24,39 @@ const TanStackRouterDevtools =
         }))
       )
 
+function AuthenticatedRoute() {
+  const wallet = useWallet()
+  const navigate = useNavigate()
+  const router = useRouterState()
+  const isLoading = useStore((state) => state.isLoading)
+
+  useEffect(() => {
+    if (!wallet.isConnected && router.location.pathname !== '/') {
+      navigate({ to: '/' })
+    }
+    if (wallet.isConnected && router.location.pathname === '/') {
+      navigate({ to: '/home' })
+    }
+  }, [wallet])
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-grow overflow-x-hidden">
+        <Outlet />
+      </main>
+      <Toaster />
+      <Suspense>
+        <TanStackRouterDevtools />
+      </Suspense>
+      {isLoading && <Loading />}
+    </div>
+  )
+}
+
 export const Route = createRootRoute({
   component: () => (
     <Providers>
-      <div className="flex flex-col min-h-screen">
-        <main className="flex-grow overflow-x-hidden">
-          <Outlet />
-        </main>
-        <Toaster />
-        <Suspense>
-          <TanStackRouterDevtools />
-        </Suspense>
-      </div>
+      <AuthenticatedRoute />
     </Providers>
   ),
 })

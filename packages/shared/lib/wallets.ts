@@ -90,7 +90,7 @@ export const WALLET_CONFIG = {
     chainType: 'evm',
     icon: OKXIcon,
     getUrl: 'https://www.okx.com/web3',
-    showMobile: true,
+    showMobile: false,
   },
   BitGetWallet: {
     id: 'bitget',
@@ -99,7 +99,7 @@ export const WALLET_CONFIG = {
     chainType: 'evm',
     icon: BitGetIcon,
     getUrl: 'https://web3.bitget.com',
-    showMobile: true,
+    showMobile: false,
   },
   Keplr: {
     id: CosmosWalletType.KEPLR,
