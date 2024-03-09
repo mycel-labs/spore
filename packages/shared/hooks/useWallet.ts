@@ -34,8 +34,13 @@ export const useWallet = () => {
   // EVM
   const evmAddress = useStore((state) => state.evmAddress)
   const updateEvmAddress = useStore((state) => state.updateEvmAddress)
-  const { address: evmAddressWagmi, isConnected: isConnectedWagmi } =
-    useAccountWagmi()
+  const {
+    address: evmAddressWagmi,
+    isConnected: isConnectedWagmi,
+    status: statusWagmi,
+    isConnecting: isConnectingWagmi,
+    isReconnecting: isReconnectingWagmi,
+  } = useAccountWagmi()
   // const publicClientWagmi = usePublicClientWagmi();
   const { data: signerWagmi } = useWalletClientWagmi()
   const { disconnectAsync: disconnectWagmi } = useDisconnectWagmi()
@@ -43,8 +48,13 @@ export const useWallet = () => {
   // Cosmos
   const mycelAddress = useStore((state) => state.mycelAddress)
   const updateMycelAddress = useStore((state) => state.updateMycelAddress)
-  const { data: mycelAccountGraz, isConnected: isConnectedGraz } =
-    useAccountGraz()
+  const {
+    data: mycelAccountGraz,
+    isConnected: isConnectedGraz,
+    status: statusGraz,
+    isConnecting: isConnectingGraz,
+    isReconnecting: isReconnectingGraz,
+  } = useAccountGraz()
   const { data: signerGraz } = useOfflineSignersGraz()
   const { disconnectAsync: disconnectGraz } = useDisconnectGraz()
   const mycelAddressGraz = mycelAccountGraz?.bech32Address as
@@ -262,7 +272,11 @@ export const useWallet = () => {
     // Wallet connection
     isConnected: isConnectedGraz || isConnectedWagmi,
     isConnectedGraz,
+    isConnectingGraz,
+    isReconnectingGraz,
     isConnectedWagmi,
+    isConnectingWagmi,
+    isReconnectingWagmi,
     connectWallet,
     disconnectWallet,
     currentWalletType,

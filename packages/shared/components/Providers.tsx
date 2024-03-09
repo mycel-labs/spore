@@ -13,6 +13,12 @@ const wagmiConfig = createConfig({
     injected(),
     walletConnect({
       projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
+      metadata: {
+        icons: [''],
+        name: 'SPORE',
+        description: 'spore',
+        url: 'https://spore.ooo',
+      },
     }),
   ],
   transports: {

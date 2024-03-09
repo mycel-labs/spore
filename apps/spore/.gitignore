@@ -265,3 +265,6 @@ $RECYCLE.BIN/
 .dev.vars
 
 # End of https://www.toptal.com/developers/gitignore/api/node,nextjs,vercel,react,macos,linux,windows
+
+# pwa
+/dev-dist

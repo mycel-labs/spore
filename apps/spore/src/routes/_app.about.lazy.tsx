@@ -10,7 +10,7 @@ function About() {
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl">
-        <h2 className="text-center text-2xl font-bold py-8 centerline">
+        <h2 className="text-center text-3xl font-bold py-8 centerline">
           About
         </h2>
         <img src={ImgIntro} className="mx-auto max-w-80 pl-10 pr-5" />

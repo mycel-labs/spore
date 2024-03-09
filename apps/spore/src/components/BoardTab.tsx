@@ -49,29 +49,29 @@ const TabsTrigger = ({ ...props }) => (
 
 const TabsContent = ({ ...props }) => (
   <TabsContent_
-    className="bg-light overlay-dot-ll p-6 rounded-xl mt-6"
+    className="bg-light overlay-dot-ll p-6 rounded-xl mt-6 pb-10"
     {...props}
   />
 )
 
 const TotalTabContent = () => (
   <>
-    <h2 className="centerline text-2xl py-4 font-bold">Total Board</h2>
+    <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
     <div className="grid grid-cols-4 gap-4">
       <img src={ImgEnoki} />
       <div className="col-span-3 pt-2">
         <ul className="list-table bg-light">
           <li>
             <div className="header">Pool Value</div>
-            <div className="text-right text-3xl">$100,000,000</div>
+            <div className="text-right text-3xl font-bold">$100,000,000</div>
           </li>
           <li>
             <div className="header">Total Estimated Reward</div>
-            <div className="text-right text-4xl">$123,000</div>
+            <div className="text-right text-3xl font-bold">$123,000</div>
           </li>
           <li>
             <div className="header">Payout Date</div>
-            <div className="text-right text-3xl">23:55:10</div>
+            <div className="text-right text-3xl font-bold">23:55:10</div>
           </li>
         </ul>
       </div>
@@ -101,22 +101,22 @@ const TotalTabContent = () => (
 
 const TeamTabContent = () => (
   <>
-    <h2 className="centerline text-2xl py-4 font-bold">Team Board</h2>
+    <h2 className="centerline text-3xl py-4 font-bold">Team Board</h2>
     <div className="grid grid-cols-4 gap-4">
       <img src={ImgEnoki} />
       <div className="col-span-3 pt-2">
         <ul className="list-table bg-light">
           <li>
             <div className="header">Pool Value</div>
-            <div className="text-right text-3xl">$9,100,000</div>
+            <div className="text-right text-3xl font-bold">$9,100,000</div>
           </li>
           <li>
             <div className="header">Team member</div>
-            <div className="text-right text-3xl">123</div>
+            <div className="text-right text-3xl font-bold">123</div>
           </li>
           <li>
             <div className="header">Bonus</div>
-            <div className="text-right text-3xl">x 2.15</div>
+            <div className="text-right text-3xl font-bold">x 2.15</div>
           </li>
         </ul>
       </div>
@@ -146,8 +146,8 @@ const TeamTabContent = () => (
 
 const PlayerTabContent = () => (
   <>
-    <h2 className="centerline font-bold text-2xl py-4">Player Board</h2>
-    <table className="bg-light border-dark border-2 font-title w-full mt-8">
+    <h2 className="centerline font-bold text-3xl py-4">Player Board</h2>
+    <table className="bg-light border-dark border-2 font-title w-full mt-4">
       <tbody>
         <tr className="bg-dark text-light uppercase [&>th]:p-1">
           <th>Player</th>

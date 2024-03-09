@@ -20,6 +20,7 @@ export type Authenticator = {
 }
 
 type StoreState = {
+  isLoading: boolean
   evmAddress: EvmAddress | undefined
   mycelAddress: MycelAddress | undefined
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -29,6 +30,8 @@ type StoreState = {
 }
 
 type StoreSAction = {
+  updateIsHydrated: (isHydrated: boolean) => void
+  updateIsLoading: (isLoading: boolean) => void
   updateEvmAddress: (address: StoreState['evmAddress']) => void
   updateMycelAddress: (address: StoreState['mycelAddress']) => void
   updateCurrentWalletType: (address: StoreState['currentWalletType']) => void
@@ -48,6 +51,8 @@ export const useStore = create<StoreState & StoreSAction>()(
   devtools(
     persist(
       (set) => ({
+        isHydrated: false,
+        isLoading: false,
         evmAddress: undefined,
         mycelAddress: undefined,
         currentWalletType: undefined,
@@ -55,6 +60,10 @@ export const useStore = create<StoreState & StoreSAction>()(
         dialog: undefined,
         onboardingStatus: undefined,
         authenticator: undefined,
+        updateIsHydrated: (payload: boolean) =>
+          set((state) => ({ ...state, isHydrated: payload })),
+        updateIsLoading: (payload: boolean) =>
+          set((state) => ({ ...state, isLoading: payload })),
         updateEvmAddress: (payload: EvmAddress | undefined) =>
           set((state) => ({ ...state, evmAddress: payload })),
         updateMycelAddress: (payload: MycelAddress | undefined) =>
@@ -82,6 +91,9 @@ export const useStore = create<StoreState & StoreSAction>()(
       }),
       {
         name: 'mycel',
+        onRehydrateStorage: () => (state) => {
+          state?.updateIsHydrated(true)
+        },
         partialize: (state) => ({
           evmAddress: state.evmAddress,
           mycelAddress: state.mycelAddress,

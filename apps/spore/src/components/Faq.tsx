@@ -1,18 +1,14 @@
 import {
   Accordion,
   AccordionContent as AccordionContent_,
-  AccordionItem,
+  AccordionItem as AccordionItem_,
   AccordionTrigger as AccordionTrigger_,
 } from '@/components/ui/accordion'
-import Play from '@/components/svg/Play'
+import Play from '@/components/svg/PlayFill'
 
 export default function AccordionDemo() {
   return (
-    <Accordion
-      type="single"
-      collapsible
-      className="w-full border-b-2 border-dotted border-dark"
-    >
+    <Accordion type="single" collapsible className="w-full px-8">
       <AccordionItem value="item-1">
         <AccordionTrigger>What is SPORE?</AccordionTrigger>
         <AccordionContent>
@@ -39,14 +35,24 @@ export default function AccordionDemo() {
 
 const AccordionTrigger = ({ ...props }) => (
   <AccordionTrigger_
-    className="border-t-2 border-dotted border-dark px-6 py-3 text-xl [&[data-state=open]>svg]:-rotate-90"
+    className="border-dark px-6 py-3 text-xl [&[data-state=open]>svg]:-rotate-90"
     icon={
-      <Play className="h-3 w-3 shrink-0 rotate-90 transition-transform duration-200" />
+      <Play
+        className="h-3 w-3 shrink-0 rotate-90 transition-transform duration-200"
+        storoke
+      />
     }
     {...props}
   />
 )
 
+const AccordionItem = ({ ...props }) => (
+  <AccordionItem_
+    className="bg-light border-dark border-2 rounded-lg mb-4"
+    {...props}
+  />
+)
+
 const AccordionContent = ({ ...props }) => (
-  <AccordionContent_ className="pl-8 pr-4 pt-4 pb-6" {...props} />
+  <AccordionContent_ className="pl-8 pr-4 pt-3 pb-6 text-base" {...props} />
 )

@@ -22,23 +22,28 @@ const config: UserConfig = {
     }),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      devOptions: { enabled: true },
+      includeAssets: [
+        '/icons/favicon.ico',
+        '/icons/apple-touch-icon.png',
+        '/icons/mask-icon.svg',
+      ],
       manifest: {
         name: 'SPORE',
         short_name: 'SPORE',
-        description: 'Welcome to SPORE',
-        theme_color: '#ffffff',
-        background_color: '#ffffff',
+        description: 'ID based Intent-Centric Interface',
+        theme_color: '#ff4615',
+        background_color: '#ff4615',
         start_url: '/home',
         display: 'fullscreen',
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: '/icons/pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'pwa-512x512.png',
+            src: '/icons/pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },

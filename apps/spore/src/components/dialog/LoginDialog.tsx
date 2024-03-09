@@ -9,40 +9,16 @@ import {
   // DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Fingerprint, Wallet } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLockBodyScroll } from '@uidotdev/usehooks'
 import useWallet from '@/hooks/useWallet'
-import { WALLET_CONFIG, type WalletType, shortAddress } from '@/lib/wallets'
-import {
-  cn,
-  copyClipboard,
-  isBitGetApp,
-  isMobile,
-  isOKXApp,
-  isPC,
-} from '@/lib/utils'
-import { useNavigate } from '@tanstack/react-router'
+import { WALLET_CONFIG, type WalletType } from '@/lib/wallets'
+import { cn, isBitGetApp, isMobile, isOKXApp, isPC } from '@/lib/utils'
 
 export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
   const [mode, setMode] = useState<'default' | 'wallet'>('wallet')
   useLockBodyScroll()
-  const {
-    connectWallet,
-    disconnectWallet,
-    isConnected,
-    evmAddress,
-    deriveKeys,
-    mycelAccount,
-    connectorsWagmi,
-  } = useWallet()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (isConnected) {
-      navigate({ to: '/home' })
-    }
-  }, [isConnected])
+  const { connectWallet, connectorsWagmi } = useWallet()
 
   return (
     <Dialog>
