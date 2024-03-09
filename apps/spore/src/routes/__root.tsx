@@ -1,12 +1,7 @@
-import React, { Suspense, useEffect } from 'react'
-import {
-  createRootRoute,
-  Outlet,
-  useNavigate,
-  useRouterState,
-} from '@tanstack/react-router'
+import React, { Suspense } from 'react'
+import { createRootRoute, Outlet } from '@tanstack/react-router'
+import NotFound from '~/components/NotFound'
 import { Toaster } from '@/components/ui/sonner'
-import useWallet from '@/hooks/useWallet'
 import { useStore } from '@/store'
 import Loading from '~/components/Loading'
 import '~/global.css'
@@ -23,20 +18,8 @@ const TanStackRouterDevtools =
         }))
       )
 
-function AuthenticatedRoute() {
-  const wallet = useWallet()
-  const navigate = useNavigate()
-  const router = useRouterState()
+function RootComponent() {
   const isLoading = useStore((state) => state.isLoading)
-
-  useEffect(() => {
-    if (!wallet.isConnected && router.location.pathname !== '/') {
-      navigate({ to: '/' })
-    }
-    if (wallet.isConnected && router.location.pathname === '/') {
-      navigate({ to: '/home' })
-    }
-  }, [wallet])
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -53,5 +36,7 @@ function AuthenticatedRoute() {
 }
 
 export const Route = createRootRoute({
-  component: () => <AuthenticatedRoute />,
+  component: () => <RootComponent />,
+  notFoundComponent: () => <NotFound />,
+  pendingComponent: () => <Loading />,
 })

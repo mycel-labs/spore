@@ -1,4 +1,4 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { createRootRoute, Outlet, redirect } from '@tanstack/react-router'
 import NavMenu from '~/components/NavMenu2'
 
 export const Route = createRootRoute({
