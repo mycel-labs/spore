@@ -5,7 +5,6 @@ import {
   useNavigate,
   useRouterState,
 } from '@tanstack/react-router'
-import Providers from '@/components/Providers'
 import { Toaster } from '@/components/ui/sonner'
 import useWallet from '@/hooks/useWallet'
 import { useStore } from '@/store'
@@ -54,9 +53,5 @@ function AuthenticatedRoute() {
 }
 
 export const Route = createRootRoute({
-  component: () => (
-    <Providers>
-      <AuthenticatedRoute />
-    </Providers>
-  ),
+  component: () => <AuthenticatedRoute />,
 })
