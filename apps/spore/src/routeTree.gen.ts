@@ -13,11 +13,12 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as StartImport } from './routes/start'
 import { Route as AppImport } from './routes/_app'
-import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
+const IndexLazyImport = createFileRoute('/')()
 const AppVaultsLazyImport = createFileRoute('/_app/vaults')()
 const AppSettingLazyImport = createFileRoute('/_app/setting')()
 const AppRefferralLazyImport = createFileRoute('/_app/refferral')()
@@ -27,12 +28,17 @@ const AppAboutLazyImport = createFileRoute('/_app/about')()
 
 // Create/Update Routes
 
+const StartRoute = StartImport.update({
+  path: '/start',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/start.lazy').then((d) => d.Route))
+
 const AppRoute = AppImport.update({
   id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
+const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
@@ -74,11 +80,15 @@ const AppAboutLazyRoute = AppAboutLazyImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/_app': {
       preLoaderRoute: typeof AppImport
+      parentRoute: typeof rootRoute
+    }
+    '/start': {
+      preLoaderRoute: typeof StartImport
       parentRoute: typeof rootRoute
     }
     '/_app/about': {
@@ -111,7 +121,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  IndexRoute,
+  IndexLazyRoute,
   AppRoute.addChildren([
     AppAboutLazyRoute,
     AppBoardLazyRoute,
@@ -120,6 +130,7 @@ export const routeTree = rootRoute.addChildren([
     AppSettingLazyRoute,
     AppVaultsLazyRoute,
   ]),
+  StartRoute,
 ])
 
 /* prettier-ignore-end */

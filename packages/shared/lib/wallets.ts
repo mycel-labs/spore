@@ -133,14 +133,14 @@ export const WALLET_CONFIG = {
 
 export type WalletType = keyof typeof WALLET_CONFIG
 
-export const getSignTypedData = () =>
+export const getTypedData = () =>
   ({
-    primaryType: 'mycel',
+    primaryType: 'Mycel',
     domain: {
       name: 'Mycel Chain',
     },
     types: {
-      mycel: [{ name: 'action', type: 'string' }],
+      Mycel: [{ name: 'action', type: 'string' }],
     },
     message: {
       action: 'Mycel Chain Authentication',

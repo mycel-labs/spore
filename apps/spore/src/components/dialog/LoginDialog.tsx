@@ -9,16 +9,22 @@ import {
   // DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLockBodyScroll } from '@uidotdev/usehooks'
-import useWallet from '@/hooks/useWallet'
+import { useWallet } from '@/hooks/useWallet'
 import { WALLET_CONFIG, type WalletType } from '@/lib/wallets'
 import { cn, isBitGetApp, isMobile, isOKXApp, isPC } from '@/lib/utils'
+import { useNavigate } from '@tanstack/react-router'
 
 export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
   const [mode, setMode] = useState<'default' | 'wallet'>('wallet')
   useLockBodyScroll()
-  const { connectWallet, connectorsWagmi } = useWallet()
+  const { connectWallet, connectorsWagmi, isConnected } = useWallet()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    isConnected && navigate({ to: '/home' })
+  }, [navigate, isConnected])
 
   return (
     <Dialog>

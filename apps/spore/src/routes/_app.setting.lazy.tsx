@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { UserCog, FileSignature, ClipboardCopy, LogOut } from 'lucide-react'
 import Profile from '~/components/Profile'
-import useWallet from '@/hooks/useWallet'
+import { useWallet } from '@/hooks/useWallet'
 import { shortAddress } from '@/lib/wallets'
 import { copyClipboard } from '@/lib/utils'
 import { useNavigate } from '@tanstack/react-router'

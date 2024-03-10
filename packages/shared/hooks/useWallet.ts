@@ -20,7 +20,7 @@ import { DirectSecp256k1HdWallet, OfflineSigner } from '@cosmjs/proto-signing'
 import {
   WALLET_CONFIG,
   MYCEL_CHAIN_INFO,
-  getSignTypedData,
+  getTypedData,
   BECH32_PREFIX,
   EVM_CHAINID,
   type EvmAddress,
@@ -187,17 +187,17 @@ export const useWallet = () => {
     [evmDerivedAddresses, evmAddress]
   )
 
-  const signTypedData = getSignTypedData()
-  const { signTypedDataAsync } = useSignTypedData({
-    ...signTypedData,
-    domain: {
-      ...signTypedData.domain,
-      chainId: EVM_CHAINID,
-    },
-  })
+  const { signTypedDataAsync } = useSignTypedData()
+  const types = getTypedData()
 
   const deriveKeys = async () => {
-    const signature = await signTypedDataAsync()
+    const signature = await signTypedDataAsync({
+      ...types,
+      domain: {
+        ...types.domain,
+        chainId: EVM_CHAINID,
+      },
+    })
     await setWalletFromEvmSignature(signature)
     const encryptedSignature = AES.encrypt(
       signature,
@@ -303,5 +303,3 @@ export const useWallet = () => {
     mycelAccount: mycelAccounts?.[0],
   }
 }
-
-export default useWallet
