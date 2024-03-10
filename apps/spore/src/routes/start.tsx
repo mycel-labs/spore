@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/start')({
   beforeLoad: ({ context }) => {
-    if (context.wallet.isConnected) {
+    if (context.hasDomain) {
       throw redirect({ to: '/home' })
     }
   },

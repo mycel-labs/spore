@@ -1,5 +1,6 @@
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { useWallet } from '@/hooks/useWallet'
+import { useDomainOwnership } from '@/hooks/useMycel'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -16,5 +17,20 @@ declare module '@tanstack/react-router' {
 
 export default function AppRouter() {
   const wallet = useWallet()
-  return <RouterProvider router={router} context={{ wallet }} />
+  const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
+    useDomainOwnership(wallet?.mycelAccount?.address)
+  const hasDomain = () =>
+    !isLoadingOwnDomain
+      ? (dataOwnDomain?.domainOwnership?.domains?.length ?? 0) > 0
+      : false
+
+  return (
+    <RouterProvider
+      router={router}
+      context={{
+        wallet,
+        mycel: { hasDomain },
+      }}
+    />
+  )
 }
