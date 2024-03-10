@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { useState } from 'react'
 import { useLockBodyScroll } from '@uidotdev/usehooks'
-import useWallet from '@/hooks/useWallet'
+import { useWallet } from '@/hooks/useWallet'
 import { WALLET_CONFIG, type WalletType } from '@/lib/wallets'
 import { cn, isBitGetApp, isMobile, isOKXApp, isPC } from '@/lib/utils'
 

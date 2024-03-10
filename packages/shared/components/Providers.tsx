@@ -7,7 +7,7 @@ import { MYCEL_CHAIN_INFO } from '../lib/wallets'
 
 const queryClient = new QueryClient()
 
-const wagmiConfig = createConfig({
+export const wagmiConfig = createConfig({
   chains: [mainnet],
   connectors: [
     injected(),
@@ -31,7 +31,7 @@ const wagmiConfig = createConfig({
   },
 })
 
-const grazOptions = {
+export const grazOptions = {
   chains: [MYCEL_CHAIN_INFO],
   defaultWallet: WalletTypeCosmos.KEPLR,
   // walletConnect: {

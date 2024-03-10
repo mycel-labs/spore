@@ -83,13 +83,19 @@
   .content {
     @apply container max-w-lg mx-auto;
   }
+
+  input,
+  textarea {
+    @apply bg-dark text-light px-5 py-2 rounded-lg text-lg min-h-14 placeholder:text-slate-400 read-only:bg-opacity-90 focus:outline  focus:outline-dark focus:outline-offset-2;
+  }
 }
+
 @layer components {
   .btn {
-    @apply border-dark border-4 rounded-xl flex items-center justify-center shadow-solid active:shadow-solid-xxs shadow-current active:translate-y-2 relative hover:opacity-90;
+    @apply border-dark border-4 rounded-xl flex items-center justify-center shadow-solid active:shadow-solid-xxs shadow-current active:translate-y-2 relative hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:shadow-solid;
   }
   .btn-s {
-    @apply border-dark border-3 rounded-xl flex items-center justify-center shadow-solid-xs shadow-current active:shadow-solid-xxs active:translate-y-0.5 relative hover:opacity-90;
+    @apply border-dark border-3 rounded-xl flex items-center justify-center shadow-solid-xs shadow-current active:shadow-solid-xxs active:translate-y-0.5 relative hover:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed disabled:active:translate-y-0 disabled:active:shadow-solid-xs;
   }
 
   span.btn-inner {

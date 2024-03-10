@@ -1,5 +1,5 @@
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-import useWallet from '@/hooks/useWallet'
+import { useWallet } from '@/hooks/useWallet'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'

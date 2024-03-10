@@ -90,7 +90,7 @@ export const useStore = create<StoreState & StoreSAction>()(
           set((state) => ({ ...state, authenticator: payload })),
       }),
       {
-        name: 'mycel',
+        name: import.meta.env.VITE_STORAGE_NAME ?? 'mycel',
         onRehydrateStorage: () => (state) => {
           state?.updateIsHydrated(true)
         },
