@@ -10,7 +10,7 @@ export default function AccordionDemo() {
   return (
     <Accordion type="single" collapsible className="w-full px-8">
       <AccordionItem value="item-1">
-        <AccordionTrigger>Waht is SPORE?</AccordionTrigger>
+        <AccordionTrigger>What is SPORE?</AccordionTrigger>
         <AccordionContent>
           Yes. It adheres to the WAI-ARIA design pattern.
         </AccordionContent>
