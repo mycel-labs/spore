@@ -87,7 +87,7 @@ function Setting() {
             onClick={handleSignout}
             className="btn bg-secondary py-2 px-6 h-14 w-full mt-6"
           >
-            <span className="btn-inner h-2/3 w-1/4" />
+            <span className="btn-inner" />
             <div className="flex items-center font-title text-xl">
               <LogOut size={28} strokeWidth={3} className="mr-4" />
               LogOut
@@ -101,7 +101,7 @@ function Setting() {
 
 const ListItem = ({ item }: { item: any }) => (
   <a href={item.href} className="btn bg-secondary py-2 px-6 h-14">
-    <span className="btn-inner h-2/3 w-1/4" />
+    <span className="btn-inner" />
     <div className="flex items-center font-title text-xl">
       <span className="mr-4">{item.icon}</span>
       {item.text}

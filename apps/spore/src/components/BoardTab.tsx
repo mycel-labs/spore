@@ -15,15 +15,15 @@ export default function BoardTab({
     <Tabs defaultValue={tab ?? 'total'} className="w-full">
       <TabsList className="text-xl bg-transparent space-x-3 font-title">
         <TabsTrigger value="total">
-          <span className="btn-inner h-1/3 w-2/5" />
+          <span className="btn-inner" />
           Total
         </TabsTrigger>
         <TabsTrigger value="team">
-          <span className="btn-inner h-1/3 w-2/5" />
+          <span className="btn-inner" />
           Team
         </TabsTrigger>
         <TabsTrigger value="player">
-          <span className="btn-inner h-1/3 w-2/5" />
+          <span className="btn-inner" />
           Player
         </TabsTrigger>
       </TabsList>

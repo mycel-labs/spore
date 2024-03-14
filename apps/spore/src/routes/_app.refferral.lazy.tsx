@@ -27,13 +27,13 @@ function Referral() {
             type="text"
             value="https://spore.xxxx/?invite=akira.cel"
             readOnly
-            className="border-dark border rounded w-full text-lg px-6 py-2 bg-transparent"
+            className="w-full font-lg font-title"
           />
           <button
             className="btn bg-secondary h-14 px-10 font-bold font-title w-full mt-4"
             onClick={() => toast('URL Copied!')}
           >
-            <span className="btn-inner h-2/3 w-1/3" />
+            <span className="btn-inner" />
             Copy referral url
           </button>
         </div>

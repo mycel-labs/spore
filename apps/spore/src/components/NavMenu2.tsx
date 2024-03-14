@@ -49,18 +49,18 @@ export default function NavMenu() {
         <img src={ImgLogo} className="h-full" />
         <div className="flex space-x-1.5 -mt-2.5">
           <Link className="btn w-14 h-14 bg-light pt-px pr-px" to="/home">
-            <span className="btn-inner h-2/3 w-2/3" />
+            <span className="btn-inner" />
             <Home size={28} strokeWidth={3} />
           </Link>
           <Link className="btn w-14 h-14 bg-light pt-px pr-px" to="/setting">
-            <span className="btn-inner h-2/3 w-2/3" />
+            <span className="btn-inner" />
             <Cog size={28} strokeWidth={3} />
           </Link>
           <button
             className="btn w-14 h-14 bg-secondary pt-px pr-px"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <span className="btn-inner h-2/3 w-2/3" />
+            <span className="btn-inner" />
             <Menu size={26} strokeWidth={3} />
           </button>
         </div>
@@ -93,7 +93,7 @@ export default function NavMenu() {
                 >
                   {({ isActive }) => (
                     <>
-                      <span className="btn-inner h-1/3 w-3/5" />
+                      <span className="btn-inner" />
                       <Home size={30} strokeWidth={3} />
                     </>
                   )}
@@ -108,7 +108,7 @@ export default function NavMenu() {
                 >
                   {({ isActive }) => (
                     <>
-                      <span className="btn-inner h-1/3 w-3/5" />
+                      <span className="btn-inner" />
                       <Cog size={30} strokeWidth={3} />
                     </>
                   )}
@@ -144,7 +144,7 @@ const ListItem = ({
       >
         {({ isActive }) => (
           <>
-            <span className="btn-inner h-1/3 w-2/5" />
+            <span className="btn-inner" />
             {item.name}
           </>
         )}

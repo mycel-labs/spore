@@ -53,7 +53,7 @@ export default function NavMenu() {
           className="btn w-12 h-12 bg-secondary"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <span className="btn-inner h-2/3 w-2/3" />
+          <span className="btn-inner" />
           <Menu size={30} strokeWidth={3} />
         </button>
       </nav>

@@ -24,7 +24,7 @@ function Index() {
         <LoginDialog
           trigger={
             <button className="btn font-title text-xl bg-secondary mx-auto mb-6 pt-3 pb-2 pl-6 pr-8 flex items-center font-bold z-20">
-              <span className="btn-inner h-2/3 w-5/6" />
+              <span className="btn-inner" />
               <span className="transiton animate-pulse mr-1.5 -mt-0.5">
                 <Play />
               </span>
