@@ -5,8 +5,8 @@ export const Route = createRootRoute({
   beforeLoad: ({ context }) => {
     if (!context.wallet.isConnected) {
       throw redirect({ to: '/' })
-      // } else if (!context.mycel.hasDomain) {
-      //   throw redirect({ to: '/start' })
+    } else if (!context.mycel.hasDomain) {
+      throw redirect({ to: '/start' })
     }
   },
   component: () => (

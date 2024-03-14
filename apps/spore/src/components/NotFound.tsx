@@ -7,7 +7,7 @@ export default function NotFound() {
         <h1 className="text-4xl mb-10">Not Found</h1>
         <img src={ImgMap} />
         <a href="/" className="text-xl block mt-6">
-          → Go TOP
+          Go TOP ↑
         </a>
       </div>
     </div>

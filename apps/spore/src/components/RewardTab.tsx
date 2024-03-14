@@ -14,11 +14,11 @@ export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
     >
       <TabsList className="text-xl bg-transparent space-x-3 font-title">
         <TabsTrigger value="deposit">
-          <span className="btn-inner h-1/3 w-2/5" />
+          <span className="btn-inner" />
           Deposit
         </TabsTrigger>
         <TabsTrigger value="withdraw">
-          <span className="btn-inner h-1/3 w-2/5" />
+          <span className="btn-inner" />
           Withdraw
         </TabsTrigger>
       </TabsList>
@@ -71,13 +71,13 @@ const DepositTabContent = () => {
           type="number"
           value="123"
           readOnly
-          className="border-dark border rounded w-full text-2xl text-right px-6 pt-2 pb-1 font-title bg-transparent"
+          className="w-full text-right"
         />
         <button
           className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
           onClick={(e) => runConfetti(e)}
         >
-          <span className="btn-inner h-2/3 w-1/3" />
+          <span className="btn-inner" />
           Deposit
         </button>
       </div>
@@ -90,17 +90,12 @@ const WithdrawTabContent = () => (
     <div className="border-dark bg-light border-2 rounded px-6 pb-8">
       <h2 className="centerline font-bold text-2xl pt-6 pb-4">Withdraw</h2>
       <p className="text-right p-1">Balance:100</p>
-      <input
-        type="number"
-        value="123"
-        readOnly
-        className="border-dark border rounded w-full text-2xl text-right px-6 pt-2 pb-1 font-title bg-transparent"
-      />
+      <input type="number" value="123" readOnly className="w-full text-right" />
       <button
         className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
         onClick={(e) => console.log(e)}
       >
-        <span className="btn-inner h-2/3 w-1/3" />
+        <span className="btn-inner" />
         Withdraw
       </button>
     </div>

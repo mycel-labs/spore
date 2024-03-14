@@ -116,7 +116,7 @@ export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
                   }
                 }}
               >
-                <span className="btn-inner h-1/3 w-1/5" />
+                <span className="btn-inner" />
                 <span className="flex items-center justify-center px-6 mr-2">
                   {Array.isArray(val.icon) ? (
                     val.icon.map((item, index) => (

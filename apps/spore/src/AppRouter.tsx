@@ -19,17 +19,19 @@ export default function AppRouter() {
   const wallet = useWallet()
   const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
     useDomainOwnership(wallet?.mycelAccount?.address)
-  const hasDomain = () =>
-    !isLoadingOwnDomain
-      ? (dataOwnDomain?.domainOwnership?.domains?.length ?? 0) > 0
-      : false
+  const userDomains = !isLoadingOwnDomain
+    ? dataOwnDomain?.domainOwnership?.domains
+    : undefined
 
   return (
     <RouterProvider
       router={router}
       context={{
         wallet,
-        mycel: { hasDomain },
+        mycel: {
+          hasDomain: userDomains?.length > 0,
+          domain: userDomains?.length > 0 ? userDomains[0] : undefined,
+        },
       }}
     />
   )

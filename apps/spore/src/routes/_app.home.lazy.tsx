@@ -29,7 +29,7 @@ function Home() {
               className="btn bg-light font-title font-bold px-6 pt-2.5 pb-0.5 w-full flex flex-col leading-none bg-yellow-200"
               to="/refferral"
             >
-              <span className="btn-inner h-2/3 w-5/6" />
+              <span className="btn-inner" />
               <div>Invite Your Friend</div>
               <div className="text-3xl">REFERRAL</div>
             </Link>
@@ -40,7 +40,7 @@ function Home() {
               className="btn bg-primary font-title font-bold uppercase px-6 pt-2.5 pb-0.5 w-full flex flex-col leading-none"
               to="/vaults"
             >
-              <span className="btn-inner h-2/3 w-5/6" />
+              <span className="btn-inner" />
               <div>Deposit</div>
               <div className="text-3xl">USDC</div>
             </Link>
@@ -51,7 +51,7 @@ function Home() {
               className="btn bg-secondary font-title font-bold w-full px-6 pt-2.5 pb-0.5 flex flex-col leading-none"
               to="/vaults?t=withdraw"
             >
-              <span className="btn-inner h-2/3 w-5/6" />
+              <span className="btn-inner" />
               <div>Withdraw</div>
               <div className="text-3xl">USDC</div>
             </Link>

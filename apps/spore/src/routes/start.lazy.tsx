@@ -9,6 +9,7 @@ import { shortAddress } from '@/lib/wallets'
 import { copyClipboard, cn } from '@/lib/utils'
 import { ClipboardCopy } from 'lucide-react'
 import Button from '~/components/Button'
+import CelNameForm from '~/components/form/CelName'
 import {
   MYCEL_COIN_DECIMALS,
   MYCEL_HUMAN_COIN_UNIT,
@@ -34,7 +35,7 @@ function Start() {
               <Mint />
             </li>
             <li>
-              <GetCel />
+              <RegisterCelName />
             </li>
           </ol>
         </div>
@@ -172,28 +173,11 @@ function Mint() {
   )
 }
 
-function GetCel() {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { mycelAccount } = useWallet()
-
-  const getCelName = async () => {
-    setIsLoading(true)
-    setIsLoading(false)
-    toast(`Get "${shortAddress(mycelAccount.address ?? 'xxx.cel')}"`)
-  }
-
+function RegisterCelName() {
   return (
     <>
       <span className={cn('')}>Get your name</span>
-      <input type="text" placeholder="xxx.cel" className="w-full mt-2" />
-      <Button
-        type="button"
-        isLoading={isLoading}
-        className="btn bg-secondary w-full h-14 mt-2"
-        onClick={async () => await getCelName()}
-      >
-        Get .cel name
-      </Button>
+      <CelNameForm />
     </>
   )
 }
