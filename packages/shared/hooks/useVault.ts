@@ -202,7 +202,7 @@ export const useVault = () => {
     setPoolBalance(fixedPoolBalance.toString())
     setDrawData(convertUnixToUTC(currentDrawData.data.drawEndTime))
     setCurrentDrawId(Number(currentDrawIdData.data))
-  }, [])
+  }, [evmAddress])
 
   return {
     depositUSDC,
