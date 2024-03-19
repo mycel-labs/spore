@@ -23,6 +23,7 @@
     "@uidotdev/usehooks": "^2.4.1",
     "@wagmi/connectors": "^4.1.12",
     "crypto-js": "^4.2.0",
+    "ethers": "^6.11.1",
     "graz": "^0.1.5",
     "long": "^5.2.3",
     "lucide-react": "^0.303.0",
