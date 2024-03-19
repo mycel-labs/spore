@@ -2,11 +2,13 @@ import { createRootRoute, Outlet, redirect } from '@tanstack/react-router'
 import NavMenu from '~/components/NavMenu2'
 
 export const Route = createRootRoute({
-  beforeLoad: ({ context }) => {
+  beforeLoad: ({ context, location }) => {
     if (!context.wallet.isConnected) {
       throw redirect({ to: '/' })
-    } else if (!context.mycel.hasDomain) {
+    } else if (location.path !== '/start' && !context.mycel.hasDomain) {
       throw redirect({ to: '/start' })
+    } else if (location.path === '/start' && context.mycel.hasDomain) {
+      throw redirect({ to: '/home' })
     }
   },
   component: () => (
