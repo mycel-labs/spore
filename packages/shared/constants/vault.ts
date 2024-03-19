@@ -1,4 +1,4 @@
-const VAULT_ADDRESS = '0xD45D604696AADdd80B3Fea931B610201076adacd'
+const VAULT_ADDRESS = '0x6F62FDD15ce157527416fB4Bf1a9dF0E110Fb6Fb'
 
 const VAULT_ABI = [
   {
@@ -338,6 +338,13 @@ const VAULT_ABI = [
     ],
     outputs: [],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    name: 'getCurrentDrawEndTime',
+    inputs: [],
+    outputs: [{ name: '', type: 'uint256', internalType: 'uint256' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',

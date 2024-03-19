@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useWallet } from './useWallet'
 import { ethers, FixedNumber } from 'ethers'
 import {
@@ -28,7 +28,9 @@ export const useVault = () => {
   const [depositedAmount, setDepositedAmount] = useState<string>()
   const [poolBalance, setPoolBalance] = useState<string>()
   const [drawData, setDrawData] = useState<string>()
-  const [currentDrawId, setCurrentDrawId] = useState<number | undefined>(0)
+  const [currentDrawId, setCurrentDrawId] = useState<number | undefined>(
+    undefined
+  )
   const [availableYield, setAvailableYield] = useState<string>()
 
   const { isLoading: isLoadingDeposit, isSuccess: isSuccessDeposit } =
@@ -45,24 +47,6 @@ export const useVault = () => {
     useWaitForTransactionReceipt({
       hash: approvalHash,
     })
-
-  useEffect(() => {
-    if (isSuccessDeposit) {
-      toast('Deposit successful')
-    }
-  }, [isSuccessDeposit])
-
-  useEffect(() => {
-    if (isSuccessWithdraw) {
-      toast('Withdraw successful')
-    }
-  }, [isSuccessWithdraw])
-
-  useEffect(() => {
-    if (isSuccessApproval) {
-      toast('Approval successful')
-    }
-  }, [isSuccessApproval])
 
   /* Read contract*/
   const depositedAmountData = useReadContract({
@@ -87,8 +71,7 @@ export const useVault = () => {
 
   const currentDrawData = useReadContract({
     ...vaultContract,
-    functionName: 'getDraw',
-    args: [1], //TODO: change to currentDrawId
+    functionName: 'getCurrentDrawEndTime',
   })
 
   const approvalData = useReadContract({
@@ -198,10 +181,27 @@ export const useVault = () => {
     setDepositedAmount(fixedDepositedAmount.toString())
     setApproval(fixedApproval)
     setPoolBalance(Number(fixedPoolBalance).toFixed(2).toString())
-    setDrawData(convertUnixToUTC(currentDrawData.data.drawEndTime))
-    setCurrentDrawId(Number(currentDrawIdData.data))
+    setDrawData(convertUnixToUTC(currentDrawData.data))
     setAvailableYield(Number(fixedYield).toFixed(2).toString())
   }, [evmAddress])
+
+  useEffect(() => {
+    if (isSuccessDeposit) {
+      toast('Deposit successful')
+    }
+  }, [isSuccessDeposit])
+
+  useEffect(() => {
+    if (isSuccessWithdraw) {
+      toast('Withdraw successful')
+    }
+  }, [isSuccessWithdraw])
+
+  useEffect(() => {
+    if (isSuccessApproval) {
+      toast('Approval successful')
+    }
+  }, [isSuccessApproval])
 
   return {
     depositUSDC,
