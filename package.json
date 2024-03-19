@@ -10,6 +10,7 @@
     "fresh": "pnpm clean && pnpm i",
     "nuke": "rimraf pnpm-lock.yaml && pnpm fresh",
     "spore": "pnpm -F \"spore\"",
+    "spore-og": "pnpm -F \"spore-og\"",
     "shared": "pnpm -F \"@mycel/shared\""
   },
   "devDependencies": {
