@@ -9,9 +9,9 @@ import {
 import { toast } from '../components/ui/sonner'
 import { convertUnixToUTC } from '../lib/converter'
 
-import { VAULT_ADDRESS, VAULT_ABI } from '../constants/vault'
-import { USDC_ADDRESS, USDC_ABI } from '../constants/testUSDC'
-import { FAUCET_ADDRESS, FAUCET_ABI } from '../constants/faucet'
+import { usdcContract } from '../constants/testUSDC'
+import { vaultContract } from '../constants/vault'
+import { faucetContract } from '../constants/faucet'
 
 export const useVault = () => {
   const { evmAddress } = useWallet()
@@ -29,6 +29,7 @@ export const useVault = () => {
   const [poolBalance, setPoolBalance] = useState<string>()
   const [drawData, setDrawData] = useState<string>()
   const [currentDrawId, setCurrentDrawId] = useState<number | undefined>(0)
+  const [availableYield, setAvailableYield] = useState<string>()
 
   const { isLoading: isLoadingDeposit, isSuccess: isSuccessDeposit } =
     useWaitForTransactionReceipt({
@@ -65,47 +66,44 @@ export const useVault = () => {
 
   /* Read contract*/
   const depositedAmountData = useReadContract({
-    address: VAULT_ADDRESS,
-    abi: VAULT_ABI,
+    ...vaultContract,
     functionName: 'balanceOf',
     args: [evmAddress],
   })
 
   const poolbalanceData = useReadContract({
-    address: VAULT_ADDRESS,
-    abi: VAULT_ABI,
+    ...vaultContract,
     functionName: 'totalSupply',
   })
 
+  const availableYieldData = useReadContract({
+    ...vaultContract,
+    functionName: 'availableYieldBalance',
+  })
   const currentDrawIdData = useReadContract({
-    address: VAULT_ADDRESS,
-    abi: VAULT_ABI,
+    ...vaultContract,
     functionName: 'currentDrawId',
   })
 
   const currentDrawData = useReadContract({
-    address: VAULT_ADDRESS,
-    abi: VAULT_ABI,
+    ...vaultContract,
     functionName: 'getDraw',
     args: [1], //TODO: change to currentDrawId
   })
 
   const approvalData = useReadContract({
-    address: USDC_ADDRESS,
-    abi: USDC_ABI,
+    ...usdcContract,
     functionName: 'allowance',
-    args: [evmAddress, VAULT_ADDRESS],
+    args: [evmAddress, vaultContract.address],
   })
 
   const usdcBalance = useReadContract({
-    address: USDC_ADDRESS,
-    abi: USDC_ABI,
+    ...usdcContract,
     functionName: 'balanceOf',
     args: [evmAddress],
   })
   const decimals = useReadContract({
-    address: USDC_ADDRESS,
-    abi: USDC_ABI,
+    ...usdcContract,
     functionName: 'decimals',
   })
 
@@ -115,8 +113,7 @@ export const useVault = () => {
     const fixedAmount = amount * 1e6
     deposit(
       {
-        address: VAULT_ADDRESS,
-        abi: VAULT_ABI,
+        ...vaultContract,
         functionName: 'deposit',
         args: [fixedAmount, evmAddress],
       },
@@ -132,8 +129,7 @@ export const useVault = () => {
     const fixedAmount = amount * 1e6
     withdraw(
       {
-        address: VAULT_ADDRESS,
-        abi: VAULT_ABI,
+        ...vaultContract,
         functionName: 'withdraw',
         args: [fixedAmount, evmAddress, evmAddress],
       },
@@ -146,8 +142,7 @@ export const useVault = () => {
 
   async function claimPrizeUSDC(amount: number) {
     claimPrize({
-      address: VAULT_ADDRESS,
-      abi: VAULT_ABI,
+      ...vaultContract,
       functionName: 'claimPrize',
       args: [amount],
     })
@@ -157,10 +152,9 @@ export const useVault = () => {
     const fixedAmount = 1000000 * 1e6
     approve(
       {
-        address: USDC_ADDRESS,
-        abi: USDC_ABI,
+        ...usdcContract,
         functionName: 'approve',
-        args: [VAULT_ADDRESS, fixedAmount],
+        args: [vaultContract.address, fixedAmount],
       },
       {
         onSuccess: () => toast('Transaction sent!'),
@@ -171,37 +165,42 @@ export const useVault = () => {
 
   async function faucetUSDC() {
     faucet({
-      address: FAUCET_ADDRESS,
-      abi: FAUCET_ABI,
+      ...faucetContract,
       functionName: 'drip',
-      args: [USDC_ADDRESS],
+      args: [usdcContract.address],
     })
   }
 
   useEffect(() => {
     if (!decimals.data) return
+    const decimalValue = decimals.data as ethers.Numeric
     const fixedBalance = FixedNumber.fromValue(
       usdcBalance?.data as ethers.BigNumberish,
-      decimals?.data as ethers.Numeric
+      decimalValue
     )
     const fixedDepositedAmount = FixedNumber.fromValue(
       depositedAmountData?.data as ethers.BigNumberish,
-      decimals?.data as ethers.Numeric
+      decimalValue
     )
     const fixedApproval = FixedNumber.fromValue(
       approvalData?.data as ethers.BigNumberish,
-      decimals?.data as ethers.Numeric
+      decimalValue
     )
     const fixedPoolBalance = FixedNumber.fromValue(
       poolbalanceData?.data as ethers.BigNumberish,
-      decimals?.data as ethers.Numeric
+      decimalValue
+    )
+    const fixedYield = FixedNumber.fromValue(
+      availableYieldData?.data as ethers.BigNumberish,
+      decimalValue
     )
     setUserBalance(fixedBalance.toString())
     setDepositedAmount(fixedDepositedAmount.toString())
     setApproval(fixedApproval)
-    setPoolBalance(fixedPoolBalance.toString())
+    setPoolBalance(Number(fixedPoolBalance).toFixed(2).toString())
     setDrawData(convertUnixToUTC(currentDrawData.data.drawEndTime))
     setCurrentDrawId(Number(currentDrawIdData.data))
+    setAvailableYield(Number(fixedYield).toFixed(2).toString())
   }, [evmAddress])
 
   return {
@@ -216,5 +215,6 @@ export const useVault = () => {
     approval,
     approvalData,
     userBalance,
+    availableYield,
   }
 }

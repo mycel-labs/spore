@@ -1,6 +1,6 @@
-export const USDC_ADDRESS = '0x80Bf46c2E683251f0fecAfC39F636494d4623c80'
+const USDC_ADDRESS = '0x80Bf46c2E683251f0fecAfC39F636494d4623c80'
 
-export const USDC_ABI = [
+const USDC_ABI = [
   {
     inputs: [
       { internalType: 'string', name: '_name', type: 'string' },
@@ -307,3 +307,8 @@ export const USDC_ABI = [
     type: 'function',
   },
 ]
+
+export const usdcContract = {
+  address: USDC_ADDRESS as `0x${string}`,
+  abi: USDC_ABI,
+}

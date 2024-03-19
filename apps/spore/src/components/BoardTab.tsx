@@ -56,7 +56,7 @@ const TabsContent = ({ ...props }) => (
 )
 
 const TotalTabContent = () => {
-  const { drawData, userBalance, poolBalance } = useVault()
+  const { drawData, poolBalance, availableYield } = useVault()
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
@@ -72,7 +72,9 @@ const TotalTabContent = () => {
             </li>
             <li>
               <div className="header">Total Estimated Reward</div>
-              <div className="text-right text-3xl font-bold">$123,000</div>
+              <div className="text-right text-3xl font-bold">
+                ${availableYield || '0'}
+              </div>
             </li>
             <li>
               <div className="header">Payout Date</div>

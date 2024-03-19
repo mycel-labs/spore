@@ -8,7 +8,7 @@ export const Route = createLazyFileRoute('/_app/home')({
 })
 
 function Home() {
-  const { depositedAmount } = useVault()
+  const { depositedAmount, availableYield } = useVault()
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light rounded-xl py-8 overlay-dot-ll">
@@ -17,7 +17,9 @@ function Home() {
         <ul className="list-table mx-4 sm:mx-6 mb-4 bg-light">
           <li>
             <div className="header">Estimated Reward</div>
-            <div className="text-right text-3xl font-bold">$123,456</div>
+            <div className="text-right text-3xl font-bold">
+              ${availableYield || '0'}
+            </div>
           </li>
           <li>
             <div className="header">Deposited USDC</div>

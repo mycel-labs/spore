@@ -1,6 +1,6 @@
-export const VAULT_ADDRESS = '0xD45D604696AADdd80B3Fea931B610201076adacd'
+const VAULT_ADDRESS = '0xD45D604696AADdd80B3Fea931B610201076adacd'
 
-export const VAULT_ABI = [
+const VAULT_ABI = [
   {
     type: 'constructor',
     inputs: [
@@ -1456,3 +1456,8 @@ export const VAULT_ABI = [
   },
   { type: 'error', name: 'YieldVaultZeroAddress', inputs: [] },
 ]
+
+export const vaultContract = {
+  address: VAULT_ADDRESS as `0x${string}`,
+  abi: VAULT_ABI,
+}

@@ -58,6 +58,7 @@ const DepositTabContent = () => {
     userBalance,
     poolBalance,
     approvalData,
+    availableYield,
   } = useVault()
 
   return (
@@ -65,7 +66,9 @@ const DepositTabContent = () => {
       <ul className="list-table bg-light">
         <li className="p-0">
           <div className="header">Estimated Reward</div>
-          <div className="text-right font-bold text-3xl">$123,000</div>
+          <div className="text-right font-bold text-3xl">
+            ${availableYield || '0'}
+          </div>
         </li>
         <li>
           <div className="header">Total Pool</div>
