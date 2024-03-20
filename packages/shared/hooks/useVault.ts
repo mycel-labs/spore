@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useWallet } from './useWallet'
-import { ethers, FixedNumber } from 'ethers'
+import { formatUnits } from 'viem'
 import {
   useWriteContract,
   useReadContract,
@@ -24,7 +24,7 @@ export const useVault = () => {
   const { data: claimPrizeHash, writeContract: claimPrize } = useWriteContract()
 
   const [userBalance, setUserBalance] = useState<string>()
-  const [approval, setApproval] = useState<ethers.FixedNumber>()
+  const [approval, setApproval] = useState<string>()
   const [depositedAmount, setDepositedAmount] = useState<string>()
   const [poolBalance, setPoolBalance] = useState<string>()
   const [drawData, setDrawData] = useState<string>()
@@ -156,33 +156,28 @@ export const useVault = () => {
 
   useEffect(() => {
     if (!decimals.data) return
-    const decimalValue = decimals.data as ethers.Numeric
-    const fixedBalance = FixedNumber.fromValue(
-      usdcBalance?.data as ethers.BigNumberish,
+    const decimalValue = decimals.data as number
+    const fixedBalance = formatUnits(usdcBalance.data as bigint, decimalValue)
+    const fixedDepositedAmount = formatUnits(
+      depositedAmountData.data as bigint,
       decimalValue
     )
-    const fixedDepositedAmount = FixedNumber.fromValue(
-      depositedAmountData?.data as ethers.BigNumberish,
+    const fixedPoolBalance = formatUnits(
+      poolbalanceData.data as bigint,
       decimalValue
     )
-    const fixedApproval = FixedNumber.fromValue(
-      approvalData?.data as ethers.BigNumberish,
+    const fixedYield = formatUnits(
+      availableYieldData.data as bigint,
       decimalValue
     )
-    const fixedPoolBalance = FixedNumber.fromValue(
-      poolbalanceData?.data as ethers.BigNumberish,
-      decimalValue
-    )
-    const fixedYield = FixedNumber.fromValue(
-      availableYieldData?.data as ethers.BigNumberish,
-      decimalValue
-    )
-    setUserBalance(fixedBalance.toString())
-    setDepositedAmount(fixedDepositedAmount.toString())
+    const fixedApproval = formatUnits(approvalData.data as bigint, decimalValue)
+
+    setUserBalance(fixedBalance)
+    setDepositedAmount(fixedDepositedAmount)
     setApproval(fixedApproval)
     setPoolBalance(Number(fixedPoolBalance).toFixed(2).toString())
-    setDrawData(convertUnixToUTC(currentDrawData.data))
     setAvailableYield(Number(fixedYield).toFixed(2).toString())
+    setDrawData(convertUnixToUTC(currentDrawData.data as BigInt))
   }, [evmAddress])
 
   useEffect(() => {
