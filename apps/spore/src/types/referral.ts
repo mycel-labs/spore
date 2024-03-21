@@ -28,3 +28,9 @@ export interface mappedLeaderBoard {
   totalPoints: number
   countIssuedReferralCodes?: number
 }
+
+export interface mappedTeamLeaderBoard {
+  teamId: string
+  teamName: string
+  totalPoints: number
+}

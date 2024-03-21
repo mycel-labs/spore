@@ -11,7 +11,7 @@ import {
   useGetIndividualLeaderBoard,
 } from '~/hooks/useReferral'
 import { env } from '@/lib/env'
-import { mappedLeaderBoard } from '~/types/referral'
+import { mappedLeaderBoard, mappedTeamLeaderBoard } from '~/types/referral'
 
 export default function BoardTab({
   tab,
@@ -37,6 +37,23 @@ export default function BoardTab({
       totalPoints: 140,
     },
   ]
+  const mockTLB: mappedTeamLeaderBoard[] = [
+    {
+      teamId: 'O2EYDIUcRcVmL5pMehRESerN11LIr6QK',
+      teamName: 'Team Awesome',
+      totalPoints: 1000,
+    },
+    {
+      teamId: 'H8c1mGSptHxbYLWH51U4Ts4jkLLiXkW6',
+      teamName: 'Team Blavo',
+      totalPoints: 900,
+    },
+    {
+      teamId: 'oSL4GXoibQ7dJdnAuFoRMvrVGjRzqx5J',
+      teamName: 'Team Cool',
+      totalPoints: 750,
+    },
+  ]
 
   const lb =
     !isLoading && data
@@ -47,6 +64,16 @@ export default function BoardTab({
           }
         )?.data.leaderBoard
       : mockLB
+
+  const tlb =
+    !isLoading && data
+      ? (
+          data as {
+            success: boolean
+            data: { leaderBoard: mappedTeamLeaderBoard[] }
+          }
+        )?.data.leaderBoard
+      : mockTLB
 
   return (
     <Tabs defaultValue={tab ?? 'total'} className="w-full">
@@ -65,7 +92,7 @@ export default function BoardTab({
         </TabsTrigger>
       </TabsList>
       <TabsContent value="total">
-        <TotalTabContent />
+        <TotalTabContent tlb={tlb} />
       </TabsContent>
       <TabsContent value="team">
         <TeamTabContent />
@@ -91,8 +118,16 @@ const TabsContent = ({ ...props }) => (
   />
 )
 
-const TotalTabContent = () => {
+const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
   const { drawData, poolBalance, availableYield } = useVault()
+  const rows = tlb.map((data) => {
+    return (
+      <tr className="[&>td]:py-2 [&>td]:px-6" key={data.teamId}>
+        <td>{data.teamName}</td>
+        <td className="text-right">{data.totalPoints}</td>
+      </tr>
+    )
+  })
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
@@ -125,18 +160,7 @@ const TotalTabContent = () => {
             <th>Team Rank</th>
             <th>Point</th>
           </tr>
-          <tr className="[&>td]:py-2 [&>td]:px-6">
-            <td>Team A</td>
-            <td className="text-right">1,000</td>
-          </tr>
-          <tr className="[&>td]:py-2 [&>td]:px-6">
-            <td>Team B</td>
-            <td className="text-right">900</td>
-          </tr>
-          <tr className="[&>td]:py-2 [&>td]:px-6">
-            <td>Team C</td>
-            <td className="text-right">750</td>
-          </tr>
+          {rows}
         </tbody>
       </table>
     </>
