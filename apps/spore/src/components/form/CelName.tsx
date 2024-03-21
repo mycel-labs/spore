@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRegisterSecondLevelDomain } from '@/hooks/useMycel'
-import { CelNameForm } from '@/store'
+import { useStore } from '@/store'
 
 const celNameSchema = z.object({
   // TODO: update with server validation
