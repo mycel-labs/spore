@@ -5,6 +5,7 @@ import {
   TabsContent as TabsContent_,
 } from '@/components/ui/tabs'
 import ImgEnoki from '@/assets/enoki.svg'
+import { useVault } from '@/hooks/useVault'
 
 export default function BoardTab({
   tab,
@@ -54,50 +55,57 @@ const TabsContent = ({ ...props }) => (
   />
 )
 
-const TotalTabContent = () => (
-  <>
-    <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
-    <div className="grid grid-cols-4 gap-4">
-      <img src={ImgEnoki} />
-      <div className="col-span-3 pt-2">
-        <ul className="list-table bg-light">
-          <li>
-            <div className="header">Pool Value</div>
-            <div className="text-right text-3xl font-bold">$100,000,000</div>
-          </li>
-          <li>
-            <div className="header">Total Estimated Reward</div>
-            <div className="text-right text-3xl font-bold">$123,000</div>
-          </li>
-          <li>
-            <div className="header">Payout Date</div>
-            <div className="text-right text-3xl font-bold">23:55:10</div>
-          </li>
-        </ul>
+const TotalTabContent = () => {
+  const { drawData, poolBalance, availableYield } = useVault()
+  return (
+    <>
+      <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
+      <div className="grid grid-cols-4 gap-4">
+        <img src={ImgEnoki} />
+        <div className="col-span-3 pt-2">
+          <ul className="list-table bg-light">
+            <li>
+              <div className="header">Pool Value</div>
+              <div className="text-right text-3xl font-bold">
+                ${poolBalance}
+              </div>
+            </li>
+            <li>
+              <div className="header">Total Estimated Reward</div>
+              <div className="text-right text-3xl font-bold">
+                ${availableYield || '0'}
+              </div>
+            </li>
+            <li>
+              <div className="header">Payout Date</div>
+              <div className="text-right text-3xl font-bold">{drawData}</div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <table className="bg-light border-dark border-2 font-title w-full mt-8">
-      <tbody>
-        <tr className="bg-dark text-light uppercase [&>th]:p-1">
-          <th>Team Rank</th>
-          <th>Point</th>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>Team A</td>
-          <td className="text-right">1,000</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>Team B</td>
-          <td className="text-right">900</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>Team C</td>
-          <td className="text-right">750</td>
-        </tr>
-      </tbody>
-    </table>
-  </>
-)
+      <table className="bg-light border-dark border-2 font-title w-full mt-8">
+        <tbody>
+          <tr className="bg-dark text-light uppercase [&>th]:p-1">
+            <th>Team Rank</th>
+            <th>Point</th>
+          </tr>
+          <tr className="[&>td]:py-2 [&>td]:px-6">
+            <td>Team A</td>
+            <td className="text-right">1,000</td>
+          </tr>
+          <tr className="[&>td]:py-2 [&>td]:px-6">
+            <td>Team B</td>
+            <td className="text-right">900</td>
+          </tr>
+          <tr className="[&>td]:py-2 [&>td]:px-6">
+            <td>Team C</td>
+            <td className="text-right">750</td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  )
+}
 
 const TeamTabContent = () => (
   <>

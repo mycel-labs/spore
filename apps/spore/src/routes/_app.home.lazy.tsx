@@ -1,12 +1,14 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Profile from '~/components/Profile'
 import { Link } from '@tanstack/react-router'
+import { useVault } from '@/hooks/useVault'
 
 export const Route = createLazyFileRoute('/_app/home')({
   component: Home,
 })
 
 function Home() {
+  const { depositedAmount, availableYield } = useVault()
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light rounded-xl py-8 overlay-dot-ll">
@@ -15,11 +17,15 @@ function Home() {
         <ul className="list-table mx-4 sm:mx-6 mb-4 bg-light">
           <li>
             <div className="header">Estimated Reward</div>
-            <div className="text-right text-3xl font-bold">$123,456</div>
+            <div className="text-right text-3xl font-bold">
+              ${availableYield || '0'}
+            </div>
           </li>
           <li>
             <div className="header">Deposited USDC</div>
-            <div className="text-right text-3xl font-bold">$1,000</div>
+            <div className="text-right text-3xl font-bold">
+              ${depositedAmount || '0'}
+            </div>
           </li>
         </ul>
         <div className="px-4 sm:px-6 py-2 grid gap-6 grid-cols-2">
