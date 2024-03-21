@@ -4,46 +4,45 @@ import Button from '~/components/Button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useRegisterSecondLevelDomain } from '@/hooks/useMycel'
+import { useStore } from '@/store'
 
-const celNameSchema = z.object({
+const refSchema = z.object({
   // TODO: update with server validation
-  domain: z.string().min(1).max(64),
+  refCode: z.string().min(1).max(48),
 })
 
 export default function CelNameForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { mutate } = useRegisterSecondLevelDomain()
+  const refCode = useStore((state) => state.refCode)
+  const updateRefCode = useStore((state) => state.updateRefCode)
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(celNameSchema),
+    resolver: zodResolver(refSchema),
+    defaultValues: {
+      refCode: refCode ?? '',
+    },
   })
 
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
-      await mutate(data.domain)
       toast(`👌 You got ${data.domain} !`)
+      updateRefCode(undefined)
     } catch (e) {
-      toast(`⚠️ Register error! ${e.message}`)
+      toast(`⚠️ Refferal error! ${e.message}`)
     }
     setIsLoading(false)
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="text"
-        placeholder="xxx.cel"
-        className="w-full mt-2"
-        {...register('domain')}
-      />
-      {errors.domain && (
+      <input type="text" className="w-full mt-2" {...register('refCode')} />
+      {errors.refCode && (
         <span className="font-sans text-right text-sm bg-primary px-2 pt-px mt-1 mx-2 inline-flex">
-          {errors.domain.message}
+          {errors.refCode.message}
         </span>
       )}
       <Button
@@ -51,7 +50,7 @@ export default function CelNameForm() {
         isLoading={isLoading}
         className="btn bg-secondary w-full h-14 mt-2"
       >
-        Get .cel name
+        Start
       </Button>
     </form>
   )

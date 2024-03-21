@@ -10,6 +10,7 @@ import { copyClipboard, cn } from '@/lib/utils'
 import { ClipboardCopy } from 'lucide-react'
 import Button from '~/components/Button'
 import CelNameForm from '~/components/form/CelName'
+import RefCodeForm from '~/components/form/RefCode'
 import {
   MYCEL_COIN_DECIMALS,
   MYCEL_HUMAN_COIN_UNIT,
@@ -36,6 +37,9 @@ function Start() {
             </li>
             <li>
               <RegisterCelName />
+            </li>
+            <li>
+              <CheckRefCode />
             </li>
           </ol>
         </div>
@@ -178,6 +182,15 @@ function RegisterCelName() {
     <>
       <span className={cn('')}>Get your name</span>
       <CelNameForm />
+    </>
+  )
+}
+
+function CheckRefCode() {
+  return (
+    <>
+      <span className={cn('')}>Refferal code</span>
+      <RefCodeForm />
     </>
   )
 }
