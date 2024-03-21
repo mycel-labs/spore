@@ -17,21 +17,12 @@ declare module '@tanstack/react-router' {
 
 export default function AppRouter() {
   const wallet = useWallet()
-  const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
-    useDomainOwnership(wallet?.mycelAccount?.address)
-  const userDomains = !isLoadingOwnDomain
-    ? dataOwnDomain?.domainOwnership?.domains
-    : undefined
 
   return (
     <RouterProvider
       router={router}
       context={{
         wallet,
-        mycel: {
-          hasDomain: userDomains?.length > 0,
-          domain: userDomains?.length > 0 ? userDomains[0] : undefined,
-        },
       }}
     />
   )

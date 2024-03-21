@@ -4,6 +4,7 @@ import ImgIntro from '@/assets/spore-intro.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
 import { useWallet } from '@/hooks/useWallet'
 import { useBalance } from '@/hooks/useMycel'
+import { useDomainOwnership } from '@/hooks/useMycel'
 import { toast } from '@/components/ui/sonner'
 import { shortAddress } from '@/lib/wallets'
 import { copyClipboard, cn } from '@/lib/utils'
@@ -178,10 +179,27 @@ function Mint() {
 }
 
 function RegisterCelName() {
-  return (
+  const { mycelAccount } = useWallet()
+  const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
+    useDomainOwnership(mycelAccount?.address)
+
+  return isLoadingOwnDomain ? null : (
     <>
-      <span className={cn('')}>Get your name</span>
-      <CelNameForm />
+      <span
+        className={cn(
+          dataOwnDomain?.domainOwnership?.domains ? 'line-through' : ''
+        )}
+      >
+        Get your name
+      </span>
+      {dataOwnDomain?.domainOwnership?.domains ? (
+        <p className="text-right font-title text-3xl font-bold">
+          {dataOwnDomain?.domainOwnership?.domains[0]?.name}.
+          {dataOwnDomain?.domainOwnership?.domains[0]?.parent}
+        </p>
+      ) : (
+        <CelNameForm />
+      )}
     </>
   )
 }
