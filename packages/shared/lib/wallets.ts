@@ -64,6 +64,18 @@ export const MYCEL_CHAIN_INFO: ChainInfo = {
   beta: true,
 }
 
+export const WALLET_CONFIG_SPORE = {
+  injected: {
+    id: 'injected',
+    name: 'Injected',
+    display: 'EVM Wallet',
+    chainType: 'evm',
+    icon: [MetamaskIcon, CoinbaseWalltIcon, GenericWalletWalltIcon],
+    getUrl: 'https://metamask.io/download.html',
+    showMobile: false,
+  },
+}
+
 export const WALLET_CONFIG = {
   injected: {
     id: 'injected',

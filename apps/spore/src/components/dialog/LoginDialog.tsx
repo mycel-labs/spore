@@ -12,7 +12,7 @@ import {
 import { useState, useEffect } from 'react'
 import { useLockBodyScroll } from '@uidotdev/usehooks'
 import { useWallet } from '@/hooks/useWallet'
-import { WALLET_CONFIG, type WalletType } from '@/lib/wallets'
+import { WALLET_CONFIG_SPORE, type WalletType } from '@/lib/wallets'
 import { cn, isBitGetApp, isMobile, isOKXApp, isPC } from '@/lib/utils'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -70,8 +70,7 @@ export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
             <div className="font-title font-bold text-2xl mb-6 centerline">
               Start
             </div>
-
-            {Object.entries(WALLET_CONFIG).map(([key, val]) => (
+            {Object.entries(WALLET_CONFIG_SPORE).map(([key, val]) => (
               <button
                 key={val.id}
                 className={cn(
