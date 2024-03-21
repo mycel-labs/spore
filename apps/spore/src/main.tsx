@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import Providers from '@/components/Providers'
 import AppRouter from '~/AppRouter'
+import { HelmetProvider } from 'react-helmet-async'
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
@@ -16,9 +17,11 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <Providers>
-        <AppRouter />
-      </Providers>
+      <HelmetProvider>
+        <Providers>
+          <AppRouter />
+        </Providers>
+      </HelmetProvider>
     </StrictMode>
   )
 }
