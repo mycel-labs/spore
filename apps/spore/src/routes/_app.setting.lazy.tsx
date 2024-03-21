@@ -51,11 +51,11 @@ function Setting() {
             <li>
               <div className="header px-4">Mycel Address</div>
               <div className="px-4 flex justify-between items-center text-2xl">
-                {shortAddress(evmAddress, 10, 6)}
+                {shortAddress(mycelAddress, 10, 6)}
                 <button
                   className="px-2.5 py-1 -mt-2 text-sm uppercase font-bold hover:opacity-90"
                   onClick={() => {
-                    copyClipboard(evmAddress)
+                    copyClipboard(mycelAddress)
                     toast('Address copied!')
                   }}
                 >

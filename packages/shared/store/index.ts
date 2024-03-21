@@ -20,7 +20,9 @@ export type Authenticator = {
 }
 
 type StoreState = {
+  isHydrated: boolean
   isLoading: boolean
+  refCode: string | undefined
   evmAddress: EvmAddress | undefined
   mycelAddress: MycelAddress | undefined
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -32,6 +34,7 @@ type StoreState = {
 type StoreSAction = {
   updateIsHydrated: (isHydrated: boolean) => void
   updateIsLoading: (isLoading: boolean) => void
+  updateRefCode: (refCode: string | undefined) => void
   updateEvmAddress: (address: StoreState['evmAddress']) => void
   updateMycelAddress: (address: StoreState['mycelAddress']) => void
   updateCurrentWalletType: (address: StoreState['currentWalletType']) => void
@@ -53,6 +56,7 @@ export const useStore = create<StoreState & StoreSAction>()(
       (set) => ({
         isHydrated: false,
         isLoading: false,
+        refCode: undefined,
         evmAddress: undefined,
         mycelAddress: undefined,
         currentWalletType: undefined,
@@ -64,6 +68,8 @@ export const useStore = create<StoreState & StoreSAction>()(
           set((state) => ({ ...state, isHydrated: payload })),
         updateIsLoading: (payload: boolean) =>
           set((state) => ({ ...state, isLoading: payload })),
+        updateRefCode: (payload: string) =>
+          set((state) => ({ ...state, refCode: payload })),
         updateEvmAddress: (payload: EvmAddress | undefined) =>
           set((state) => ({ ...state, evmAddress: payload })),
         updateMycelAddress: (payload: MycelAddress | undefined) =>
@@ -95,6 +101,7 @@ export const useStore = create<StoreState & StoreSAction>()(
           state?.updateIsHydrated(true)
         },
         partialize: (state) => ({
+          refCode: state.refCode,
           evmAddress: state.evmAddress,
           mycelAddress: state.mycelAddress,
           authenticator: state.authenticator,

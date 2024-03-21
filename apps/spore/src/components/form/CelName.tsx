@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRegisterSecondLevelDomain } from '@/hooks/useMycel'
+import { CelNameForm } from '@/store'
 
 const celNameSchema = z.object({
   // TODO: update with server validation
@@ -21,12 +22,15 @@ export default function CelNameForm() {
   } = useForm({
     resolver: zodResolver(celNameSchema),
   })
+  const refCode = useStore((state) => state.refCode)
+  const updateRefCode = useStore((state) => state.updateRefCode)
 
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
       await mutate(data.domain)
       toast(`👌 You got ${data.domain} !`)
+      updateRefCode(undefined)
     } catch (e) {
       toast(`⚠️ Register error! ${e.message}`)
     }

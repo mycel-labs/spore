@@ -10,8 +10,6 @@ export default function Profile() {
     ? dataOwnDomain?.domainOwnership?.domains[0]
     : undefined
 
-  console.log('d;', domain)
-
   return (
     <div className="grid grid-cols-2 border-dark border-2 rounded my-6 mx-4 sm:mx-6 bg-light">
       <div className="px-3 py-2 border-r-2 border-dark flex items-center justify-center">
