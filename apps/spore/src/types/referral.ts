@@ -21,3 +21,10 @@ export interface ReferralCode {
   redeemedUserIds?: string[]
   maxRedemptions?: number
 }
+export interface mappedLeaderBoard {
+  rank?: number
+  userId: string
+  userAddress?: string
+  totalPoints: number
+  countIssuedReferralCodes?: number
+}

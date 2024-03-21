@@ -13,11 +13,11 @@ export const Route = createLazyFileRoute('/_app/referral')({
 
 function Referral() {
   const code = 'REFERRAL_CODE'
-  const fn = useFirebaseFunction({
+  const fns = useFirebaseFunction({
     projectId: env.firebaseProjectId,
     apiKey: env.firebaseAPIKey,
   })
-  const { data, isLoading } = useGetUserByReferralCode(fn, code)
+  const { data, isLoading } = useGetUserByReferralCode(fns, code)
   const invitedUserCount =
     !isLoading && data ? (data as { user: User })?.user?.invitedUserCount : 0
   return (

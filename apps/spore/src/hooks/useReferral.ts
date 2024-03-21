@@ -15,7 +15,7 @@ export const useCreateUser = async (
   address: string
 ) => {
   const { data, error, isError, isLoading, status } = useQuery({
-    queryKey: ['queryCreateUser', fns],
+    queryKey: ['queryCreateUser', userId],
     queryFn: async () => {
       const fn = httpsCallable(fns, 'createUser')
       const res = await fn({
