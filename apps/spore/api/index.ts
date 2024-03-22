@@ -43,6 +43,9 @@ async function claimFaucet(address: string) {
   const balance = await faucetClient.getBalance(address, "umycel").catch((err) => {
     return err
   });
+  if (balance instanceof Error) {
+    return getErrorMessage(balance.message);
+  }
 
   if (balance.amount > threashold) {
     return getErrorMessage("Faucet has insufficient balance");
@@ -67,10 +70,8 @@ const claimFaucetValidator = [
   query("address").isString().matches(/^mycel[a-zA-Z0-9]*$/),
 ];
 
-
-
 app.get('/api', (_req: Request, res: Response) => {
-  return res.send('Hello World 🌍')
+  return res.send('Hello')
 })
 
 app.get('/api/faucet', claimFaucetValidator, async (req: Request, res: Response) => {
@@ -82,7 +83,7 @@ app.get('/api/faucet', claimFaucetValidator, async (req: Request, res: Response)
     const response = await claimFaucet(req.query.address as string);
     return res.status(200).json(response);
   } catch (err) {
-    return res.status(500).json(getErrorMessage(err.message));
+    return res.status(500).json({ message: "Internal server error" });
   }
 })
 
