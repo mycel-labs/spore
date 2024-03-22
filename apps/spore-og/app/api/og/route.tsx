@@ -19,7 +19,10 @@ export async function GET(request: NextRequest) {
       `../../../../../packages/shared/assets/og/char${4}.png`,
       import.meta.url
     )
-  ).then((res) => res.arrayBuffer())
+  ).then((res) => res.arrayBuffer()).then((buffer) => {
+    const base64 = Buffer.from(buffer).toString('base64');
+    return `data:image/png;base64,${base64}`;
+  });
 
   return new ImageResponse(
     (
