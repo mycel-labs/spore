@@ -2,6 +2,7 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { UserCog, FileSignature, ClipboardCopy, LogOut } from 'lucide-react'
 import Profile from '~/components/Profile'
 import { useWallet } from '@/hooks/useWallet'
+import { useDomainOwnership } from '@/hooks/useMycel'
 import { shortAddress } from '@/lib/wallets'
 import { copyClipboard } from '@/lib/utils'
 import { useNavigate } from '@tanstack/react-router'
@@ -27,9 +28,11 @@ export const Route = createLazyFileRoute('/_app/setting')({
 })
 
 function Setting() {
-  const { evmAddress, mycelAddress } = useWallet()
+  const { evmAddress, mycelAccount } = useWallet()
+  const mycelAddress = mycelAccount?.address
   const { disconnectWallet } = useWallet()
   const navigate = useNavigate()
+
 
   const handleSignout = async (): Promise<void> => {
     await disconnectWallet()
