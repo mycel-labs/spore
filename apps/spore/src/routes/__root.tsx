@@ -4,6 +4,9 @@ import NotFound from '~/components/NotFound'
 import { Toaster } from '@/components/ui/sonner'
 import { useStore } from '@/store'
 import Loading from '~/components/Loading'
+import { Helmet } from 'react-helmet-async'
+import ImgOg from '@/assets/og/og.png'
+
 import '~/global.css'
 
 const TanStackRouterDevtools =
@@ -22,16 +25,21 @@ function RootComponent() {
   const isLoading = useStore((state) => state.isLoading)
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <main className="flex-grow overflow-x-hidden">
-        <Outlet />
-      </main>
-      <Toaster />
-      <Suspense>
-        <TanStackRouterDevtools />
-      </Suspense>
-      {isLoading && <Loading />}
-    </div>
+    <>
+      <Helmet>
+        <meta property="og:image" content={ImgOg} />
+      </Helmet>
+      <div className="flex flex-col min-h-screen">
+        <main className="flex-grow overflow-x-hidden">
+          <Outlet />
+        </main>
+        <Toaster />
+        <Suspense>
+          <TanStackRouterDevtools />
+        </Suspense>
+        {isLoading && <Loading />}
+      </div>
+    </>
   )
 }
 
