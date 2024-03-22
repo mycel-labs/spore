@@ -9,7 +9,7 @@ export const useAllRecords = (domain: Domain | undefined) => {
     enabled: !!domain,
     queryKey: ['queryAllRecords', domain],
     queryFn: () =>
-      client.MycelResolver.query
+      client.MycelRegistry.query
         .queryAllRecords(domain.name, domain.parent)
         .then((res) => res.data),
   })
@@ -121,7 +121,7 @@ export const useRegisterSecondLevelDomain = () => {
             registrationPeriodInYear: 1,
           },
         })
-        .then((res) => res.data),
+        .then((res) => res.data).catch((e) => { console.log(e) }),
   })
 
   return {
