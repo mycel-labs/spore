@@ -4,7 +4,6 @@ import nodePolyfills from 'vite-plugin-node-stdlib-browser'
 import type { UserConfig } from 'vite'
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin'
 import { VitePluginRadar } from 'vite-plugin-radar'
-import mix, { vercelAdapter } from 'vite-plugin-mix'
 
 const config: UserConfig = {
   resolve: {
@@ -16,10 +15,6 @@ const config: UserConfig = {
   plugins: [
     react(),
     TanStackRouterVite(),
-    mix.default({
-      handler: './api/handler.ts',
-      adapter: vercelAdapter(),
-    }),
     VitePluginRadar({
       analytics: {
         id: 'G-9LRZ9KB92V',
@@ -59,6 +54,15 @@ const config: UserConfig = {
   ],
   define: {
     global: 'window',
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
 }
 
