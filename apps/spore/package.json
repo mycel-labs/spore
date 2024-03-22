@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prod": "pnpm run lint && pnpm run build && pnpm run server:prod",
-    "server": "nodemon --exec node --loader ts-node/esm ./api/index.ts",
+    "server": "pnpm nodemon --exec tsx ./api/index.ts",
     "server:dev": "pnpm run server",
     "server:prod": "cross-env NODE_ENV=production pnpm run server"
   },
@@ -61,7 +61,7 @@
     "postcss-hexrgba": "^2.1.0",
     "postcss-import": "^16.0.1",
     "tailwindcss": "^3.4.1",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.7.1",
     "typescript": "^5.4.2",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vite-plugin-pwa": "^0.19.2"
