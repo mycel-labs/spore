@@ -33,7 +33,7 @@ function Home() {
             <Link
               type="button"
               className="btn bg-light font-title font-bold px-6 pt-2.5 pb-0.5 w-full flex flex-col leading-none bg-yellow-200"
-              to="/refferral"
+              to="/referral"
             >
               <span className="btn-inner" />
               <div>Invite Your Friend</div>

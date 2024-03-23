@@ -22,7 +22,7 @@ const StartLazyImport = createFileRoute('/start')()
 const IndexLazyImport = createFileRoute('/')()
 const AppVaultsLazyImport = createFileRoute('/_app/vaults')()
 const AppSettingLazyImport = createFileRoute('/_app/setting')()
-const AppRefferralLazyImport = createFileRoute('/_app/refferral')()
+const AppReferralLazyImport = createFileRoute('/_app/referral')()
 const AppHomeLazyImport = createFileRoute('/_app/home')()
 const AppBoardLazyImport = createFileRoute('/_app/board')()
 const AppAboutLazyImport = createFileRoute('/_app/about')()
@@ -59,12 +59,10 @@ const AppSettingLazyRoute = AppSettingLazyImport.update({
   getParentRoute: () => AppRoute,
 } as any).lazy(() => import('./routes/_app.setting.lazy').then((d) => d.Route))
 
-const AppRefferralLazyRoute = AppRefferralLazyImport.update({
-  path: '/refferral',
+const AppReferralLazyRoute = AppReferralLazyImport.update({
+  path: '/referral',
   getParentRoute: () => AppRoute,
-} as any).lazy(() =>
-  import('./routes/_app.refferral.lazy').then((d) => d.Route),
-)
+} as any).lazy(() => import('./routes/_app.referral.lazy').then((d) => d.Route))
 
 const AppHomeLazyRoute = AppHomeLazyImport.update({
   path: '/home',
@@ -113,8 +111,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHomeLazyImport
       parentRoute: typeof AppImport
     }
-    '/_app/refferral': {
-      preLoaderRoute: typeof AppRefferralLazyImport
+    '/_app/referral': {
+      preLoaderRoute: typeof AppReferralLazyImport
       parentRoute: typeof AppImport
     }
     '/_app/setting': {
@@ -136,7 +134,7 @@ export const routeTree = rootRoute.addChildren([
     AppAboutLazyRoute,
     AppBoardLazyRoute,
     AppHomeLazyRoute,
-    AppRefferralLazyRoute,
+    AppReferralLazyRoute,
     AppSettingLazyRoute,
     AppVaultsLazyRoute,
   ]),
