@@ -7,7 +7,7 @@ export default function Profile() {
   const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
     useDomainOwnership(wallet?.mycelAccount?.address)
   const domain = !isLoadingOwnDomain
-    ? dataOwnDomain?.domainOwnership?.domains[0]
+    ? dataOwnDomain?.domain_ownership?.domains[0]
     : undefined
 
   return (
@@ -21,7 +21,7 @@ export default function Profile() {
             <div className="text-lg uppercase bg-dark text-light px-3 py-1">
               Name
             </div>
-            <div className="text-3xl px-3 py-3 break-words">
+            <div className="text-2xl px-3 py-3 break-words">
               {domain?.name}.{domain?.parent}
             </div>
           </li>

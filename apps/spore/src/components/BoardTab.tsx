@@ -6,12 +6,75 @@ import {
 } from '@/components/ui/tabs'
 import ImgEnoki from '@/assets/enoki.svg'
 import { useVault } from '@/hooks/useVault'
+import {
+  useFirebaseFunction,
+  useGetIndividualLeaderBoard,
+} from '~/hooks/useReferral'
+import { env } from '@/lib/env'
+import { mappedLeaderBoard, mappedTeamLeaderBoard } from '~/types/referral'
 
 export default function BoardTab({
   tab,
 }: {
   tab: 'total' | 'team' | 'player' | undefined
 }) {
+  const fns = useFirebaseFunction({
+    projectId: env.firebaseProjectId,
+    apiKey: env.firebaseAPIKey,
+  })
+  const { data, isLoading } = useGetIndividualLeaderBoard(fns)
+  const mockLB: mappedLeaderBoard[] = [
+    {
+      userId: 'akira.cel',
+      totalPoints: 200,
+    },
+    {
+      userId: 'taro.cel',
+      totalPoints: 190,
+    },
+    {
+      userId: 'yosui.cel',
+      totalPoints: 140,
+    },
+  ]
+  const mockTLB: mappedTeamLeaderBoard[] = [
+    {
+      teamId: 'O2EYDIUcRcVmL5pMehRESerN11LIr6QK',
+      teamName: 'Team Awesome',
+      totalPoints: 1000,
+    },
+    {
+      teamId: 'H8c1mGSptHxbYLWH51U4Ts4jkLLiXkW6',
+      teamName: 'Team Blavo',
+      totalPoints: 900,
+    },
+    {
+      teamId: 'oSL4GXoibQ7dJdnAuFoRMvrVGjRzqx5J',
+      teamName: 'Team Cool',
+      totalPoints: 750,
+    },
+  ]
+
+  const lb =
+    !isLoading && data
+      ? (
+          data as {
+            success: boolean
+            data: { leaderBoard: mappedLeaderBoard[] }
+          }
+        )?.data.leaderBoard
+      : mockLB
+
+  const tlb =
+    !isLoading && data
+      ? (
+          data as {
+            success: boolean
+            data: { leaderBoard: mappedTeamLeaderBoard[] }
+          }
+        )?.data.leaderBoard
+      : mockTLB
+
   return (
     <Tabs defaultValue={tab ?? 'total'} className="w-full">
       <TabsList className="text-xl bg-transparent space-x-3 font-title">
@@ -29,13 +92,13 @@ export default function BoardTab({
         </TabsTrigger>
       </TabsList>
       <TabsContent value="total">
-        <TotalTabContent />
+        <TotalTabContent tlb={tlb} />
       </TabsContent>
       <TabsContent value="team">
         <TeamTabContent />
       </TabsContent>
       <TabsContent value="player">
-        <PlayerTabContent />
+        <PlayerTabContent lb={lb} />
       </TabsContent>
     </Tabs>
   )
@@ -55,8 +118,16 @@ const TabsContent = ({ ...props }) => (
   />
 )
 
-const TotalTabContent = () => {
+const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
   const { drawData, poolBalance, availableYield } = useVault()
+  const rows = tlb.map((data) => {
+    return (
+      <tr className="[&>td]:py-2 [&>td]:px-6" key={data.teamId}>
+        <td>{data.teamName}</td>
+        <td className="text-right">{data.totalPoints}</td>
+      </tr>
+    )
+  })
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
@@ -89,18 +160,7 @@ const TotalTabContent = () => {
             <th>Team Rank</th>
             <th>Point</th>
           </tr>
-          <tr className="[&>td]:py-2 [&>td]:px-6">
-            <td>Team A</td>
-            <td className="text-right">1,000</td>
-          </tr>
-          <tr className="[&>td]:py-2 [&>td]:px-6">
-            <td>Team B</td>
-            <td className="text-right">900</td>
-          </tr>
-          <tr className="[&>td]:py-2 [&>td]:px-6">
-            <td>Team C</td>
-            <td className="text-right">750</td>
-          </tr>
+          {rows}
         </tbody>
       </table>
     </>
@@ -152,40 +212,27 @@ const TeamTabContent = () => (
   </>
 )
 
-const PlayerTabContent = () => (
-  <>
-    <h2 className="centerline font-bold text-3xl py-4">Player Board</h2>
-    <table className="bg-light border-dark border-2 font-title w-full mt-4">
-      <tbody>
-        <tr className="bg-dark text-light uppercase [&>th]:p-1">
-          <th>Player</th>
-          <th>Point</th>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>akira.cel</td>
-          <td className="text-right">200</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>taro.cel</td>
-          <td className="text-right">190</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>yosui.cel</td>
-          <td className="text-right">140</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>xxxx.cel</td>
-          <td className="text-right">100</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>xxxx.cel</td>
-          <td className="text-right">90</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>xxxx.cel</td>
-          <td className="text-right">80</td>
-        </tr>
-      </tbody>
-    </table>
-  </>
-)
+const PlayerTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
+  const rows = lb.map((data) => {
+    return (
+      <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
+        <td>{data.userId}</td>
+        <td className="text-right">{data.totalPoints}</td>
+      </tr>
+    )
+  })
+  return (
+    <>
+      <h2 className="centerline font-bold text-3xl py-4">Player Board</h2>
+      <table className="bg-light border-dark border-2 font-title w-full mt-4">
+        <tbody>
+          <tr className="bg-dark text-light uppercase [&>th]:p-1">
+            <th>Player</th>
+            <th>Point</th>
+          </tr>
+          {rows}
+        </tbody>
+      </table>
+    </>
+  )
+}

@@ -21,7 +21,7 @@ const NAV_ITEMS: NavItem[] = [
     link: '/vaults',
     klass: 'bg-light',
   },
-  { name: 'Referral', link: '/refferral', klass: 'bg-light' },
+  { name: 'Referral', link: '/referral', klass: 'bg-light' },
   { name: 'LeaderBoard', link: '/board', klass: 'bg-light' },
   { name: 'About', link: '/about', klass: 'bg-light' },
 ]

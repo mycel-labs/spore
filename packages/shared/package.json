@@ -23,7 +23,7 @@
     "long": "^5.2.3",
     "lucide-react": "^0.303.0",
     "mobile-detect": "^1.4.5",
-    "mycel-client-ts": "^0.1.2",
+    "mycel-client-ts": "^0.2.0-alpha.1",
     "party-js": "^2.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

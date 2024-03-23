@@ -120,7 +120,7 @@ function Mint() {
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
       await fetch(
-        `${import.meta.env.VITE_DASHBOARD_HOST}/api/faucet?address=${mycelAccount?.address}`
+        `/api/faucet?address=${mycelAccount?.address}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -187,15 +187,15 @@ function RegisterCelName() {
     <>
       <span
         className={cn(
-          dataOwnDomain?.domainOwnership?.domains ? 'line-through' : ''
+          dataOwnDomain?.domain_ownership?.domains ? 'line-through' : ''
         )}
       >
         Get your name
       </span>
-      {dataOwnDomain?.domainOwnership?.domains ? (
+      {dataOwnDomain?.domain_ownership?.domains ? (
         <p className="text-right font-title text-3xl font-bold">
-          {dataOwnDomain?.domainOwnership?.domains[0]?.name}.
-          {dataOwnDomain?.domainOwnership?.domains[0]?.parent}
+          {dataOwnDomain?.domain_ownership?.domains[0]?.name}.
+          {dataOwnDomain?.domain_ownership?.domains[0]?.parent}
         </p>
       ) : (
         <CelNameForm />

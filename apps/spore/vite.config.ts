@@ -55,6 +55,14 @@ const config: UserConfig = {
   define: {
     global: 'window',
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+      },
+    },
+  },
 }
 
 export default config
