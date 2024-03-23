@@ -23,7 +23,7 @@ const NAV_ITEMS: NavItem[] = [
     name: 'Reward',
     link: '/reward',
   },
-  { name: 'Referral', link: '/refferral' },
+  { name: 'Referral', link: '/referral' },
   { name: 'Setting', link: '/setting' },
   { name: 'About', link: '/about' },
 ]
