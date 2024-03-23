@@ -1,40 +1,39 @@
 # Spore
 
 ## Getstarted
+
 Install Dependencies
+
 ```
 pnpm i
 ```
 
 ## Spore
 
-
 ### Enviroment Values
-```
-cd apps/spore
-```
 
 ```
-cp .env_example .env
+cp apps/spore/.env_example apps/spore/.env
 ```
 
 ### Run Spore
-```
-cd apps/spore
-```
 
 Start API
+
 ```
-pnpm run server
+pnpm spore run server
 ```
 
 Then start frontend
+
 ```
-pnpm run dev
+pnpm spore run dev
 ```
 
 ### Run Spore with `vercel dev`
+
 Setup vercel
+
 ```
 vercel link
 ```
@@ -50,6 +49,7 @@ Vercel CLI 33.6.1
 ```
 
 Run App
+
 ```
 vercel dev
 ```
