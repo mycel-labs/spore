@@ -23,12 +23,19 @@ export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
           <span className="btn-inner" />
           Withdraw
         </TabsTrigger>
+        <TabsTrigger value="claim">
+          <span className="btn-inner" />
+          Claim
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="deposit">
         <DepositTabContent />
       </TabsContent>
       <TabsContent value="withdraw">
         <WithdrawTabContent />
+      </TabsContent>
+      <TabsContent value="claim">
+        <ClaimTabContent />
       </TabsContent>
     </Tabs>
   )
@@ -88,7 +95,7 @@ const DepositTabContent = () => {
           onClick={() => setAmount(Number(userBalance))}
         >
           Balance:
-          {userBalance?.toString() || '0'}
+          {userBalance || '0'}
         </p>
         <input
           type="number"
@@ -155,6 +162,48 @@ const WithdrawTabContent = () => {
           <span className="btn-inner" />
           Withdraw
         </button>
+      </div>
+    </>
+  )
+}
+const ClaimTabContent = () => {
+  const { runSparkles } = useConfetti()
+  const { claimablePrize, claimPrizeUSDC } = useVault()
+  const [amount, setAmount] = useState(0)
+
+  return (
+    <>
+      <div className="border-dark bg-light border-2 rounded px-6 pb-8">
+        <h2 className="centerline font-bold text-2xl pt-6 pb-4">Claim Prize</h2>
+        <p
+          className="text-right p-1 cursor-pointer"
+          onClick={() => setAmount(Number(claimablePrize))}
+        >
+          Balance: {claimablePrize || '0'}
+        </p>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
+          className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+        />
+        {claimablePrize ? (
+          <button
+            className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+            onClick={(e) => {
+              claimPrizeUSDC(amount)
+              runSparkles(e)
+            }}
+          >
+            <span className="btn-inner" />
+            Claim Prize
+          </button>
+        ) : (
+          <button className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6">
+            <span className="btn-inner" />
+            Not eligible
+          </button>
+        )}
       </div>
     </>
   )

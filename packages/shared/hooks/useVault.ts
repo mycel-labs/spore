@@ -23,15 +23,22 @@ export const useVault = () => {
   const { data: faucetHash, writeContract: faucet } = useWriteContract()
   const { data: claimPrizeHash, writeContract: claimPrize } = useWriteContract()
 
-  const [userBalance, setUserBalance] = useState<string>()
-  const [approval, setApproval] = useState<string>()
-  const [depositedAmount, setDepositedAmount] = useState<string>()
-  const [poolBalance, setPoolBalance] = useState<string>()
-  const [drawData, setDrawData] = useState<string>()
+  const [userBalance, setUserBalance] = useState<string | undefined>(undefined)
+  const [approval, setApproval] = useState<string | undefined>(undefined)
+  const [depositedAmount, setDepositedAmount] = useState<string | undefined>(
+    undefined
+  )
+  const [poolBalance, setPoolBalance] = useState<string | undefined>(undefined)
+  const [drawData, setDrawData] = useState<string | undefined>(undefined)
+  const [claimablePrize, setClaimablePrize] = useState<string | undefined>(
+    undefined
+  )
   const [currentDrawId, setCurrentDrawId] = useState<number | undefined>(
     undefined
   )
-  const [availableYield, setAvailableYield] = useState<string>()
+  const [availableYield, setAvailableYield] = useState<string | undefined>(
+    undefined
+  )
 
   const { isLoading: isLoadingDeposit, isSuccess: isSuccessDeposit } =
     useWaitForTransactionReceipt({
@@ -46,6 +53,11 @@ export const useVault = () => {
   const { isLoading: isLoadingApproval, isSuccess: isSuccessApproval } =
     useWaitForTransactionReceipt({
       hash: approvalHash,
+    })
+
+  const { isLoading: isLoadingClaimPrize, isSuccess: isSuccessClaimPrize } =
+    useWaitForTransactionReceipt({
+      hash: claimPrizeHash,
     })
 
   /* Read contract*/
@@ -72,6 +84,10 @@ export const useVault = () => {
   const currentDrawData = useReadContract({
     ...vaultContract,
     functionName: 'getCurrentDrawEndTime',
+  })
+  const claimablePrizeData = useReadContract({
+    ...vaultContract,
+    functionName: '_claimablePrize',
   })
 
   const approvalData = useReadContract({
@@ -124,10 +140,13 @@ export const useVault = () => {
   }
 
   async function claimPrizeUSDC(amount: number) {
+    // if (!amount || amount == 0) return
+    const fixedAmount = amount * 1e6
+    console.log('fixedAmount', fixedAmount)
     claimPrize({
       ...vaultContract,
       functionName: 'claimPrize',
-      args: [amount],
+      args: [fixedAmount],
     })
   }
 
@@ -178,6 +197,15 @@ export const useVault = () => {
     setPoolBalance(Number(fixedPoolBalance).toFixed(2).toString())
     setAvailableYield(Number(fixedYield).toFixed(2).toString())
     setDrawData(convertUnixToUTC(currentDrawData.data as BigInt))
+    if (claimablePrizeData.data != undefined) {
+      // if there is no claimable prize(mapping => (address => uint256))
+      // then claimablePrizeData.data will be undefined
+      const fixedClaimablePrize = formatUnits(
+        claimablePrizeData.data as bigint,
+        decimalValue
+      )
+      setClaimablePrize(fixedClaimablePrize)
+    }
   }, [evmAddress])
 
   useEffect(() => {
@@ -198,6 +226,12 @@ export const useVault = () => {
     }
   }, [isSuccessApproval])
 
+  useEffect(() => {
+    if (isSuccessClaimPrize) {
+      toast('Claim Prize successful')
+    }
+  }, [isSuccessClaimPrize])
+
   return {
     depositUSDC,
     withdrawUSDC,
@@ -211,5 +245,6 @@ export const useVault = () => {
     approvalData,
     userBalance,
     availableYield,
+    claimablePrize,
   }
 }
