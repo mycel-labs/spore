@@ -10,19 +10,22 @@ export async function GET(request: NextRequest) {
 
   // fetch data with ref-code here
   const name: string = 'akira.cel'
-  const rank: string = 'Noob'
+  const rank: number = 1
+  const rankText: string = 'Noob'
   const score: string = '1000 / 10000'
 
   // load image for user with score
   const imgChar = await fetch(
     new URL(
-      `../../../../../packages/shared/assets/og/char${4}.png`,
+      `../../../../../packages/shared/assets/og/char_lv${rank}.png`,
       import.meta.url
     )
-  ).then((res) => res.arrayBuffer()).then((buffer) => {
-    const base64 = Buffer.from(buffer).toString('base64');
-    return `data:image/png;base64,${base64}`;
-  });
+  )
+    .then((res) => res.arrayBuffer())
+    .then((buffer) => {
+      const base64 = Buffer.from(buffer).toString('base64')
+      return `data:image/png;base64,${base64}`
+    })
 
   return new ImageResponse(
     (
@@ -77,7 +80,7 @@ export async function GET(request: NextRequest) {
               // background: 'blue',
             }}
           >
-            {rank}
+            {rankText}
           </div>
           <p
             style={{
