@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import type { Metadata, ResolvingMetadata } from 'next'
+import { SPORE_DOMAIN } from '@/constants/spore'
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -14,7 +15,7 @@ export async function generateMetadata(
       images: [
         searchParams.ref
           ? `/api/og?ref=${searchParams.ref}`
-          : 'https://spore.ooo/og.png',
+          : `${SPORE_DOMAIN}/og.png`,
       ],
     },
   }
@@ -22,8 +23,8 @@ export async function generateMetadata(
 
 export default function Page({ searchParams }: Props) {
   // if (!searchParams.ref) {
-  //   redirect(`https://spore.ooo`)
+  //   redirect(SPORE_DOMAIN)
   // } else {
-  //   redirect(`https://spore.ooo?ref=${searchParams.ref}`)
+  //   redirect(`${SPORE_DOMAIN}/s?ref=${searchParams.ref}`)
   // }
 }
