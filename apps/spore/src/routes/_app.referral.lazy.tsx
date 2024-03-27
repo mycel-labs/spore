@@ -4,7 +4,7 @@ import { env } from '@/lib/env'
 import {
   useFirebaseFunction,
   useGetUserByReferralCode,
-} from '~/hooks/useReferral'
+} from '@/hooks/useReferral'
 import { User } from '~/types/referral'
 
 export const Route = createLazyFileRoute('/_app/referral')({

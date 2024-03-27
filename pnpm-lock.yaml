@@ -74,9 +74,6 @@ importers:
       express-validator:
         specifier: ^7.0.1
         version: 7.0.1
-      firebase:
-        specifier: ^10.9.0
-        version: 10.9.0
       lucide-react:
         specifier: ^0.350.0
         version: 0.350.0(react@18.2.0)
@@ -253,6 +250,9 @@ importers:
       crypto-js:
         specifier: ^4.2.0
         version: 4.2.0
+      firebase:
+        specifier: ^10.9.0
+        version: 10.9.0
       graz:
         specifier: ^0.1.5
         version: 0.1.5(@cosmjs/amino@0.31.3)(@cosmjs/cosmwasm-stargate@0.32.2)(@cosmjs/launchpad@0.27.1)(@cosmjs/proto-signing@0.32.2)(@cosmjs/stargate@0.32.2)(@cosmjs/tendermint-rpc@0.32.2)(@terra-money/feather.js@1.2.1)(@types/react@18.2.48)(axios@0.27.2)(long@5.2.3)(react-dom@18.2.0)(react-native@0.73.4)(react@18.2.0)

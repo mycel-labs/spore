@@ -11,7 +11,7 @@ import { convertUnixToUTC } from '@/lib/converter'
 import {
   useFirebaseFunction,
   useGetIndividualLeaderBoard,
-} from '~/hooks/useReferral'
+} from '@/hooks/useReferral'
 import { env } from '@/lib/env'
 import { mappedLeaderBoard, mappedTeamLeaderBoard } from '~/types/referral'
 
