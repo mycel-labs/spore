@@ -1,8 +1,8 @@
 import { ImageResponse } from 'next/og'
 import { type NextRequest } from 'next/server'
 import { IMG_IDCARD } from '~/images'
-import { httpsCallable } from 'firebase/functions'
-import { getFunctions, initializeApp } from 'firebase/app'
+import { httpsCallable, getFunctions } from 'firebase/functions'
+import { initializeApp } from 'firebase/app'
 import {
   getRankFromScore,
   getRankNameFromScore,
