@@ -187,7 +187,7 @@ const ClaimTabContent = () => {
           onChange={(e) => setAmount(Number(e.target.value))}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        {claimablePrize ? (
+        {Number(claimablePrize) > 0 ? (
           <button
             className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
             onClick={(e) => {

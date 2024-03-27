@@ -88,6 +88,7 @@ export const useVault = () => {
   const claimablePrizeData = useReadContract({
     ...vaultContract,
     functionName: '_claimablePrize',
+    args: [evmAddress],
   })
 
   const approvalData = useReadContract({
@@ -140,7 +141,7 @@ export const useVault = () => {
   }
 
   async function claimPrizeUSDC(amount: number) {
-    // if (!amount || amount == 0) return
+    if (!amount || amount == 0) return
     const fixedAmount = amount * 1e6
     console.log('fixedAmount', fixedAmount)
     claimPrize({
@@ -190,22 +191,17 @@ export const useVault = () => {
       decimalValue
     )
     const fixedApproval = formatUnits(approvalData.data as bigint, decimalValue)
-
+    const fixedClaimablePrize = formatUnits(
+      claimablePrizeData.data as bigint,
+      decimalValue
+    )
     setUserBalance(fixedBalance)
     setDepositedAmount(fixedDepositedAmount)
     setApproval(fixedApproval)
     setPoolBalance(Number(fixedPoolBalance).toFixed(2).toString())
     setAvailableYield(Number(fixedYield).toFixed(2).toString())
     setDrawData(convertUnixToUTC(currentDrawData.data as BigInt))
-    if (claimablePrizeData.data != undefined) {
-      // if there is no claimable prize(mapping => (address => uint256))
-      // then claimablePrizeData.data will be undefined
-      const fixedClaimablePrize = formatUnits(
-        claimablePrizeData.data as bigint,
-        decimalValue
-      )
-      setClaimablePrize(fixedClaimablePrize)
-    }
+    setClaimablePrize(fixedClaimablePrize)
   }, [evmAddress])
 
   useEffect(() => {
