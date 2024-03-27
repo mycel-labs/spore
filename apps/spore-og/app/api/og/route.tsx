@@ -11,7 +11,7 @@ import {
 
 export const runtime = 'edge'
 
-export async function getUserByReferralCode(ref: string) {
+async function getUserByReferralCode(ref: string) {
   const app = initializeApp({
     projectId: process.env.FIREBASE_PROJECT_ID,
     apiKey: process.env.FIREBASE_API_KEY,
@@ -29,9 +29,10 @@ export async function GET(request: NextRequest) {
   // fetch data with ref-code here
   if (!ref) return
   const data = await getUserByReferralCode(ref)
+  //@ts-ignore
   const cnt = data?.user?.invitedUserCount ?? 0
-
-  const name: string = 'akira.cel'
+  //@ts-ignore
+  const name: string = data?.user?.id ?? ''
   const rank: number = getRankFromScore(cnt)
   const rankText: string = getRankNameFromScore(cnt)
   const score: string = `${getNextRankFromScore(cnt).current} /
