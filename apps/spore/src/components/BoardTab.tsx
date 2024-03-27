@@ -13,7 +13,7 @@ import {
   useGetIndividualLeaderBoard,
 } from '@/hooks/useReferral'
 import { env } from '@/lib/env'
-import { mappedLeaderBoard, mappedTeamLeaderBoard } from '~/types/referral'
+import { mappedLeaderBoard, mappedTeamLeaderBoard } from '@/types/referral'
 
 export default function BoardTab({
   tab,

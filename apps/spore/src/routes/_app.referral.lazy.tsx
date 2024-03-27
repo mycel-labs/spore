@@ -5,7 +5,7 @@ import {
   useFirebaseFunction,
   useGetUserByReferralCode,
 } from '@/hooks/useReferral'
-import { User } from '~/types/referral'
+import { User } from '@/types/referral'
 
 export const Route = createLazyFileRoute('/_app/referral')({
   component: Referral,
@@ -43,7 +43,7 @@ function Referral() {
         <div className="px-6 mb-2 mt-8">
           <input
             type="text"
-            value={`https://spore.xxxx/?invite=${code}`}
+            value={`https://l.spore.xxxx/s?ref=${code}`}
             readOnly
             className="w-full font-lg font-title"
           />
