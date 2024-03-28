@@ -21,7 +21,7 @@ function Home() {
   useEffect(() => {
     // switch to Optimism Sepolia
     switchChainId(11155420)
-  }, [chainId])
+  }, [chainId, switchChainId])
 
   return (
     <div className="py-8 space-y-8">
