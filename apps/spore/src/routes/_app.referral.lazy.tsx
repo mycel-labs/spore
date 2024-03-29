@@ -8,6 +8,7 @@ import {
 import { copyClipboard } from '@/lib/utils'
 import { User } from '@/types/referral'
 import { SPORE_SHARE_URL } from '@/constants/spore'
+import { ClipboardCopy } from 'lucide-react'
 
 export const Route = createLazyFileRoute('/_app/referral')({
   component: Referral,
@@ -59,6 +60,7 @@ function Referral() {
             }}
           >
             <span className="btn-inner" />
+            <ClipboardCopy size={28} strokeWidth={3} className="mr-2" />
             Copy referral url
           </button>
         </div>
