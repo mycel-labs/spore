@@ -57,24 +57,6 @@ export const useGetUserByReferralCode = (
 }
 
 // Referral Codes
-export const useCreateReferralCode = (fns: Functions, userId: string) => {
-  const { data, error, isError, isLoading, status } = useQuery({
-    queryKey: ['queryCreateReferralCode', fns],
-    queryFn: async () => {
-      const fn = httpsCallable(fns, 'createReferralCode')
-      const res = await fn({ uid: userId })
-      return res.data
-    },
-  })
-  return {
-    data,
-    error,
-    isError,
-    isLoading,
-    status,
-  }
-}
-
 export const useGetReferralCodeByIssuerUserId = (
   fns: Functions,
   issuerUserId: string
@@ -115,11 +97,29 @@ export const useGetIndividualLeaderBoard = (fns: Functions) => {
   }
 }
 
-export const useGetTeamLeaderBoard = (fns: Functions) => {
+export const useGetTeamLeaderBoardByUserId = (fns: Functions, uid: string) => {
   const { data, error, isError, isLoading, status } = useQuery({
-    queryKey: ['queryGetTeamLeaderBoard', fns],
+    queryKey: ['queryGetTeamLeaderBoardByUserId', fns],
     queryFn: async () => {
-      const fn = httpsCallable(fns, 'getTeamLeaderBoard')
+      const fn = httpsCallable(fns, 'getTeamLeaderBoardByUserId')
+      const res = await fn({ uid })
+      return res.data
+    },
+  })
+  return {
+    data,
+    error,
+    isError,
+    isLoading,
+    status,
+  }
+}
+
+export const useGetTotalLeaderBoard = (fns: Functions) => {
+  const { data, error, isError, isLoading, status } = useQuery({
+    queryKey: ['queryGetTotalLeaderBoard', fns],
+    queryFn: async () => {
+      const fn = httpsCallable(fns, 'getTotalLeaderBoard')
       const res = await fn()
       return res.data
     },
