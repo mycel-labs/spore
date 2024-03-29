@@ -74,6 +74,15 @@ export const WALLET_CONFIG_SPORE = {
     getUrl: 'https://metamask.io/download.html',
     showMobile: false,
   },
+  WalletConnect: {
+    id: 'walletConnect',
+    name: 'WalletConnect',
+    display: 'Wallet Connect',
+    chainType: 'evm',
+    icon: WalletConnectIcon,
+    getUrl: '',
+    showMobile: true,
+  },
 }
 
 export const WALLET_CONFIG = {
