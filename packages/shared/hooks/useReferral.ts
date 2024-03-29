@@ -6,7 +6,7 @@ import {
   getFunctions,
   httpsCallable,
 } from 'firebase/functions'
-import { env } from '@/lib/env'
+import { env } from '../lib/env'
 
 export const useFirebaseFunction = (firebaseOptions: FirebaseOptions) => {
   const app = initializeApp(firebaseOptions)
@@ -32,6 +32,24 @@ export const useCreateUser = async (
         uid: userId,
         address,
       })
+      return res.data
+    },
+  })
+  return {
+    data,
+    error,
+    isError,
+    isLoading,
+    status,
+  }
+}
+
+export const useGetUser = (fns: Functions, uid: string) => {
+  const { data, error, isError, isLoading, status } = useQuery({
+    queryKey: ['queryGetUser', fns],
+    queryFn: async () => {
+      const fn = httpsCallable(fns, 'getUser')
+      const res = await fn({ uid })
       return res.data
     },
   })
