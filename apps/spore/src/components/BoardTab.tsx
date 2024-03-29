@@ -11,7 +11,7 @@ import {
   useGetIndividualLeaderBoard,
 } from '@/hooks/useReferral'
 import { env } from '@/lib/env'
-import { mappedLeaderBoard, mappedTeamLeaderBoard } from '@/types/referral'
+import { mappedLeaderBoard, mappedTotalLeaderBoard } from '~/types/referral'
 
 export default function BoardTab({
   tab,
@@ -36,8 +36,26 @@ export default function BoardTab({
       userId: 'yosui.cel',
       totalPoints: 140,
     },
+    {
+      userId: 'anon.cel',
+      totalPoints: 10,
+    },
   ]
-  const mockTLB: mappedTeamLeaderBoard[] = [
+  const mockTeamLB: mappedLeaderBoard[] = [
+    {
+      userId: 'akira.cel',
+      totalPoints: 200,
+    },
+    {
+      userId: 'taro.cel',
+      totalPoints: 190,
+    },
+    {
+      userId: 'yosui.cel',
+      totalPoints: 140,
+    },
+  ]
+  const mockTLB: mappedTotalLeaderBoard[] = [
     {
       teamId: 'O2EYDIUcRcVmL5pMehRESerN11LIr6QK',
       teamName: 'Team Awesome',
@@ -65,12 +83,22 @@ export default function BoardTab({
         )?.data.leaderBoard
       : mockLB
 
-  const tlb =
+  const teamlb =
     !isLoading && data
       ? (
           data as {
             success: boolean
-            data: { leaderBoard: mappedTeamLeaderBoard[] }
+            data: { leaderBoard: mappedLeaderBoard[] }
+          }
+        )?.data.leaderBoard
+      : mockTeamLB
+
+  const totallb =
+    !isLoading && data
+      ? (
+          data as {
+            success: boolean
+            data: { leaderBoard: mappedTotalLeaderBoard[] }
           }
         )?.data.leaderBoard
       : mockTLB
@@ -92,10 +120,10 @@ export default function BoardTab({
         </TabsTrigger>
       </TabsList>
       <TabsContent value="total">
-        <TotalTabContent tlb={tlb} />
+        <TotalTabContent tlb={totallb} />
       </TabsContent>
       <TabsContent value="team">
-        <TeamTabContent />
+        <TeamTabContent lb={teamlb} />
       </TabsContent>
       <TabsContent value="player">
         <PlayerTabContent lb={lb} />
@@ -118,7 +146,7 @@ const TabsContent = ({ ...props }) => (
   />
 )
 
-const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
+const TotalTabContent = ({ tlb }: { tlb: mappedTotalLeaderBoard[] }) => {
   const { drawData, poolBalance, availableYield } = useVault()
   const rows = tlb.map((data) => {
     return (
@@ -167,50 +195,49 @@ const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
   )
 }
 
-const TeamTabContent = () => (
-  <>
-    <h2 className="centerline text-3xl py-4 font-bold">Team Board</h2>
-    <div className="grid grid-cols-4 gap-4">
-      <img src={ImgEnoki} />
-      <div className="col-span-3 pt-2">
-        <ul className="list-table bg-light">
-          <li>
-            <div className="header">Pool Value</div>
-            <div className="text-right text-3xl font-bold">$9,100,000</div>
-          </li>
-          <li>
-            <div className="header">Team member</div>
-            <div className="text-right text-3xl font-bold">123</div>
-          </li>
-          <li>
-            <div className="header">Bonus</div>
-            <div className="text-right text-3xl font-bold">x 2.15</div>
-          </li>
-        </ul>
+const TeamTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
+  const rows = lb.map((data) => {
+    return (
+      <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
+        <td>{data.userId}</td>
+        <td className="text-right">{data.totalPoints}</td>
+      </tr>
+    )
+  })
+  return (
+    <>
+      <h2 className="centerline text-3xl py-4 font-bold">Team Board</h2>
+      <div className="grid grid-cols-4 gap-4">
+        <img src={ImgEnoki} />
+        <div className="col-span-3 pt-2">
+          <ul className="list-table bg-light">
+            <li>
+              <div className="header">Pool Value</div>
+              <div className="text-right text-3xl font-bold">$9,100,000</div>
+            </li>
+            <li>
+              <div className="header">Team member</div>
+              <div className="text-right text-3xl font-bold">123</div>
+            </li>
+            <li>
+              <div className="header">Bonus</div>
+              <div className="text-right text-3xl font-bold">x 2.15</div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <table className="bg-light border-dark border-2 font-title w-full mt-8">
-      <tbody>
-        <tr className="bg-dark text-light uppercase [&>th]:p-1">
-          <th>Player</th>
-          <th>Point</th>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>akira.cel</td>
-          <td className="text-right">200</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>taro.cel</td>
-          <td className="text-right">190</td>
-        </tr>
-        <tr className="[&>td]:py-2 [&>td]:px-6">
-          <td>yosui.cel</td>
-          <td className="text-right">140</td>
-        </tr>
-      </tbody>
-    </table>
-  </>
-)
+      <table className="bg-light border-dark border-2 font-title w-full mt-8">
+        <tbody>
+          <tr className="bg-dark text-light uppercase [&>th]:p-1">
+            <th>Player</th>
+            <th>Point</th>
+          </tr>
+          {rows}
+        </tbody>
+      </table>
+    </>
+  )
+}
 
 const PlayerTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
   const rows = lb.map((data) => {
