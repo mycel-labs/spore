@@ -1,10 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { FirebaseOptions, initializeApp } from 'firebase/app'
-import { Functions, getFunctions, httpsCallable } from 'firebase/functions'
+import {
+  connectFunctionsEmulator,
+  Functions,
+  getFunctions,
+  httpsCallable,
+} from 'firebase/functions'
+import { env } from '@/lib/env'
 
 export const useFirebaseFunction = (firebaseOptions: FirebaseOptions) => {
   const app = initializeApp(firebaseOptions)
   const functions = getFunctions(app)
+  if (env.isDev) {
+    connectFunctionsEmulator(functions, 'localhost', 5001)
+  }
   return functions
 }
 
