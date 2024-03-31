@@ -1,10 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 import { FirebaseOptions, initializeApp } from 'firebase/app'
-import { Functions, getFunctions, httpsCallable } from 'firebase/functions'
+import {
+  connectFunctionsEmulator,
+  Functions,
+  getFunctions,
+  httpsCallable,
+} from 'firebase/functions'
+import { env } from '../lib/env'
 
 export const useFirebaseFunction = (firebaseOptions: FirebaseOptions) => {
   const app = initializeApp(firebaseOptions)
   const functions = getFunctions(app)
+  if (env.isDev) {
+    connectFunctionsEmulator(functions, 'localhost', 5001)
+  }
   return functions
 }
 
@@ -23,6 +32,24 @@ export const useCreateUser = async (
         uid: userId,
         address,
       })
+      return res.data
+    },
+  })
+  return {
+    data,
+    error,
+    isError,
+    isLoading,
+    status,
+  }
+}
+
+export const useGetUser = (fns: Functions, uid: string) => {
+  const { data, error, isError, isLoading, status } = useQuery({
+    queryKey: ['queryGetUser', fns],
+    queryFn: async () => {
+      const fn = httpsCallable(fns, 'getUser')
+      const res = await fn({ uid })
       return res.data
     },
   })
@@ -57,24 +84,6 @@ export const useGetUserByReferralCode = (
 }
 
 // Referral Codes
-export const useCreateReferralCode = (fns: Functions, userId: string) => {
-  const { data, error, isError, isLoading, status } = useQuery({
-    queryKey: ['queryCreateReferralCode', fns],
-    queryFn: async () => {
-      const fn = httpsCallable(fns, 'createReferralCode')
-      const res = await fn({ uid: userId })
-      return res.data
-    },
-  })
-  return {
-    data,
-    error,
-    isError,
-    isLoading,
-    status,
-  }
-}
-
 export const useGetReferralCodeByIssuerUserId = (
   fns: Functions,
   issuerUserId: string
@@ -115,11 +124,29 @@ export const useGetIndividualLeaderBoard = (fns: Functions) => {
   }
 }
 
-export const useGetTeamLeaderBoard = (fns: Functions) => {
+export const useGetTeamLeaderBoardByUserId = (fns: Functions, uid: string) => {
   const { data, error, isError, isLoading, status } = useQuery({
-    queryKey: ['queryGetTeamLeaderBoard', fns],
+    queryKey: ['queryGetTeamLeaderBoardByUserId', fns],
     queryFn: async () => {
-      const fn = httpsCallable(fns, 'getTeamLeaderBoard')
+      const fn = httpsCallable(fns, 'getTeamLeaderBoardByUserId')
+      const res = await fn({ uid })
+      return res.data
+    },
+  })
+  return {
+    data,
+    error,
+    isError,
+    isLoading,
+    status,
+  }
+}
+
+export const useGetTotalLeaderBoard = (fns: Functions) => {
+  const { data, error, isError, isLoading, status } = useQuery({
+    queryKey: ['queryGetTotalLeaderBoard', fns],
+    queryFn: async () => {
+      const fn = httpsCallable(fns, 'getTotalLeaderBoard')
       const res = await fn()
       return res.data
     },

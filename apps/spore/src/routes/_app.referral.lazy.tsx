@@ -3,10 +3,11 @@ import { toast } from '@/components/ui/sonner'
 import { env } from '@/lib/env'
 import {
   useFirebaseFunction,
-  useGetUserByReferralCode,
+  useGetUser,
+  useGetReferralCodeByIssuerUserId,
 } from '@/hooks/useReferral'
 import { copyClipboard } from '@/lib/utils'
-import { User } from '@/types/referral'
+import { User, ReferralCode } from '@/types/referral'
 import { SPORE_SHARE_URL } from '@/constants/spore'
 import { ClipboardCopy } from 'lucide-react'
 
@@ -15,15 +16,24 @@ export const Route = createLazyFileRoute('/_app/referral')({
 })
 
 function Referral() {
-  const code = 'REFERRAL_CODE'
-  const referralUrl: string = `${SPORE_SHARE_URL}?ref=${code}`
+  const uid = 'my.cel' // TODO: should be replaced with the actual user id
   const fns = useFirebaseFunction({
     projectId: env.firebaseProjectId,
     apiKey: env.firebaseAPIKey,
   })
-  const { data, isLoading } = useGetUserByReferralCode(fns, code)
+  const user = useGetUser(fns, uid)
   const invitedUserCount =
-    !isLoading && data ? (data as { user: User })?.user?.invitedUserCount : 0
+    !user.isLoading && user.data
+      ? (user.data.data as { user: User })?.user?.invitedUserCount
+      : 0
+
+  const refCode = useGetReferralCodeByIssuerUserId(fns, uid)
+  const codes =
+    !refCode.isLoading && refCode.data
+      ? (refCode.data.data?.referralCodes as ReferralCode[])
+      : []
+  const code = codes ? codes.find((c) => c.active)?.id : 'NOT_FOUND'
+  const referralUrl: string = `${SPORE_SHARE_URL}?ref=${code}`
 
   return (
     <div className="py-8 space-y-8">
