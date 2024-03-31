@@ -24,11 +24,7 @@ export default function BoardTab({
 }: {
   tab: 'total' | 'team' | 'player' | undefined
 }) {
-  const fns = useFirebaseFunction({
-    projectId: env.firebaseProjectId,
-    apiKey: env.firebaseAPIKey,
-  })
-  const { data, isLoading } = useGetIndividualLeaderBoard(fns)
+  const { data, isLoading } = useGetIndividualLeaderBoard()
   const mockLB: mappedLeaderBoard[] = [
     {
       userId: 'akira.cel',

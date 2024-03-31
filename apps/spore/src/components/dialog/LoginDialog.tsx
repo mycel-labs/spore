@@ -23,7 +23,7 @@ export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    isConnected && navigate({ to: '/home' })
+    isConnected && navigate({ to: '/start' })
   }, [navigate, isConnected])
 
   return (

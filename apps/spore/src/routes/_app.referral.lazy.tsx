@@ -2,7 +2,6 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import { toast } from '@/components/ui/sonner'
 import { env } from '@/lib/env'
 import {
-  useFirebaseFunction,
   useGetUser,
   useGetReferralCodeByIssuerUserId,
 } from '@/hooks/useReferral'
@@ -16,18 +15,14 @@ export const Route = createLazyFileRoute('/_app/referral')({
 })
 
 function Referral() {
-  const uid = 'my.cel' // TODO: should be replaced with the actual user id
-  const fns = useFirebaseFunction({
-    projectId: env.firebaseProjectId,
-    apiKey: env.firebaseAPIKey,
-  })
-  const user = useGetUser(fns, uid)
+  const uid = 'aaaa.cel' // TODO: should be replaced with the actual user id
+  const user = useGetUser(uid)
   const invitedUserCount =
     !user.isLoading && user.data
       ? (user.data.data as { user: User })?.user?.invitedUserCount
       : 0
 
-  const refCode = useGetReferralCodeByIssuerUserId(fns, uid)
+  const refCode = useGetReferralCodeByIssuerUserId(uid)
   const codes =
     !refCode.isLoading && refCode.data
       ? (refCode.data.data?.referralCodes as ReferralCode[])
