@@ -6,10 +6,7 @@ import {
 } from '@/components/ui/tabs'
 import ImgEnoki from '@/assets/enoki.svg'
 import { useVault } from '@/hooks/useVault'
-import {
-  useFirebaseFunction,
-  useGetIndividualLeaderBoard,
-} from '@/hooks/useReferral'
+import { useGetIndividualLeaderBoard } from '@/hooks/useReferral'
 import { env } from '@/lib/env'
 import { mappedLeaderBoard, mappedTotalLeaderBoard } from '~/types/referral'
 
@@ -18,11 +15,7 @@ export default function BoardTab({
 }: {
   tab: 'total' | 'team' | 'player' | undefined
 }) {
-  const fns = useFirebaseFunction({
-    projectId: env.firebaseProjectId,
-    apiKey: env.firebaseAPIKey,
-  })
-  const { data, isLoading } = useGetIndividualLeaderBoard(fns)
+  const { data, isLoading } = useGetIndividualLeaderBoard()
   const mockLB: mappedLeaderBoard[] = [
     {
       userId: 'akira.cel',
