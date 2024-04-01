@@ -237,9 +237,38 @@ export const useWallet = () => {
     }
   }, [chainWagmi?.id])
 
+  // Sign id on registration
+  const signDomainName = async (domainName: string) => {
+    if (mycelOfflineSigner) {
+      const account = await mycelOfflineSigner.getAccounts()
+      const signData = {
+        chain_id: MYCEL_CHAIN_INFO.chainId,
+        account_number: "0",
+        sequence: "0",
+        fee: {
+          gas: "0",
+          amount: [],
+        },
+        msgs: [
+          {
+            type: "/cosmos.msg.v1.MsgSignData",
+            value: {
+              signer: account[0].address,
+              data: btoa(domainName),
+            },
+          },
+        ],
+        memo: "",
+      }
+      const signature = await mycelOfflineSigner.signDirect(account[0].address, signData)
+      return signature
+    }
+
+  }
+
   // LocalWallet
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (mycelAddress && signerGraz?.offlineSigner) {
         try {
           setLocalMycelWallet(
@@ -266,7 +295,7 @@ export const useWallet = () => {
         }
       }
     })()
-  }, [evmAddress, evmDerivedAddresses, signerWagmi, mycelAddress, signerGraz])
+  }, [evmAddress, evmDerivedAddresses, signerWagmi, mycelAddress, signDomainName, signerGraz])
 
   return {
     // Wallet connection
@@ -300,6 +329,7 @@ export const useWallet = () => {
     hdKey,
     localMycelWallet,
     mycelOfflineSigner,
+    signDomainName,
     mycelAccount: mycelAccounts?.[0],
   }
 }
