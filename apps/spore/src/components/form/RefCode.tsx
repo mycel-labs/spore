@@ -7,6 +7,9 @@ import { z } from 'zod'
 import { useStore } from '@/store'
 import { useCreateUser } from '@/hooks/useReferral'
 import { useWallet } from '@/hooks/useWallet'
+import { getReferralSig } from '@/lib/wallets'
+import { useQuery, useMutation } from '@tanstack/react-query'
+import { callFn } from '@/lib/firebase'
 
 const refSchema = z.object({
   // TODO: update with server validation
@@ -28,17 +31,37 @@ export default function CelNameForm() {
     },
   })
   const { mycelAccount, mycelOfflineSigner } = useWallet()
-  const { mutateAsync } = useCreateUser(
-    'aaaa.cel',
-    mycelAccount?.address,
-    mycelOfflineSigner ?? undefined
-  )
+
+  const { data, status, error, mutateAsync } = useMutation({
+    mutationKey: ['muataionCreateUser', 'aaaa.cel'],
+    mutationFn: async ({
+      code,
+      signature,
+    }: {
+      code: string
+      signature: string
+    }) => {
+      const res = await callFn({
+        code,
+        uid: 'aaaa.cel',
+        address: mycelAccount.address,
+        signature,
+      })
+      return res.data
+    },
+  })
+
+  console.log(':::', data, status)
 
   const onSubmit = async (data: { refCode: string }) => {
     setIsLoading(true)
     try {
-      console.log('data::', data)
-      await mutateAsync({ code: data.refCode })
+      const signature = await mycelOfflineSigner?.signDirect(
+        mycelAccount.address,
+        getReferralSig(mycelAccount.address, 'aaaa.cel')
+      )
+      console.log('data::', data, signature, status, error)
+      await mutateAsync({ code: data.refCode, signature })
       toast(`👌 Welcome!`)
       // updateRefCode(undefined)
     } catch (e) {
