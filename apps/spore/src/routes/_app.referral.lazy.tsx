@@ -15,12 +15,8 @@ export const Route = createLazyFileRoute('/_app/referral')({
 })
 
 function Referral() {
-  const uid = 'aaaa.cel' // TODO: should be replaced with the actual user id
-  const user = useGetUser(uid)
-  const invitedUserCount =
-    !user.isLoading && user.data
-      ? (user.data.data as { user: User })?.user?.invitedUserCount
-      : 0
+  // useStore.getState().updateMycelName('my.cel') // Assume `MycelName` is set in the localStorage
+  const uid = useStore.getState().mycelName
 
   const refCode = useGetReferralCodeByIssuerUserId(uid)
   const codes =
