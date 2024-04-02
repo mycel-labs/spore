@@ -121,7 +121,10 @@ export const useRegisterSecondLevelDomain = () => {
             registrationPeriodInYear: 1,
           },
         })
-        .then((res) => res.data).catch((e) => { console.log(e) }),
+        .then((res) => res.data)
+        .catch((e) => {
+          console.log(e)
+        }),
   })
 
   return {

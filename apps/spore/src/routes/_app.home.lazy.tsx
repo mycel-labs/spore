@@ -9,6 +9,7 @@ export const Route = createLazyFileRoute('/_app/home')({
 
 function Home() {
   const { depositedAmount, availableYield } = useVault()
+
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light rounded-xl py-8 overlay-dot-ll">

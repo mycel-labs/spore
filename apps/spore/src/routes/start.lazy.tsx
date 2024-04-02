@@ -119,9 +119,7 @@ function Mint() {
 
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
-      await fetch(
-        `/api/faucet?address=${mycelAccount?.address}`
-      )
+      await fetch(`/api/faucet?address=${mycelAccount?.address}`)
         .then((res) => res.json())
         .then((data) => {
           toast(data.response as DeliverTxResponse)
@@ -183,19 +181,19 @@ function RegisterCelName() {
   const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
     useDomainOwnership(mycelAccount?.address)
 
-  return isLoadingOwnDomain ? null : (
+  return (
     <>
       <span
         className={cn(
-          dataOwnDomain?.domain_ownership?.domains ? 'line-through' : ''
+          dataOwnDomain?.domainOwnership?.domains ? 'line-through' : ''
         )}
       >
         Get your name
       </span>
-      {dataOwnDomain?.domain_ownership?.domains ? (
+      {!isLoadingOwnDomain && dataOwnDomain?.domainOwnership?.domains ? (
         <p className="text-right font-title text-3xl font-bold">
-          {dataOwnDomain?.domain_ownership?.domains[0]?.name}.
-          {dataOwnDomain?.domain_ownership?.domains[0]?.parent}
+          {dataOwnDomain?.domainOwnership?.domains[0]?.name}.
+          {dataOwnDomain?.domainOwnership?.domains[0]?.parent}
         </p>
       ) : (
         <CelNameForm />
