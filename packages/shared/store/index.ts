@@ -7,6 +7,7 @@ export type EvmDerivedAddresses = {
   [EvmAddress: EvmAddress]: {
     encryptedSignature?: string
     mycelAddress?: MycelAddress
+    mycelName?: string
   }
 }
 
@@ -101,7 +102,7 @@ export const useStore = create<StoreState & StoreSAction>()(
           set((state) => ({ ...state, authenticator: payload })),
       }),
       {
-        name: import.meta.env.VITE_STORAGE_NAME ?? 'mycel',
+        name: import.meta.env.VITE_LOCAL_STORAGE_KEY ?? 'mycel',
         onRehydrateStorage: () => (state) => {
           state?.updateIsHydrated(true)
         },
