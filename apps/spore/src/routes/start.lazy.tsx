@@ -4,6 +4,8 @@ import ImgIntro from '@/assets/spore-intro.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
 import { useWallet } from '@/hooks/useWallet'
 import { useBalance } from '@/hooks/useMycel'
+import { useGetUser } from '@/hooks/useReferral'
+import { useStore } from '@/store'
 import { useDomainOwnership } from '@/hooks/useMycel'
 import { toast } from '@/components/ui/sonner'
 import { shortAddress } from '@/lib/wallets'
@@ -17,12 +19,25 @@ import {
   MYCEL_HUMAN_COIN_UNIT,
   convertToDecimalString,
 } from '@/lib/coin'
+import { useNavigate } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/start')({
   component: Start,
 })
 
 function Start() {
+  const { isConnected } = useWallet()
+  const { mycelName } = useStore.getState()
+  const { data, isLoading } = useGetUser(mycelName)
+  const user = data?.data?.user
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isConnected && !isLoading && user) {
+      navigate({ to: '/home' })
+    }
+  }, [navigate, isConnected, isLoading, user])
+
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
       <img src={ImgLogo} className="h-16 mx-auto mb-6" />
@@ -119,9 +134,7 @@ function Mint() {
 
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
-      await fetch(
-        `/api/faucet?address=${mycelAccount?.address}`
-      )
+      await fetch(`/api/faucet?address=${mycelAccount?.address}`)
         .then((res) => res.json())
         .then((data) => {
           toast(data.response as DeliverTxResponse)
