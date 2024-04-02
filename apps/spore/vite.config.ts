@@ -20,36 +20,36 @@ const config: UserConfig = {
         id: 'G-9LRZ9KB92V',
       },
     }),
-    VitePWA({
-      registerType: 'autoUpdate',
-      devOptions: { enabled: true },
-      includeAssets: [
-        '/icons/favicon.ico',
-        '/icons/apple-touch-icon.png',
-        '/icons/mask-icon.svg',
-      ],
-      manifest: {
-        name: 'SPORE',
-        short_name: 'SPORE',
-        description: 'ID based Intent-Centric Interface',
-        theme_color: '#ff4615',
-        background_color: '#ff4615',
-        start_url: '/home',
-        display: 'fullscreen',
-        icons: [
-          {
-            src: '/icons/pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: '/icons/pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-        ],
-      },
-    }),
+    // VitePWA({
+    //   registerType: 'autoUpdate',
+    //   devOptions: { enabled: true },
+    //   includeAssets: [
+    //     '/icons/favicon.ico',
+    //     '/icons/apple-touch-icon.png',
+    //     '/icons/mask-icon.svg',
+    //   ],
+    //   manifest: {
+    //     name: 'SPORE',
+    //     short_name: 'SPORE',
+    //     description: 'ID based Intent-Centric Interface',
+    //     theme_color: '#ff4615',
+    //     background_color: '#ff4615',
+    //     start_url: '/home',
+    //     display: 'fullscreen',
+    //     icons: [
+    //       {
+    //         src: '/icons/pwa-192x192.png',
+    //         sizes: '192x192',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: '/icons/pwa-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //       },
+    //     ],
+    //   },
+    // }),
     nodePolyfills(),
   ],
   define: {

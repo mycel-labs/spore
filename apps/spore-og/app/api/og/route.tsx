@@ -1,26 +1,14 @@
 import { ImageResponse } from 'next/og'
 import { type NextRequest } from 'next/server'
 import { IMG_IDCARD } from '~/images'
-import { httpsCallable, getFunctions } from 'firebase/functions'
-import { initializeApp } from 'firebase/app'
 import {
   getRankFromScore,
   getRankNameFromScore,
   getNextRankFromScore,
 } from '@/lib/referral'
+import { callFn } from '@/lib/firebase'
 
 export const runtime = 'edge'
-
-async function getUserByReferralCode(ref: string) {
-  const app = initializeApp({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    apiKey: process.env.FIREBASE_API_KEY,
-  })
-  const fns = getFunctions(app)
-  const fn = httpsCallable(fns, 'getUserByReferralCode')
-  const res = await fn({ code: ref })
-  return res.data
-}
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
@@ -28,6 +16,7 @@ export async function GET(request: NextRequest) {
 
   // fetch data with ref-code here
   if (!ref) return
+  const getUserByReferralCode = callFn('getUserByReferralCode')
   const data = await getUserByReferralCode(ref)
   //@ts-ignore
   const cnt = data?.user?.invitedUserCount ?? 0

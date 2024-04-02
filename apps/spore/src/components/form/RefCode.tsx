@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useStore } from '@/store'
+import { useCreateUser } from '@/hooks/useReferral'
+import { useWallet } from '@/hooks/useWallet'
 
 const refSchema = z.object({
   // TODO: update with server validation
@@ -25,12 +27,20 @@ export default function CelNameForm() {
       refCode: refCode ?? '',
     },
   })
+  const { mycelAccount, mycelOfflineSigner } = useWallet()
+  const { mutateAsync } = useCreateUser(
+    'aaaa.cel',
+    mycelAccount?.address,
+    mycelOfflineSigner ?? undefined
+  )
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: { refCode: string }) => {
     setIsLoading(true)
     try {
-      toast(`👌 You got ${data.domain} !`)
-      updateRefCode(undefined)
+      console.log('data::', data)
+      await mutateAsync({ code: data.refCode })
+      toast(`👌 Welcome!`)
+      // updateRefCode(undefined)
     } catch (e) {
       toast(`⚠️ Refferal error! ${e.message}`)
     }

@@ -176,3 +176,25 @@ export const shortAddress = (
   if (!address) return ''
   return `${address.slice(0, prefix)}...${address.slice(-suffix)}`
 }
+
+export const getReferralSig = (address: string, uid: string) => {
+  return {
+    chain_id: import.meta.env.VITE_CHAIN_ID,
+    account_number: '0',
+    sequence: '0',
+    fee: {
+      gas: '0',
+      amount: [],
+    },
+    msgs: [
+      {
+        type: 'sign/MsgSignData',
+        value: {
+          signer: address,
+          data: btoa(uid),
+        },
+      },
+    ],
+    memo: '',
+  }
+}
