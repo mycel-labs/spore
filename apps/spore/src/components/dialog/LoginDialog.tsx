@@ -12,6 +12,8 @@ import {
 import { useState, useEffect } from 'react'
 import { useLockBodyScroll } from '@uidotdev/usehooks'
 import { useWallet } from '@/hooks/useWallet'
+import { useGetUser } from '@/hooks/useReferral'
+import { useStore } from '@/store'
 import { WALLET_CONFIG_SPORE, type WalletType } from '@/lib/wallets'
 import { cn, isBitGetApp, isMobile, isOKXApp, isPC } from '@/lib/utils'
 import { useNavigate } from '@tanstack/react-router'
@@ -20,11 +22,21 @@ export default function LoginDialog({ trigger }: { trigger: React.ReactNode }) {
   const [mode, setMode] = useState<'default' | 'wallet'>('wallet')
   useLockBodyScroll()
   const { connectWallet, connectorsWagmi, isConnected } = useWallet()
+  const { mycelName } = useStore.getState()
+  // const mycelName = 'my.cel'
+  const { data, isLoading } = useGetUser(mycelName)
+  const user = data?.data?.user
   const navigate = useNavigate()
 
   useEffect(() => {
-    isConnected && navigate({ to: '/start' })
-  }, [navigate, isConnected])
+    if (isConnected && !isLoading) {
+      if (user) {
+        navigate({ to: '/home' })
+      } else {
+        navigate({ to: '/start' })
+      }
+    }
+  }, [navigate, isConnected, isLoading, user])
 
   return (
     <Dialog>
