@@ -45,12 +45,6 @@ function Referral() {
               {invitedUserCount}
             </div>
           </li>
-          <li>
-            <div className="header">Points</div>
-            <div className="text-right text-3xl font-bold">
-              {invitedUserCount}
-            </div>
-          </li>
         </ul>
         <div className="px-6 mb-2 mt-8">
           <input
