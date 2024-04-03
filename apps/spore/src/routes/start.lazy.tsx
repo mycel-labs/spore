@@ -38,9 +38,6 @@ function Start() {
               <Mint />
             </li>
             <li>
-              <MintUSDC />
-            </li>
-            <li>
               <RegisterCelName />
             </li>
             <li>
@@ -110,8 +107,10 @@ function Mint() {
     import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isClaimable, setIsClaimable] = useState<boolean>(false)
-  const { mycelAccount } = useWallet()
+  const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
+  const { mycelAccount, evmAddress } = useWallet()
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
+  const { usdcBalance, isLoadingFaucet, isSuccessFaucet } = useVault()
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
@@ -121,11 +120,18 @@ function Mint() {
     }
   }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
 
+  useEffect(() => {
+    if (usdcBalance?.data < BigInt(10000 * 1e6)) {
+      setIsUSDCClaimable(true)
+    } else {
+      setIsUSDCClaimable(false)
+    }
+  }, [usdcBalance, isUSDCClaimable, isLoadingFaucet, isSuccessFaucet])
+
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
-      await fetch(
-        `/api/faucet?address=${mycelAccount?.address}`
-      )
+			
+      await fetch(`/api/faucet?address=${mycelAccount?.address}`)
         .then((res) => res.json())
         .then((data) => {
           toast(data.response as DeliverTxResponse)
@@ -143,10 +149,28 @@ function Mint() {
     }
   }
 
+  const claimUSDC = async () => {
+    if (isUSDCClaimable && evmAddress) {
+      await fetch(
+        `${import.meta.env.VITE_USDC_FAUCET_URL}/api/usdc?address=${evmAddress}`
+      )
+        .then((res) => {
+          const data = res.json()
+          console.log('usdc faucet succeeded!: ', data)
+        })
+        .catch((err) => {
+          console.log('usdc faucet error: ', err)
+        })
+    } else {
+      toast('⚠️ You have enough USDC')
+    }
+  }
+
   const mintTestToken = async () => {
     setIsLoading(true)
     try {
       await claimFaucet()
+      await claimUSDC()
       toast('👌 Minted!')
     } catch (e) {
       toast('⚠️ Mint error!')
@@ -159,14 +183,20 @@ function Mint() {
       <span className={cn(!isClaimable ? 'line-through' : undefined)}>
         Mint test token
       </span>
-      {!isClaimable ? (
-        <p className="text-right font-title text-3xl font-bold">
-          {convertToDecimalString(
-            dataBalance?.balance?.amount ?? 0,
-            MYCEL_COIN_DECIMALS
-          )}
-          <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
-        </p>
+      {!isClaimable && !isUSDCClaimable ? (
+        <>
+          <p className="text-right font-title text-3xl font-bold">
+            {convertToDecimalString(
+              dataBalance?.balance?.amount ?? 0,
+              MYCEL_COIN_DECIMALS
+            )}
+            <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
+          </p>
+          <p className="text-right font-title text-3xl font-bold">
+            {convertToDecimalString(usdcBalance.data ?? 0, MYCEL_COIN_DECIMALS)}
+            <span className="text-xl ml-1.5">USDC</span>
+          </p>
+        </>
       ) : (
         <Button
           type="button"
@@ -176,43 +206,6 @@ function Mint() {
           onClick={async () => await mintTestToken()}
         >
           Mint
-        </Button>
-      )}
-    </>
-  )
-}
-function MintUSDC() {
-  const { faucetUSDC, usdcBalance, isLoadingFaucet, isSuccessFaucet } =
-    useVault()
-  const [isClaimable, setIsClaimable] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (usdcBalance?.data < BigInt(1000 * 1e6)) {
-      setIsClaimable(true)
-    } else {
-      setIsClaimable(false)
-    }
-  }, [usdcBalance, isClaimable, isLoadingFaucet, isSuccessFaucet])
-
-  return (
-    <>
-      <span className={cn(!isClaimable ? 'line-through' : undefined)}>
-        Mint test token
-      </span>
-      {!isClaimable ? (
-        <p className="text-right font-title text-3xl font-bold">
-          {convertToDecimalString(usdcBalance.data ?? 0, MYCEL_COIN_DECIMALS)}
-          <span className="text-xl ml-1.5">USDC</span>
-        </p>
-      ) : (
-        <Button
-          type="button"
-          isLoading={isLoadingFaucet}
-          disabled={!isClaimable}
-          className="btn bg-secondary w-full h-14 mt-2"
-          onClick={async () => await faucetUSDC()}
-        >
-          Mint USDC
         </Button>
       )}
     </>
