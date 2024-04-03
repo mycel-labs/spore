@@ -17,7 +17,7 @@ import {
 } from 'graz'
 import { LocalWallet, onboarding } from '@dydxprotocol/v4-client-js'
 import { DirectSecp256k1HdWallet, OfflineSigner } from '@cosmjs/proto-signing'
-import { Secp256k1HdWallet } from '@cosmjs/amino'
+import { Secp256k1HdWallet, OfflineAminoSigner } from '@cosmjs/amino'
 import {
   WALLET_CONFIG,
   MYCEL_CHAIN_INFO,
@@ -127,7 +127,7 @@ export const useWallet = () => {
   const [localMycelWallet, setLocalMycelWallet] = useState<LocalWallet>()
   const [mycelOfflineSigner, setMycelOfflineSigner] = useState<OfflineSigner>()
   const [mycelOfflineSignerAmino, setMycelOfflineSignerAmino] =
-    useState<OfflineSigner>()
+    useState<OfflineAminoSigner>()
   const [hdKey, setHdKey] = useState<PrivateInformation>()
 
   const mycelAccounts = useMemo(
@@ -229,6 +229,7 @@ export const useWallet = () => {
       if (mycelOfflineSignerAmino) {
         const account = await mycelOfflineSignerAmino.getAccounts()
         const signData = getSignDomainData(account[0].address, domainName)
+        console.log('signData', signData, account[0].address)
         const signature = await mycelOfflineSignerAmino.signAmino(
           account[0].address,
           signData

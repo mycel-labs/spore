@@ -1,22 +1,17 @@
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { callFn } from '../lib/firebase'
-import { getReferralSig } from '../lib/wallets'
 
-export const useCreateUser = async (
-  userId: string,
-  address: string,
-  signer: any | undefined
-) => {
-  const { signature } = await signer?.signDirect(
-    address,
-    getReferralSig(address, userId)
-  )
-
+export const useCreateUser = async (userId: string, address: string) => {
   const { data, error, isError, status, mutate, mutateAsync } = useMutation({
     mutationKey: ['muataionCreateUser', userId],
-    mutationFn: async ({ code }: { code: string }) => {
+    mutationFn: async ({
+      code,
+      signature,
+    }: {
+      code: string
+      signature: any
+    }) => {
       const fn = callFn('createUser')
-      console.log('mutete::::', code, userId, address, signature)
       const res = await fn({
         code,
         uid: userId,

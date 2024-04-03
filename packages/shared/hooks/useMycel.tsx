@@ -100,10 +100,7 @@ export const useRegisterSecondLevelDomain = () => {
     isPending,
     isSuccess,
     mutate,
-    onMutate,
-    onSettled,
-    onSuccess,
-    onError,
+    mutateAsync,
     status,
   } = useMutation({
     mutationKey: [
@@ -131,13 +128,10 @@ export const useRegisterSecondLevelDomain = () => {
     data,
     error,
     mutate,
+    mutateAsync,
     isError,
     isPending,
     isSuccess,
-    onMutate,
-    onSettled,
-    onSuccess,
-    onError,
     status,
   }
 }

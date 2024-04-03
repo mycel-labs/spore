@@ -188,7 +188,7 @@ export const getSignDomainData = (address: string, uid: string) => {
     },
     msgs: [
       {
-        type: '/cosmos.msg.v1.MsgSignData',
+        type: 'sign/MsgSignData',
         value: {
           signer: address,
           data: btoa(uid),
