@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useWallet } from './useWallet'
 import {
+  useChainId,
+  useSwitchChain,
   useWriteContract,
   useReadContract,
   useWaitForTransactionReceipt,
@@ -15,6 +17,16 @@ export const useVault = () => {
   const { evmAddress } = useWallet()
   const queryClient = useQueryClient()
   const { queryKey } = useReadContract()
+
+  const chainId = useChainId()
+  const defaultChainId = 11155420
+  const { switchChain } = useSwitchChain()
+
+  useEffect(() => {
+    if (chainId !== defaultChainId) {
+      switchChain({ chainId: defaultChainId })
+    }
+  }, [chainId])
 
   /* Write contract*/
   const { data: depositHash, writeContract: deposit } = useWriteContract()
@@ -47,46 +59,50 @@ export const useVault = () => {
     ...vaultContract,
     functionName: 'balanceOf',
     args: [evmAddress as `0x${string}`],
+    chainId: defaultChainId,
   })
 
   const poolbalanceData = useReadContract({
     ...vaultContract,
     functionName: 'totalSupply',
+    chainId: defaultChainId,
   })
 
   const availableYieldData = useReadContract({
     ...vaultContract,
     functionName: 'availableYieldBalance',
-  })
-  const currentDrawIdData = useReadContract({
-    ...vaultContract,
-    functionName: 'currentDrawId',
+    chainId: defaultChainId,
   })
 
   const currentDrawData = useReadContract({
     ...vaultContract,
     functionName: 'getCurrentDrawEndTime',
+    chainId: defaultChainId,
   })
   const claimablePrizeData = useReadContract({
     ...vaultContract,
     functionName: '_claimablePrize',
     args: [evmAddress as `0x${string}`],
+    chainId: defaultChainId,
   })
 
   const approvalData = useReadContract({
     ...usdcContract,
     functionName: 'allowance',
     args: [evmAddress as `0x${string}`, vaultContract.address],
+    chainId: defaultChainId,
   })
 
   const usdcBalance = useReadContract({
     ...usdcContract,
     functionName: 'balanceOf',
     args: [evmAddress as `0x${string}`],
+    chainId: defaultChainId,
   })
   const decimals = useReadContract({
     ...usdcContract,
     functionName: 'decimals',
+    chainId: defaultChainId,
   })
 
   /* Async functions */
@@ -102,6 +118,7 @@ export const useVault = () => {
         ...vaultContract,
         functionName: 'deposit',
         args: [fixedAmount, evmAddress],
+        chainId: defaultChainId,
       },
       {
         onSuccess: () => toast('Transaction sent!'),
@@ -118,6 +135,7 @@ export const useVault = () => {
         ...vaultContract,
         functionName: 'withdraw',
         args: [fixedAmount, evmAddress, evmAddress],
+        chainId: defaultChainId,
       },
       {
         onSuccess: () => toast('Transaction sent!'),
@@ -133,6 +151,7 @@ export const useVault = () => {
       ...vaultContract,
       functionName: 'claimPrize',
       args: [fixedAmount],
+      chainId: defaultChainId,
     })
   }
 
@@ -144,6 +163,7 @@ export const useVault = () => {
         ...usdcContract,
         functionName: 'approve',
         args: [vaultContract.address, fixedAmount],
+        chainId: defaultChainId,
       },
       {
         onSuccess: () => toast('Transaction sent!'),
