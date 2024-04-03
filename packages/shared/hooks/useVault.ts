@@ -53,10 +53,6 @@ export const useVault = () => {
     useWaitForTransactionReceipt({
       hash: claimPrizeHash,
     })
-  const { isLoading: isLoadingFaucet, isSuccess: isSuccessFaucet } =
-    useWaitForTransactionReceipt({
-      hash: faucetHash,
-    })
 
   /* Read contract*/
   const depositedAmountData = useReadContract({
@@ -204,12 +200,6 @@ export const useVault = () => {
     }
   }, [isSuccessClaimPrize])
 
-  useEffect(() => {
-    if (isSuccessFaucet) {
-      toast('Faucet successful')
-    }
-  }, [isSuccessFaucet])
-
   return {
     depositUSDC,
     withdrawUSDC,
@@ -218,8 +208,6 @@ export const useVault = () => {
     refetch,
     switchChainId,
     chainId,
-    isSuccessFaucet,
-    isLoadingFaucet,
     depositedAmountData,
     poolbalanceData,
     availableYieldData,
