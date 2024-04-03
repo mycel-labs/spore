@@ -9,16 +9,17 @@ import { toast } from '../components/ui/sonner'
 
 import { usdcContract } from '../constants/testUSDC'
 import { vaultContract } from '../constants/vault'
-import { faucetContract } from '../constants/faucet'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const useVault = () => {
   const { evmAddress } = useWallet()
+  const queryClient = useQueryClient()
+  const { queryKey } = useReadContract()
 
   /* Write contract*/
   const { data: depositHash, writeContract: deposit } = useWriteContract()
   const { data: withdrawHash, writeContract: withdraw } = useWriteContract()
   const { data: approvalHash, writeContract: approve } = useWriteContract()
-  const { data: faucetHash, writeContract: faucet } = useWriteContract()
   const { data: claimPrizeHash, writeContract: claimPrize } = useWriteContract()
 
   const { isLoading: isLoadingDeposit, isSuccess: isSuccessDeposit } =
@@ -40,16 +41,12 @@ export const useVault = () => {
     useWaitForTransactionReceipt({
       hash: claimPrizeHash,
     })
-  const { isLoading: isLoadingFaucet, isSuccess: isSuccessFaucet } =
-    useWaitForTransactionReceipt({
-      hash: faucetHash,
-    })
 
   /* Read contract*/
   const depositedAmountData = useReadContract({
     ...vaultContract,
     functionName: 'balanceOf',
-    args: [evmAddress],
+    args: [evmAddress as `0x${string}`],
   })
 
   const poolbalanceData = useReadContract({
@@ -73,19 +70,19 @@ export const useVault = () => {
   const claimablePrizeData = useReadContract({
     ...vaultContract,
     functionName: '_claimablePrize',
-    args: [evmAddress],
+    args: [evmAddress as `0x${string}`],
   })
 
   const approvalData = useReadContract({
     ...usdcContract,
     functionName: 'allowance',
-    args: [evmAddress, vaultContract.address],
+    args: [evmAddress as `0x${string}`, vaultContract.address],
   })
 
   const usdcBalance = useReadContract({
     ...usdcContract,
     functionName: 'balanceOf',
-    args: [evmAddress],
+    args: [evmAddress as `0x${string}`],
   })
   const decimals = useReadContract({
     ...usdcContract,
@@ -93,8 +90,12 @@ export const useVault = () => {
   })
 
   /* Async functions */
+  async function refetch() {
+    await queryClient.invalidateQueries({ queryKey })
+  }
+
   async function depositUSDC(amount: number) {
-    if (!amount || amount == 0) return
+    if (!amount || amount == 0 || !evmAddress) return
     const fixedAmount = BigInt(amount * 1e6)
     deposit(
       {
@@ -110,7 +111,7 @@ export const useVault = () => {
   }
 
   async function withdrawUSDC(amount: number) {
-    if (!amount || amount == 0) return
+    if (!amount || amount == 0 || !evmAddress) return
     const fixedAmount = BigInt(amount * 1e6)
     withdraw(
       {
@@ -135,8 +136,9 @@ export const useVault = () => {
     })
   }
 
-  async function approveUSDC() {
-    const fixedAmount = 1000000 * 1e6
+  async function approveUSDC(amount: number) {
+    if (!amount || amount == 0) return
+    const fixedAmount = BigInt(amount * 1e6)
     approve(
       {
         ...usdcContract,
@@ -150,58 +152,39 @@ export const useVault = () => {
     )
   }
 
-  async function faucetUSDC() {
-    faucet(
-      {
-        ...faucetContract,
-        functionName: 'drip',
-        args: [usdcContract.address],
-      },
-      {
-        onSuccess: () => toast('Transaction sent!'),
-        onError: (err) => toast(`Faucet error! ${err}`),
-      }
-    )
-  }
-
   useEffect(() => {
     if (isSuccessDeposit) {
+      refetch()
       toast('Deposit successful')
     }
   }, [isSuccessDeposit])
 
   useEffect(() => {
     if (isSuccessWithdraw) {
+      refetch()
       toast('Withdraw successful')
     }
   }, [isSuccessWithdraw])
 
   useEffect(() => {
     if (isSuccessApproval) {
+      refetch()
       toast('Approval successful')
     }
   }, [isSuccessApproval])
 
   useEffect(() => {
     if (isSuccessClaimPrize) {
+      refetch()
       toast('Claim Prize successful')
     }
   }, [isSuccessClaimPrize])
-
-  useEffect(() => {
-    if (isSuccessFaucet) {
-      toast('Faucet successful')
-    }
-  }, [isSuccessFaucet])
 
   return {
     depositUSDC,
     withdrawUSDC,
     claimPrizeUSDC,
     approveUSDC,
-    faucetUSDC,
-    isSuccessFaucet,
-    isLoadingFaucet,
     depositedAmountData,
     poolbalanceData,
     availableYieldData,

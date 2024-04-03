@@ -110,7 +110,7 @@ function Mint() {
   const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { mycelAccount, evmAddress } = useWallet()
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
-  const { usdcBalance, isLoadingFaucet, isSuccessFaucet } = useVault()
+  const { usdcBalance } = useVault()
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
@@ -126,11 +126,10 @@ function Mint() {
     } else {
       setIsUSDCClaimable(false)
     }
-  }, [usdcBalance, isUSDCClaimable, isLoadingFaucet, isSuccessFaucet])
+  }, [usdcBalance, isUSDCClaimable])
 
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
-			
       await fetch(`/api/faucet?address=${mycelAccount?.address}`)
         .then((res) => res.json())
         .then((data) => {
