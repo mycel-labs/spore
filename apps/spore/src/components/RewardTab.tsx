@@ -58,7 +58,7 @@ const TabsContent = ({ ...props }) => (
 )
 
 const DepositTabContent = () => {
-  const { runConfetti, runSparkles } = useConfetti()
+  const { runConfetti } = useConfetti()
   const [amount, setAmount] = useState<number>(0)
   const {
     depositUSDC,
@@ -107,7 +107,12 @@ const DepositTabContent = () => {
           className="text-right p-1 cursor-pointer"
           onClick={() =>
             setAmount(
-              Number(convertToDecimalString(usdcBalance?.data, decimals?.data))
+              Number(
+                convertToDecimalString(
+                  usdcBalance?.data,
+                  decimals?.data
+                ).replace(/,/g, '')
+              )
             )
           }
         >
@@ -120,11 +125,11 @@ const DepositTabContent = () => {
           onChange={(e) => setAmount(Number(e.target.value))}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        {approvalData.data > BigInt(amount * 1e6) ? (
+        {approvalData.data >= BigInt(amount * 1e6) ? (
           <button
             className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-            onClick={(e) => {
-              depositUSDC(amount)
+            onClick={async (e) => {
+              await depositUSDC(amount)
               runConfetti(e)
             }}
           >
@@ -134,8 +139,8 @@ const DepositTabContent = () => {
         ) : (
           <button
             className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-            onClick={(e) => {
-              approveUSDC()
+            onClick={async (e) => {
+              await approveUSDC(amount)
               runConfetti(e)
             }}
           >
@@ -165,7 +170,7 @@ const WithdrawTabContent = () => {
                 convertToDecimalString(
                   depositedAmountData?.data,
                   decimals?.data
-                )
+                ).replace(/,/g, '')
               )
             )
           }
@@ -182,8 +187,8 @@ const WithdrawTabContent = () => {
         />
         <button
           className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-          onClick={(e) => {
-            withdrawUSDC(amount)
+          onClick={async (e) => {
+            await withdrawUSDC(amount)
             runSparkles(e)
           }}
         >
@@ -208,7 +213,10 @@ const ClaimTabContent = () => {
           onClick={() =>
             setAmount(
               Number(
-                convertToDecimalString(claimablePrizeData?.data, decimals?.data)
+                convertToDecimalString(
+                  claimablePrizeData?.data,
+                  decimals?.data
+                ).replace(/,/g, '')
               )
             )
           }
@@ -227,8 +235,8 @@ const ClaimTabContent = () => {
         BigInt(claimablePrizeData?.data) > BigInt(0) ? (
           <button
             className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-            onClick={(e) => {
-              claimPrizeUSDC(amount)
+            onClick={async (e) => {
+              await claimPrizeUSDC(amount)
               runSparkles(e)
             }}
           >
