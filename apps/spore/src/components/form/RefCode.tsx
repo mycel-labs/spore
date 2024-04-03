@@ -5,10 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useStore } from '@/store'
-import { useCreateUser } from '@/hooks/useReferral'
 import { useWallet } from '@/hooks/useWallet'
-import { getReferralSig } from '@/lib/wallets'
-import { useQuery, useMutation } from '@tanstack/react-query'
 import { callFn } from '@/lib/firebase'
 
 const refSchema = z.object({
@@ -30,41 +27,23 @@ export default function CelNameForm() {
       refCode: refCode ?? '',
     },
   })
-  const { mycelAccount, mycelOfflineSigner } = useWallet()
-
-  const { data, status, error, mutateAsync } = useMutation({
-    mutationKey: ['muataionCreateUser', 'aaaa.cel'],
-    mutationFn: async ({
-      code,
-      signature,
-    }: {
-      code: string
-      signature: string
-    }) => {
-      const res = await callFn({
-        code,
-        uid: 'aaaa.cel',
-        address: mycelAccount.address,
-        signature,
-      })
-      return res.data
-    },
-  })
-
-  console.log(':::', data, status)
+  const { mycelAccount, signDomainName } = useWallet()
 
   const onSubmit = async (data: { refCode: string }) => {
     setIsLoading(true)
     try {
-      const signature = await mycelOfflineSigner?.signDirect(
-        mycelAccount.address,
-        getReferralSig(mycelAccount.address, 'aaaa.cel')
-      )
-      console.log('data::', data, signature, status, error)
-      await mutateAsync({ code: data.refCode, signature })
+      const { signature } = await signDomainName()
+      console.log('*****', data.refCode, mycelAccount.address, signature)
+      await callFn('createUser')({
+        code: data.refCode,
+        uid: 'aaaa.cel',
+        address: mycelAccount.address,
+        signature,
+      })
       toast(`👌 Welcome!`)
       // updateRefCode(undefined)
     } catch (e) {
+      console.log(e)
       toast(`⚠️ Refferal error! ${e.message}`)
     }
     setIsLoading(false)

@@ -177,9 +177,9 @@ export const shortAddress = (
   return `${address.slice(0, prefix)}...${address.slice(-suffix)}`
 }
 
-export const getReferralSig = (address: string, uid: string) => {
+export const getSignDomainData = (address: string, uid: string) => {
   return {
-    chain_id: import.meta.env.VITE_CHAIN_ID,
+    chain_id: MYCEL_CHAIN_INFO.chainId,
     account_number: '0',
     sequence: '0',
     fee: {
