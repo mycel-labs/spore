@@ -39,7 +39,7 @@ importers:
         specifier: ^0.12.70
         version: 0.12.70
       '@mycel/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@radix-ui/react-accordion':
         specifier: ^1.1.2
@@ -178,7 +178,7 @@ importers:
   apps/spore-og:
     dependencies:
       '@mycel/shared':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/shared
       '@vercel/og':
         specifier: ^0.6.2

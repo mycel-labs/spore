@@ -24,7 +24,7 @@
     "@headlessui/react": "^1.7.18",
     "@hookform/resolvers": "^3.3.4",
     "@keplr-wallet/types": "^0.12.70",
-    "@mycel/shared": "workspace:^",
+    "@mycel/shared": "workspace:*",
     "@radix-ui/react-accordion": "^1.1.2",
     "@tanstack/react-query": "^5.25.0",
     "@tanstack/react-router": "^1.19.1",
