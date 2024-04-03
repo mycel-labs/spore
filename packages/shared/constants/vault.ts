@@ -1460,7 +1460,7 @@ const VAULT_ABI = [
     ],
   },
   { type: 'error', name: 'YieldVaultZeroAddress', inputs: [] },
-]
+] as const
 
 export const vaultContract = {
   address: VAULT_ADDRESS as `0x${string}`,
