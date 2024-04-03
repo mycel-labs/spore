@@ -59,9 +59,6 @@ function Start() {
               <Mint isClaimable={isClaimable} balance={dataBalance} />
             </li>
             <li>
-              <MintUSDC />
-            </li>
-            <li>
               <RegisterCelName />
             </li>
             <li>
@@ -229,43 +226,6 @@ function Mint({
           onClick={async () => await mintTestToken()}
         >
           Mint
-        </Button>
-      )}
-    </>
-  )
-}
-function MintUSDC() {
-  const { faucetUSDC, usdcBalance, isLoadingFaucet, isSuccessFaucet } =
-    useVault()
-  const [isClaimable, setIsClaimable] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (usdcBalance?.data < BigInt(1000 * 1e6)) {
-      setIsClaimable(true)
-    } else {
-      setIsClaimable(false)
-    }
-  }, [usdcBalance, isClaimable, isLoadingFaucet, isSuccessFaucet])
-
-  return (
-    <>
-      <span className={cn(!isClaimable ? 'line-through' : undefined)}>
-        Mint test token
-      </span>
-      {!isClaimable ? (
-        <p className="text-right font-title text-3xl font-bold">
-          {convertToDecimalString(usdcBalance.data ?? 0, MYCEL_COIN_DECIMALS)}
-          <span className="text-xl ml-1.5">USDC</span>
-        </p>
-      ) : (
-        <Button
-          type="button"
-          isLoading={isLoadingFaucet}
-          disabled={!isClaimable}
-          className="btn bg-secondary w-full h-14 mt-2"
-          onClick={async () => await faucetUSDC()}
-        >
-          Mint USDC
         </Button>
       )}
     </>
