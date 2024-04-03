@@ -13,7 +13,7 @@ const celNameSchema = z.object({
 
 export default function CelNameForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { mutate } = useRegisterSecondLevelDomain()
+  const { mutateAsync } = useRegisterSecondLevelDomain()
   const {
     register,
     handleSubmit,
@@ -22,10 +22,10 @@ export default function CelNameForm() {
     resolver: zodResolver(celNameSchema),
   })
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     setIsLoading(true)
     try {
-      await mutate(data.domain)
+      await mutateAsync(data.domain)
       toast(`👌 You got ${data.domain} !`)
     } catch (e) {
       toast(`⚠️ Register error! ${e.message}`)

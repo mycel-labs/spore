@@ -1,6 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { toast } from '@/components/ui/sonner'
-import { env } from '@/lib/env'
 import {
   useGetUser,
   useGetReferralCodeByIssuerUserId,
@@ -8,6 +7,7 @@ import {
 import { copyClipboard } from '@/lib/utils'
 import { User, ReferralCode } from '@/types/referral'
 import { SPORE_SHARE_URL } from '@/constants/spore'
+import { useStore } from '@/store'
 import { ClipboardCopy } from 'lucide-react'
 
 export const Route = createLazyFileRoute('/_app/referral')({
@@ -15,14 +15,14 @@ export const Route = createLazyFileRoute('/_app/referral')({
 })
 
 function Referral() {
-  const uid = 'aaaa.cel' // TODO: should be replaced with the actual user id
-  const user = useGetUser(uid)
+  const mycelName = useStore((state) => state.mycelName)
+  const user = useGetUser(mycelName)
   const invitedUserCount =
     !user.isLoading && user.data
       ? (user.data.data as { user: User })?.user?.invitedUserCount
       : 0
 
-  const refCode = useGetReferralCodeByIssuerUserId(uid)
+  const refCode = useGetReferralCodeByIssuerUserId(mycelName)
   const codes =
     !refCode.isLoading && refCode.data
       ? (refCode.data.data?.referralCodes as ReferralCode[])

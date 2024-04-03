@@ -18,6 +18,8 @@ import {
   MYCEL_HUMAN_COIN_UNIT,
   convertToDecimalString,
 } from '@/lib/coin'
+import { convertDomainToString } from '@/lib/domainName'
+import { useStore } from '@/store'
 
 export const Route = createLazyFileRoute('/start')({
   component: Start,
@@ -25,11 +27,24 @@ export const Route = createLazyFileRoute('/start')({
 
 function Start() {
   const { chainId, switchChainId } = useVault()
+  const THRESHOLD: number =
+    import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
+  const [isClaimable, setIsClaimable] = useState<boolean>(false)
+  const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
 
   useEffect(() => {
     // switch to Ethereum mainnet
     switchChainId(1)
   }, [chainId])
+
+  useEffect(() => {
+    if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
+      setIsClaimable(true)
+    } else {
+      setIsClaimable(false)
+    }
+  }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
+
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
       <img src={ImgLogo} className="h-16 mx-auto mb-6" />
@@ -41,13 +56,13 @@ function Start() {
               <Create />
             </li>
             <li>
-              <Mint />
+              <Mint isClaimable={isClaimable} balance={dataBalance} />
             </li>
             <li>
               <RegisterCelName />
             </li>
             <li>
-              <CheckRefCode />
+              <CheckRefCode isClaimable={isClaimable} />
             </li>
           </ol>
         </div>
@@ -108,23 +123,18 @@ function Create() {
   )
 }
 
-function Mint() {
-  const THRESHOLD: number =
-    import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
+function Mint({
+  isClaimable,
+  balance,
+}: {
+  isClaimable: boolean
+  balance: any
+}) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isClaimable, setIsClaimable] = useState<boolean>(false)
   const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { mycelAccount, evmAddress } = useWallet()
-  const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
+  const { data: dataBalance } = useBalance()
   const { usdcBalance, refetch } = useVault()
-
-  useEffect(() => {
-    if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
-      setIsClaimable(true)
-    } else {
-      setIsClaimable(false)
-    }
-  }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
 
   useEffect(() => {
     if (usdcBalance?.data < BigInt(10000 * 1e6)) {
@@ -226,21 +236,23 @@ function RegisterCelName() {
   const { mycelAccount } = useWallet()
   const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
     useDomainOwnership(mycelAccount?.address)
+  const mycelName = useStore((state) => state.mycelName)
+  const updateMycelName = useStore((state) => state.updateMycelName)
+
+  useEffect(() => {
+    // set mycelName (xxx.cel)
+    if (dataOwnDomain?.domainOwnership?.domains[0]) {
+      updateMycelName(
+        convertDomainToString(dataOwnDomain?.domainOwnership?.domains[0])
+      )
+    }
+  }, [dataOwnDomain, isLoadingOwnDomain])
 
   return (
     <>
-      <span
-        className={cn(
-          dataOwnDomain?.domainOwnership?.domains ? 'line-through' : ''
-        )}
-      >
-        Get your name
-      </span>
-      {!isLoadingOwnDomain && dataOwnDomain?.domainOwnership?.domains ? (
-        <p className="text-right font-title text-3xl font-bold">
-          {dataOwnDomain?.domainOwnership?.domains[0]?.name}.
-          {dataOwnDomain?.domainOwnership?.domains[0]?.parent}
-        </p>
+      <span className={cn(mycelName ? 'line-through' : '')}>Get your name</span>
+      {!isLoadingOwnDomain && mycelName ? (
+        <p className="text-right font-title text-3xl font-bold">{mycelName}</p>
       ) : (
         <CelNameForm />
       )}
@@ -248,11 +260,11 @@ function RegisterCelName() {
   )
 }
 
-function CheckRefCode() {
+function CheckRefCode({ isClaimable }: { isClaimable: boolean }) {
   return (
     <>
       <span className={cn('')}>Refferal code</span>
-      <RefCodeForm />
+      <RefCodeForm isClaimable={isClaimable} />
     </>
   )
 }

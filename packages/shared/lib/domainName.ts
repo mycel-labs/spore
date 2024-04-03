@@ -8,12 +8,24 @@ export const convertToDomain = (domain: string) => {
   return { name: s[0], parent: s.slice(1).join('.') } as Domain
 }
 
+export const convertDomainToString = (domain: Domain) => {
+  const name = domain.name
+  const parent = domain.parent
+  if (name && parent) {
+    return `${name}.${parent}`
+  } else if (name) {
+    return name
+  } else {
+    return ''
+  }
+}
+
 export const convertToDomainString = (
   name: string | undefined,
   parent: string | undefined
 ) => {
   if (name && parent) {
-    return name + '.' + parent
+    return `${name}.${parent}`
   } else if (name) {
     return name
   } else {

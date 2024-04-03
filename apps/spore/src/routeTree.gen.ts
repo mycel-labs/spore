@@ -13,12 +13,12 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as StartImport } from './routes/start'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
-const StartLazyImport = createFileRoute('/start')()
 const AppVaultsLazyImport = createFileRoute('/_app/vaults')()
 const AppSettingLazyImport = createFileRoute('/_app/setting')()
 const AppReferralLazyImport = createFileRoute('/_app/referral')()
@@ -28,7 +28,7 @@ const AppAboutLazyImport = createFileRoute('/_app/about')()
 
 // Create/Update Routes
 
-const StartLazyRoute = StartLazyImport.update({
+const StartRoute = StartImport.update({
   path: '/start',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/start.lazy').then((d) => d.Route))
@@ -86,7 +86,7 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof rootRoute
     }
     '/start': {
-      preLoaderRoute: typeof StartLazyImport
+      preLoaderRoute: typeof StartImport
       parentRoute: typeof rootRoute
     }
     '/_app/about': {
@@ -128,7 +128,7 @@ export const routeTree = rootRoute.addChildren([
     AppSettingLazyRoute,
     AppVaultsLazyRoute,
   ]),
-  StartLazyRoute,
+  StartRoute,
 ])
 
 /* prettier-ignore-end */
