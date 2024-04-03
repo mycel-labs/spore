@@ -100,10 +100,7 @@ export const useRegisterSecondLevelDomain = () => {
     isPending,
     isSuccess,
     mutate,
-    onMutate,
-    onSettled,
-    onSuccess,
-    onError,
+    mutateAsync,
     status,
   } = useMutation({
     mutationKey: [
@@ -121,20 +118,20 @@ export const useRegisterSecondLevelDomain = () => {
             registrationPeriodInYear: 1,
           },
         })
-        .then((res) => res.data).catch((e) => { console.log(e) }),
+        .then((res) => res.data)
+        .catch((e) => {
+          console.log(e)
+        }),
   })
 
   return {
     data,
     error,
     mutate,
+    mutateAsync,
     isError,
     isPending,
     isSuccess,
-    onMutate,
-    onSettled,
-    onSuccess,
-    onError,
     status,
   }
 }

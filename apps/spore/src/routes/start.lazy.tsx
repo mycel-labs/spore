@@ -17,12 +17,27 @@ import {
   MYCEL_HUMAN_COIN_UNIT,
   convertToDecimalString,
 } from '@/lib/coin'
+import { convertDomainToString } from '@/lib/domainName'
+import { useStore } from '@/store'
 
 export const Route = createLazyFileRoute('/start')({
   component: Start,
 })
 
 function Start() {
+  const THRESHOLD: number =
+    import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
+  const [isClaimable, setIsClaimable] = useState<boolean>(false)
+  const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
+
+  useEffect(() => {
+    if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
+      setIsClaimable(true)
+    } else {
+      setIsClaimable(false)
+    }
+  }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
+
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
       <img src={ImgLogo} className="h-16 mx-auto mb-6" />
@@ -34,13 +49,13 @@ function Start() {
               <Create />
             </li>
             <li>
-              <Mint />
+              <Mint isClaimable={isClaimable} balance={dataBalance} />
             </li>
             <li>
               <RegisterCelName />
             </li>
             <li>
-              <CheckRefCode />
+              <CheckRefCode isClaimable={isClaimable} />
             </li>
           </ol>
         </div>
@@ -101,27 +116,19 @@ function Create() {
   )
 }
 
-function Mint() {
-  const THRESHOLD: number =
-    import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
+function Mint({
+  isClaimable,
+  balance,
+}: {
+  isClaimable: booleanm
+  balance: any
+}) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isClaimable, setIsClaimable] = useState<boolean>(false)
   const { mycelAccount } = useWallet()
-  const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
-
-  useEffect(() => {
-    if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
-      setIsClaimable(true)
-    } else {
-      setIsClaimable(false)
-    }
-  }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
 
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
-      await fetch(
-        `/api/faucet?address=${mycelAccount?.address}`
-      )
+      await fetch(`/api/faucet?address=${mycelAccount?.address}`)
         .then((res) => res.json())
         .then((data) => {
           toast(data.response as DeliverTxResponse)
@@ -158,7 +165,7 @@ function Mint() {
       {!isClaimable ? (
         <p className="text-right font-title text-3xl font-bold">
           {convertToDecimalString(
-            dataBalance?.balance?.amount ?? 0,
+            balance?.balance?.amount ?? 0,
             MYCEL_COIN_DECIMALS
           )}
           <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
@@ -182,21 +189,23 @@ function RegisterCelName() {
   const { mycelAccount } = useWallet()
   const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
     useDomainOwnership(mycelAccount?.address)
+  const mycelName = useStore((state) => state.mycelName)
+  const updateMycelName = useStore((state) => state.updateMycelName)
 
-  return isLoadingOwnDomain ? null : (
+  useEffect(() => {
+    // set mycelName (xxx.cel)
+    if (dataOwnDomain?.domainOwnership?.domains[0]) {
+      updateMycelName(
+        convertDomainToString(dataOwnDomain?.domainOwnership?.domains[0])
+      )
+    }
+  }, [dataOwnDomain, isLoadingOwnDomain])
+
+  return (
     <>
-      <span
-        className={cn(
-          dataOwnDomain?.domain_ownership?.domains ? 'line-through' : ''
-        )}
-      >
-        Get your name
-      </span>
-      {dataOwnDomain?.domain_ownership?.domains ? (
-        <p className="text-right font-title text-3xl font-bold">
-          {dataOwnDomain?.domain_ownership?.domains[0]?.name}.
-          {dataOwnDomain?.domain_ownership?.domains[0]?.parent}
-        </p>
+      <span className={cn(mycelName ? 'line-through' : '')}>Get your name</span>
+      {!isLoadingOwnDomain && mycelName ? (
+        <p className="text-right font-title text-3xl font-bold">{mycelName}</p>
       ) : (
         <CelNameForm />
       )}
@@ -204,11 +213,11 @@ function RegisterCelName() {
   )
 }
 
-function CheckRefCode() {
+function CheckRefCode({ isClaimable }: { isClaimable: boolean }) {
   return (
     <>
       <span className={cn('')}>Refferal code</span>
-      <RefCodeForm />
+      <RefCodeForm isClaimable={isClaimable} />
     </>
   )
 }

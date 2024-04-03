@@ -17,12 +17,14 @@ import {
 } from 'graz'
 import { LocalWallet, onboarding } from '@dydxprotocol/v4-client-js'
 import { DirectSecp256k1HdWallet, OfflineSigner } from '@cosmjs/proto-signing'
+import { Secp256k1HdWallet, OfflineAminoSigner } from '@cosmjs/amino'
 import {
   WALLET_CONFIG,
   MYCEL_CHAIN_INFO,
   getTypedData,
   BECH32_PREFIX,
   EVM_CHAINID,
+  getSignDomainData,
   type EvmAddress,
   type MycelAddress,
   type PrivateInformation,
@@ -124,6 +126,8 @@ export const useWallet = () => {
   // mycel wallet
   const [localMycelWallet, setLocalMycelWallet] = useState<LocalWallet>()
   const [mycelOfflineSigner, setMycelOfflineSigner] = useState<OfflineSigner>()
+  const [mycelOfflineSignerAmino, setMycelOfflineSignerAmino] =
+    useState<OfflineAminoSigner>()
   const [hdKey, setHdKey] = useState<PrivateInformation>()
 
   const mycelAccounts = useMemo(
@@ -156,6 +160,11 @@ export const useWallet = () => {
     setHdKey({ mnemonic, privateKey, publicKey })
     setMycelOfflineSigner(
       await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
+        prefix: BECH32_PREFIX,
+      })
+    )
+    setMycelOfflineSignerAmino(
+      await Secp256k1HdWallet.fromMnemonic(mnemonic, {
         prefix: BECH32_PREFIX,
       })
     )
@@ -214,6 +223,22 @@ export const useWallet = () => {
     const signature = decrypted.toString(enc.Utf8)
     return signature
   }
+
+  const signDomainName = useCallback(
+    async (domainName: string) => {
+      if (mycelOfflineSignerAmino) {
+        const account = await mycelOfflineSignerAmino.getAccounts()
+        const signData = getSignDomainData(account[0].address, domainName)
+        console.log('signData', signData, account[0].address)
+        const signature = await mycelOfflineSignerAmino.signAmino(
+          account[0].address,
+          signData
+        )
+        return signature
+      }
+    },
+    [mycelOfflineSignerAmino]
+  )
 
   useEffect(() => {
     if (evmAddressWagmi) {
@@ -296,6 +321,7 @@ export const useWallet = () => {
     saveEvmSignature,
     // forgetEvmSignature,
     deriveKeys,
+    signDomainName,
     // mycel accounts
     hdKey,
     localMycelWallet,

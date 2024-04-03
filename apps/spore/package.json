@@ -18,6 +18,7 @@
     "server:prod": "cross-env NODE_ENV=production pnpm run server"
   },
   "dependencies": {
+    "@cosmjs/amino": "0.32.2",
     "@cosmjs/proto-signing": "^0.32.2",
     "@cosmjs/stargate": "^0.32.2",
     "@headlessui/react": "^1.7.18",
@@ -36,7 +37,6 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
     "express-validator": "^7.0.1",
-    "firebase": "^10.9.0",
     "lucide-react": "^0.350.0",
     "mycel-client-ts": "0.1.2",
     "react": "^18.2.0",

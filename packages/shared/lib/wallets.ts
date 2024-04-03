@@ -74,6 +74,15 @@ export const WALLET_CONFIG_SPORE = {
     getUrl: 'https://metamask.io/download.html',
     showMobile: false,
   },
+  WalletConnect: {
+    id: 'walletConnect',
+    name: 'WalletConnect',
+    display: 'Wallet Connect',
+    chainType: 'evm',
+    icon: WalletConnectIcon,
+    getUrl: '',
+    showMobile: true,
+  },
 }
 
 export const WALLET_CONFIG = {
@@ -166,4 +175,26 @@ export const shortAddress = (
 ) => {
   if (!address) return ''
   return `${address.slice(0, prefix)}...${address.slice(-suffix)}`
+}
+
+export const getSignDomainData = (address: string, uid: string) => {
+  return {
+    chain_id: MYCEL_CHAIN_INFO.chainId,
+    account_number: '0',
+    sequence: '0',
+    fee: {
+      gas: '0',
+      amount: [],
+    },
+    msgs: [
+      {
+        type: 'sign/MsgSignData',
+        value: {
+          signer: address,
+          data: btoa(uid),
+        },
+      },
+    ],
+    memo: '',
+  }
 }

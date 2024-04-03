@@ -5,9 +5,6 @@ export const Route = createRootRoute({
   beforeLoad: async ({ context }) => {
     if (!context.wallet.isConnected) {
       throw redirect({ to: '/' })
-    } else if (false) {
-      // if user exists on referral-db
-      throw redirect({ to: '/start' })
     }
   },
   component: () => (

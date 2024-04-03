@@ -1,6 +1,12 @@
 import { ImageResponse } from 'next/og'
 import { type NextRequest } from 'next/server'
 import { IMG_IDCARD } from '~/images'
+import {
+  getRankFromScore,
+  getRankNameFromScore,
+  getNextRankFromScore,
+} from '@/lib/referral'
+import { callFn } from '@/lib/firebase'
 
 export const runtime = 'edge'
 
@@ -9,10 +15,17 @@ export async function GET(request: NextRequest) {
   const ref = searchParams.get('ref')
 
   // fetch data with ref-code here
-  const name: string = 'akira.cel'
-  const rank: number = 1
-  const rankText: string = 'Noob'
-  const score: string = '1000 / 10000'
+  if (!ref) return
+  const getUserByReferralCode = callFn('getUserByReferralCode')
+  const data = await getUserByReferralCode(ref)
+  //@ts-ignore
+  const cnt = data?.user?.invitedUserCount ?? 0
+  //@ts-ignore
+  const name: string = data?.user?.id ?? ''
+  const rank: number = getRankFromScore(cnt)
+  const rankText: string = getRankNameFromScore(cnt)
+  const score: string = `${getNextRankFromScore(cnt).current} /
+  ${getNextRankFromScore(cnt).next}`
 
   // load image for user with score
   const imgChar = await fetch(
