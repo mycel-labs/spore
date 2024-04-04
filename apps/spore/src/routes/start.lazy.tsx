@@ -31,6 +31,7 @@ function Start() {
     import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
   const [isClaimable, setIsClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
+  const { chainId, switchChainId } = useVault()
 
   useEffect(() => {
     // switch to Ethereum mainnet
@@ -43,7 +44,15 @@ function Start() {
     } else {
       setIsClaimable(false)
     }
-  }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
+    switchChainId(1)
+  }, [
+    isLoadingBalance,
+    dataBalance,
+    THRESHOLD,
+    isClaimable,
+    chainId,
+    switchChainId,
+  ])
 
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
@@ -192,6 +201,7 @@ function Mint({
       await claimFaucet()
       await claimUSDC()
       await refetch()
+      toast('👌 Minted!')
     } catch (e) {
       toast('⚠️ Mint error!')
     }
