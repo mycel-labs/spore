@@ -5,8 +5,7 @@ let prefix = ''
 let firebaseAPIKey = ''
 let firebaseProjectId = ''
 
-if (import.meta.env) {
-  console.log('v')
+if (!!import.meta?.env) {
   isDev = import.meta.env.DEV
   apiURL = import.meta.env.VITE_API_COSMOS ?? 'http://localhost:1317'
   rpcURL = import.meta.env.VITE_WS_TENDERMINT ?? 'http://localhost:26657'
@@ -15,7 +14,6 @@ if (import.meta.env) {
   firebaseProjectId =
     import.meta.env.VITE_FIREBASE_PROJECT_ID ?? 'spore-testnet'
 } else {
-  console.log('n')
   isDev = process.env.NODE_ENV !== 'production'
   apiURL = process.env.NEXT_PUBLIC_API_COSMOS ?? 'http://localhost:1317'
   rpcURL = process.env.NEXT_PUBLIC_WS_TENDERMINT ?? 'http://localhost:26657'
