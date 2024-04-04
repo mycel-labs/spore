@@ -17,7 +17,12 @@ export async function GET(request: NextRequest) {
   // fetch data with ref-code here
   if (!ref) return
   const getUserByReferralCode = callFn('getUserByReferralCode')
-  const data = await getUserByReferralCode(ref)
+  let data = undefined
+  try {
+    data = await getUserByReferralCode(ref)
+  } catch (err: any) {
+    console.error('error:', err)
+  }
   //@ts-ignore
   const cnt = data?.user?.invitedUserCount ?? 0
   //@ts-ignore
