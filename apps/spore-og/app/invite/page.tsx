@@ -22,9 +22,9 @@ export async function generateMetadata(
 }
 
 export default function Page({ searchParams }: Props) {
-  // if (!searchParams.ref) {
-  //   redirect(SPORE_DOMAIN)
-  // } else {
-  //   redirect(`${SPORE_DOMAIN}/s?ref=${searchParams.ref}`)
-  // }
+  if (!searchParams.ref) {
+    redirect(SPORE_DOMAIN)
+  } else {
+    redirect(`${SPORE_DOMAIN}?ref=${searchParams.ref}`)
+  }
 }
