@@ -24,6 +24,12 @@ export const Route = createLazyFileRoute('/start')({
 })
 
 function Start() {
+  const { chainId, switchChainId } = useVault()
+
+  useEffect(() => {
+    // switch to Ethereum mainnet
+    switchChainId(1)
+  }, [chainId])
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
       <img src={ImgLogo} className="h-16 mx-auto mb-6" />
@@ -110,7 +116,7 @@ function Mint() {
   const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { mycelAccount, evmAddress } = useWallet()
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
-  const { usdcBalance } = useVault()
+  const { usdcBalance, refetch } = useVault()
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
@@ -153,7 +159,7 @@ function Mint() {
       await fetch(
         `${import.meta.env.VITE_USDC_FAUCET_URL}/api/usdc?address=${evmAddress}`
       )
-        .then((res) => {
+        .then(async (res) => {
           const data = res.json()
           console.log('usdc faucet succeeded!: ', data)
         })
@@ -170,6 +176,7 @@ function Mint() {
     try {
       await claimFaucet()
       await claimUSDC()
+      await refetch()
       toast('👌 Minted!')
     } catch (e) {
       toast('⚠️ Mint error!')

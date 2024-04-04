@@ -22,11 +22,11 @@ export const useVault = () => {
   const defaultChainId = 11155420
   const { switchChain } = useSwitchChain()
 
-  useEffect(() => {
-    if (chainId !== defaultChainId) {
-      switchChain({ chainId: defaultChainId })
+  function switchChainId(id: number) {
+    if (chainId !== id) {
+      switchChain({ chainId: id })
     }
-  }, [chainId])
+  }
 
   /* Write contract*/
   const { data: depositHash, writeContract: deposit } = useWriteContract()
@@ -205,6 +205,9 @@ export const useVault = () => {
     withdrawUSDC,
     claimPrizeUSDC,
     approveUSDC,
+    refetch,
+    switchChainId,
+    chainId,
     depositedAmountData,
     poolbalanceData,
     availableYieldData,

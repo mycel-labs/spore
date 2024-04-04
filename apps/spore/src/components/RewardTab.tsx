@@ -8,9 +8,16 @@ import useConfetti from '@/hooks/useConfetti'
 import { useVault } from '@/hooks/useVault'
 import { convertToDecimalString } from '@/lib/coin'
 import { convertUnixToUTC } from '@/lib/converter'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
+  const { chainId, switchChainId } = useVault()
+
+  useEffect(() => {
+    // switch to Optimism Sepolia
+    switchChainId(11155420)
+  }, [chainId])
+
   return (
     <Tabs
       defaultValue={tab === 'withdraw' ? 'withdraw' : 'deposit'}
