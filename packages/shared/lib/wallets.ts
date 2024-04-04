@@ -179,7 +179,7 @@ export const shortAddress = (
 
 export const getSignDomainData = (address: string, uid: string) => {
   return {
-    chain_id: MYCEL_CHAIN_INFO.chainId,
+    chain_id: "",
     account_number: '0',
     sequence: '0',
     fee: {
