@@ -201,7 +201,6 @@ function Mint({
       await claimFaucet()
       await claimUSDC()
       await refetch()
-      toast('👌 Minted!')
     } catch (e) {
       toast('⚠️ Mint error!')
     }
