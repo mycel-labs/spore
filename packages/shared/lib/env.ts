@@ -6,7 +6,7 @@ let prefix = ''
 let firebaseAPIKey = ''
 let firebaseProjectId = ''
 
-if (process.env.NEXT_RUNTIME === 'nodejs') {
+if (!!process.env.NEXT_RUNTIME) {
   isDev = String(process.env.NODE_ENV !== 'production')
   apiURL = process.env.NEXT_PUBLIC_API_COSMOS ?? 'http://localhost:1317'
   rpcURL = process.env.NEXT_PUBLIC_WS_TENDERMINT ?? 'http://localhost:26657'
