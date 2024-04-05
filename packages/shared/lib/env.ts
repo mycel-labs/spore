@@ -1,3 +1,4 @@
+// @ts-nocheck
 let isDev = ''
 let apiURL = ''
 let rpcURL = ''
