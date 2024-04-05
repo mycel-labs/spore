@@ -136,14 +136,16 @@ function Mint() {
 
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
-      await fetch(`/api/faucet?address=${mycelAccount?.address}`)
-        .then((res) => res.json())
-        .then((data) => {
-          toast(data.response as DeliverTxResponse)
-          // setTxResponse(data.response as DeliverTxResponse)
+      await fetch(
+        `${import.meta.env.VITE_FAUCET_URL!}/faucet?address=${mycelAccount?.address}`
+      )
+        .then((res) => {
+          console.log('faucet MYCEL succeeded!', res)
+          toast('👌 MYCEL Minted!')
         })
         .catch((err) => {
-          console.log(err)
+          console.log('faucet error: ', err)
+          toast('⚠️ Mint MYCEL error!')
         })
     } else {
       toast('⚠️ You have enough balance')
@@ -156,16 +158,19 @@ function Mint() {
 
   const claimUSDC = async () => {
     if (isUSDCClaimable && evmAddress) {
-      await fetch(
-        `${import.meta.env.VITE_USDC_FAUCET_URL}/api/usdc?address=${evmAddress}`
-      )
-        .then(async (res) => {
-          const data = res.json()
-          console.log('usdc faucet succeeded!: ', data)
+      try {
+        await fetch(
+          `${import.meta.env.VITE_USDC_FAUCET_URL!}/api/usdc?address=${evmAddress}`
+        ).then((res) => {
+          console.log('usdc faucet succeeded!', res)
+          toast('👌 USDC Minted!')
         })
-        .catch((err) => {
-          console.log('usdc faucet error: ', err)
-        })
+      } catch (e) {
+        console.error('usdc faucet error: ', e)
+        toast('⚠️ Mint USDC error!')
+      } finally {
+        refetch()
+      }
     } else {
       toast('⚠️ You have enough USDC')
     }
@@ -177,7 +182,6 @@ function Mint() {
       await claimFaucet()
       await claimUSDC()
       await refetch()
-      toast('👌 Minted!')
     } catch (e) {
       toast('⚠️ Mint error!')
     }
