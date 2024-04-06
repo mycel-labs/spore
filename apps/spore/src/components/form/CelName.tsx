@@ -51,7 +51,7 @@ export default function CelNameForm({ balance }: { balance: bigint }) {
       <Button
         type="submit"
         isLoading={isLoading}
-        disabled={balance <= BigInt(0)}
+        disabled={balance <= 0}
         className="btn bg-secondary w-full h-14 mt-2"
       >
         Get .cel name
