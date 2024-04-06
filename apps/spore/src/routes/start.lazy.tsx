@@ -49,10 +49,15 @@ function Start() {
               <Create />
             </li>
             <li>
-              <Mint isClaimable={isClaimable} balance={dataBalance} />
+              <Mint
+                isClaimable={isClaimable}
+                balance={BigInt(dataBalance?.balance?.amount ?? 0)}
+              />
             </li>
             <li>
-              <RegisterCelName />
+              <RegisterCelName
+                balance={BigInt(dataBalance?.balance?.amount ?? 0)}
+              />
             </li>
             <li>
               <CheckRefCode isClaimable={isClaimable} />
@@ -120,8 +125,8 @@ function Mint({
   isClaimable,
   balance,
 }: {
-  isClaimable: booleanm
-  balance: any
+  isClaimable: boolean
+  balance: bigint
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { mycelAccount } = useWallet()
@@ -164,10 +169,7 @@ function Mint({
       </span>
       {!isClaimable ? (
         <p className="text-right font-title text-3xl font-bold">
-          {convertToDecimalString(
-            balance?.balance?.amount ?? 0,
-            MYCEL_COIN_DECIMALS
-          )}
+          {convertToDecimalString(balance, MYCEL_COIN_DECIMALS)}
           <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
         </p>
       ) : (
@@ -185,7 +187,7 @@ function Mint({
   )
 }
 
-function RegisterCelName() {
+function RegisterCelName({ balance }: { balance: BigInt }) {
   const { mycelAccount } = useWallet()
   const { isLoading: isLoadingOwnDomain, data: dataOwnDomain } =
     useDomainOwnership(mycelAccount?.address)
@@ -207,7 +209,7 @@ function RegisterCelName() {
       {!isLoadingOwnDomain && mycelName ? (
         <p className="text-right font-title text-3xl font-bold">{mycelName}</p>
       ) : (
-        <CelNameForm />
+        <CelNameForm balance={balance} />
       )}
     </>
   )

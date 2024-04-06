@@ -16,14 +16,5 @@ declare module '@tanstack/react-router' {
 }
 
 export default function AppRouter() {
-  const wallet = useWallet()
-
-  return (
-    <RouterProvider
-      router={router}
-      context={{
-        wallet,
-      }}
-    />
-  )
+  return <RouterProvider router={router} />
 }

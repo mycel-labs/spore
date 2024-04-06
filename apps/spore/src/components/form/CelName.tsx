@@ -11,7 +11,7 @@ const celNameSchema = z.object({
   domain: z.string().min(1).max(64),
 })
 
-export default function CelNameForm() {
+export default function CelNameForm({ balance }: { balance: bigint }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { mutateAsync } = useRegisterSecondLevelDomain()
   const {
@@ -21,6 +21,8 @@ export default function CelNameForm() {
   } = useForm({
     resolver: zodResolver(celNameSchema),
   })
+
+  console.log('balance:::', balance)
 
   const onSubmit = async (data: any) => {
     setIsLoading(true)
@@ -49,6 +51,7 @@ export default function CelNameForm() {
       <Button
         type="submit"
         isLoading={isLoading}
+        disabled={balance <= BigInt(0)}
         className="btn bg-secondary w-full h-14 mt-2"
       >
         Get .cel name
