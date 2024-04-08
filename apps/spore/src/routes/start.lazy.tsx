@@ -255,7 +255,6 @@ function RegisterCelName() {
       )
     }
   }, [dataOwnDomain, isLoadingOwnDomain])
-
   return (
     <>
       <span className={cn(mycelName ? 'line-through' : '')}>Get your name</span>
