@@ -26,7 +26,6 @@ export const Route = createLazyFileRoute('/start')({
 })
 
 function Start() {
-  const { chainId, switchChainId } = useVault()
   const THRESHOLD: number =
     import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
   const [isClaimable, setIsClaimable] = useState<boolean>(false)
