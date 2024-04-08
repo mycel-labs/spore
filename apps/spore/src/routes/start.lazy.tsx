@@ -35,7 +35,7 @@ function Start() {
   useEffect(() => {
     // switch to Ethereum mainnet
     switchChainId(1)
-  }, [chainId])
+  }, [chainId, switchChainId])
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
