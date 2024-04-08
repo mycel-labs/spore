@@ -33,11 +33,6 @@ function Start() {
   const { chainId, switchChainId } = useVault()
 
   useEffect(() => {
-    // switch to Ethereum mainnet
-    switchChainId(1)
-  }, [chainId, switchChainId])
-
-  useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
       setIsClaimable(true)
     } else {
