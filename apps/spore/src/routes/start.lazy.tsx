@@ -249,7 +249,7 @@ function RegisterCelName() {
         convertDomainToString(dataOwnDomain?.domainOwnership?.domains[0])
       )
     }
-  }, [dataOwnDomain, isLoadingOwnDomain])
+  }, [dataOwnDomain, isLoadingOwnDomain, updateMycelName])
   return (
     <>
       <span className={cn(mycelName ? 'line-through' : '')}>Get your name</span>
