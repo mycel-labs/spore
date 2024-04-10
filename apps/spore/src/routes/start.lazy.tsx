@@ -29,8 +29,9 @@ function Start() {
   const THRESHOLD: number =
     import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
   const [isClaimable, setIsClaimable] = useState<boolean>(false)
+  const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
-  const { chainId, switchChainId } = useVault()
+  const { usdcBalance, chainId, switchChainId } = useVault()
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
@@ -48,6 +49,14 @@ function Start() {
     switchChainId,
   ])
 
+  useEffect(() => {
+    if (usdcBalance?.data < BigInt(10000 * 1e6)) {
+      setIsUSDCClaimable(true)
+    } else {
+      setIsUSDCClaimable(false)
+    }
+  }, [usdcBalance.data, isUSDCClaimable])
+
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
       <img src={ImgLogo} className="h-16 mx-auto mb-6" />
@@ -61,6 +70,7 @@ function Start() {
             <li>
               <Mint
                 isClaimable={isClaimable}
+                isUSDCClaimable={isUSDCClaimable}
                 balance={BigInt(dataBalance?.balance?.amount ?? 0)}
               />
             </li>
@@ -133,38 +143,33 @@ function Create() {
 
 function Mint({
   isClaimable,
+  isUSDCClaimable,
   balance,
 }: {
   isClaimable: boolean
+  isUSDCClaimable: boolean
   balance: bigint
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { mycelAccount, evmAddress } = useWallet()
-  const { data: dataBalance } = useBalance()
-  const { usdcBalance, refetch } = useVault()
-
-  useEffect(() => {
-    if (usdcBalance?.data < BigInt(10000 * 1e6)) {
-      setIsUSDCClaimable(true)
-    } else {
-      setIsUSDCClaimable(false)
-    }
-  }, [usdcBalance, isUSDCClaimable])
+  const { refetchBalance } = useBalance()
+  const { refetch } = useVault()
 
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
-      await fetch(
-        `${import.meta.env.VITE_FAUCET_URL!}/faucet?address=${mycelAccount?.address}`
-      )
-        .then((res) => {
+      try {
+        await fetch(
+          `${import.meta.env.VITE_FAUCET_URL!}/faucet?address=${mycelAccount?.address}`
+        ).then((res) => {
           console.log('faucet MYCEL succeeded!', res)
           toast('👌 MYCEL Minted!')
         })
-        .catch((err) => {
-          console.log('faucet error: ', err)
-          toast('⚠️ Mint MYCEL error!')
-        })
+      } catch (e) {
+        console.error('faucet error: ', e)
+        toast('⚠️ Mint MYCEL error!')
+      } finally {
+        refetchBalance()
+      }
     } else {
       toast('⚠️ You have enough balance')
       // setTxResponse({
@@ -199,11 +204,11 @@ function Mint({
     try {
       await claimFaucet()
       await claimUSDC()
-      await refetch()
     } catch (e) {
       toast('⚠️ Mint error!')
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   return (
@@ -211,18 +216,11 @@ function Mint({
       <span className={cn(!isClaimable ? 'line-through' : undefined)}>
         Mint test token
       </span>
-      {!isClaimable && !isUSDCClaimable ? (
+      {!isClaimable && !isLoading ? (
         <>
           <p className="text-right font-title text-3xl font-bold">
-            {convertToDecimalString(
-              dataBalance?.balance?.amount ?? 0,
-              MYCEL_COIN_DECIMALS
-            )}
+            {convertToDecimalString(balance ?? 0, MYCEL_COIN_DECIMALS)}
             <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
-          </p>
-          <p className="text-right font-title text-3xl font-bold">
-            {convertToDecimalString(usdcBalance.data ?? 0, MYCEL_COIN_DECIMALS)}
-            <span className="text-xl ml-1.5">USDC</span>
           </p>
         </>
       ) : (
