@@ -43,6 +43,10 @@ export const getNextRankFromScore = (count: number) => {
 export const isReferralUserExist = async (
   mycelName: string
 ): Promise<boolean> => {
+  if (!mycelName) {
+    return false
+  }
+
   let isReferralUserExist = false
   try {
     const { data } = await callFn('getUser')({ uid: mycelName })

@@ -251,10 +251,9 @@ function RegisterCelName({ balance }: { balance: bigint }) {
 
   useEffect(() => {
     // set mycelName (xxx.cel)
-    if (dataOwnDomain?.domain_ownership?.domains[0]) {
-      updateMycelName(
-        convertDomainToString(dataOwnDomain?.domain_ownership?.domains[0])
-      )
+    const mycelName = dataOwnDomain?.domain_ownership?.domains[0]
+    if (mycelName) {
+      updateMycelName(convertDomainToString(mycelName))
     }
   }, [dataOwnDomain, isLoadingOwnDomain, updateMycelName])
   return (
