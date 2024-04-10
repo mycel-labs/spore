@@ -5,6 +5,7 @@ import ImgLogo from '@/assets/spore-logo.svg'
 import { useWallet } from '@/hooks/useWallet'
 import { useBalance } from '@/hooks/useMycel'
 import { useDomainOwnership } from '@/hooks/useMycel'
+import { useVault } from '@/hooks/useVault'
 import { toast } from '@/components/ui/sonner'
 import { shortAddress } from '@/lib/wallets'
 import { copyClipboard, cn } from '@/lib/utils'
@@ -29,6 +30,7 @@ function Start() {
     import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
   const [isClaimable, setIsClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
+  const { chainId, switchChainId } = useVault()
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
@@ -36,7 +38,15 @@ function Start() {
     } else {
       setIsClaimable(false)
     }
-  }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
+    switchChainId(1)
+  }, [
+    isLoadingBalance,
+    dataBalance,
+    THRESHOLD,
+    isClaimable,
+    chainId,
+    switchChainId,
+  ])
 
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
@@ -120,22 +130,35 @@ function Mint({
   isClaimable,
   balance,
 }: {
-  isClaimable: booleanm
+  isClaimable: boolean
   balance: any
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { mycelAccount } = useWallet()
+  const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
+  const { mycelAccount, evmAddress } = useWallet()
+  const { data: dataBalance } = useBalance()
+  const { usdcBalance, refetch } = useVault()
+
+  useEffect(() => {
+    if (usdcBalance?.data < BigInt(10000 * 1e6)) {
+      setIsUSDCClaimable(true)
+    } else {
+      setIsUSDCClaimable(false)
+    }
+  }, [usdcBalance, isUSDCClaimable])
 
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
-      await fetch(`/api/faucet?address=${mycelAccount?.address}`)
-        .then((res) => res.json())
-        .then((data) => {
-          toast(data.response as DeliverTxResponse)
-          // setTxResponse(data.response as DeliverTxResponse)
+      await fetch(
+        `${import.meta.env.VITE_FAUCET_URL!}/faucet?address=${mycelAccount?.address}`
+      )
+        .then((res) => {
+          console.log('faucet MYCEL succeeded!', res)
+          toast('👌 MYCEL Minted!')
         })
         .catch((err) => {
-          console.log(err)
+          console.log('faucet error: ', err)
+          toast('⚠️ Mint MYCEL error!')
         })
     } else {
       toast('⚠️ You have enough balance')
@@ -146,11 +169,32 @@ function Mint({
     }
   }
 
+  const claimUSDC = async () => {
+    if (isUSDCClaimable && evmAddress) {
+      try {
+        await fetch(
+          `${import.meta.env.VITE_USDC_FAUCET_URL!}/api/usdc?address=${evmAddress}`
+        ).then((res) => {
+          console.log('usdc faucet succeeded!', res)
+          toast('👌 USDC Minted!')
+        })
+      } catch (e) {
+        console.error('usdc faucet error: ', e)
+        toast('⚠️ Mint USDC error!')
+      } finally {
+        refetch()
+      }
+    } else {
+      toast('⚠️ You have enough USDC')
+    }
+  }
+
   const mintTestToken = async () => {
     setIsLoading(true)
     try {
       await claimFaucet()
-      toast('👌 Minted!')
+      await claimUSDC()
+      await refetch()
     } catch (e) {
       toast('⚠️ Mint error!')
     }
@@ -162,14 +206,20 @@ function Mint({
       <span className={cn(!isClaimable ? 'line-through' : undefined)}>
         Mint test token
       </span>
-      {!isClaimable ? (
-        <p className="text-right font-title text-3xl font-bold">
-          {convertToDecimalString(
-            balance?.balance?.amount ?? 0,
-            MYCEL_COIN_DECIMALS
-          )}
-          <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
-        </p>
+      {!isClaimable && !isUSDCClaimable ? (
+        <>
+          <p className="text-right font-title text-3xl font-bold">
+            {convertToDecimalString(
+              dataBalance?.balance?.amount ?? 0,
+              MYCEL_COIN_DECIMALS
+            )}
+            <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
+          </p>
+          <p className="text-right font-title text-3xl font-bold">
+            {convertToDecimalString(usdcBalance.data ?? 0, MYCEL_COIN_DECIMALS)}
+            <span className="text-xl ml-1.5">USDC</span>
+          </p>
+        </>
       ) : (
         <Button
           type="button"
@@ -199,8 +249,7 @@ function RegisterCelName() {
         convertDomainToString(dataOwnDomain?.domainOwnership?.domains[0])
       )
     }
-  }, [dataOwnDomain, isLoadingOwnDomain])
-
+  }, [dataOwnDomain, isLoadingOwnDomain, updateMycelName])
   return (
     <>
       <span className={cn(mycelName ? 'line-through' : '')}>Get your name</span>

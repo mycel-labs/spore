@@ -1,4 +1,4 @@
-const VAULT_ADDRESS = '0x6F62FDD15ce157527416fB4Bf1a9dF0E110Fb6Fb'
+const VAULT_ADDRESS = '0x6B722668933f6A6e5E6B681254aBf5BdC18C9864'
 
 const VAULT_ABI = [
   {
@@ -666,6 +666,7 @@ const VAULT_ABI = [
         type: 'uint256',
         internalType: 'uint256',
       },
+      { name: 'drawEndTime', type: 'uint256', internalType: 'uint256' },
     ],
     outputs: [],
     stateMutability: 'nonpayable',
@@ -916,13 +917,13 @@ const VAULT_ABI = [
       {
         name: 'drawStartPeriod',
         type: 'uint256',
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
       },
       {
         name: 'drawEndPeriod',
         type: 'uint256',
-        indexed: false,
+        indexed: true,
         internalType: 'uint256',
       },
     ],
@@ -1265,10 +1266,7 @@ const VAULT_ABI = [
   {
     type: 'error',
     name: 'InvalidDrawPeriod',
-    inputs: [
-      { name: 'timestamp', type: 'uint256', internalType: 'uint256' },
-      { name: 'drawPeriod', type: 'uint256', internalType: 'uint256' },
-    ],
+    inputs: [{ name: 'timestamp', type: 'uint256', internalType: 'uint256' }],
   },
   {
     type: 'error',
@@ -1462,7 +1460,7 @@ const VAULT_ABI = [
     ],
   },
   { type: 'error', name: 'YieldVaultZeroAddress', inputs: [] },
-]
+] as const
 
 export const vaultContract = {
   address: VAULT_ADDRESS as `0x${string}`,

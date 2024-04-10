@@ -6,9 +6,18 @@ import {
 } from '@/components/ui/tabs'
 import ImgEnoki from '@/assets/enoki.svg'
 import { useVault } from '@/hooks/useVault'
-import { useGetIndividualLeaderBoard } from '@/hooks/useReferral'
+import { convertToDecimalString } from '@/lib/coin'
+import { convertUnixToUTC } from '@/lib/converter'
+import {
+  useFirebaseFunction,
+  useGetIndividualLeaderBoard,
+} from '@/hooks/useReferral'
 import { env } from '@/lib/env'
-import { mappedLeaderBoard, mappedTotalLeaderBoard } from '~/types/referral'
+import {
+  mappedLeaderBoard,
+  mappedTeamLeaderBoard,
+  mappedTotalLeaderBoard,
+} from '~/types/referral'
 
 export default function BoardTab({
   tab,
@@ -139,8 +148,9 @@ const TabsContent = ({ ...props }) => (
   />
 )
 
-const TotalTabContent = ({ tlb }: { tlb: mappedTotalLeaderBoard[] }) => {
-  const { drawData, poolBalance, availableYield } = useVault()
+const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
+  const { currentDrawData, availableYieldData, decimals, poolbalanceData } =
+    useVault()
   const rows = tlb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.teamId}>
@@ -159,18 +169,32 @@ const TotalTabContent = ({ tlb }: { tlb: mappedTotalLeaderBoard[] }) => {
             <li>
               <div className="header">Pool Value</div>
               <div className="text-right text-3xl font-bold">
-                ${poolBalance}
+                $
+                {convertToDecimalString(
+                  poolbalanceData?.data,
+                  decimals?.data
+                ) || '0'}
               </div>
             </li>
             <li>
               <div className="header">Total Estimated Reward</div>
               <div className="text-right text-3xl font-bold">
-                ${availableYield || '0'}
+                $
+                {convertToDecimalString(
+                  availableYieldData?.data,
+                  decimals?.data
+                ) || '0'}
               </div>
             </li>
             <li>
               <div className="header">Payout Date</div>
-              <div className="text-right text-3xl font-bold">{drawData}</div>
+              {currentDrawData?.data == BigInt(0) ? (
+                <div className="text-right text-3xl font-bold">not started</div>
+              ) : (
+                <div className="text-right text-3xl font-bold">
+                  {convertUnixToUTC(currentDrawData?.data)}
+                </div>
+              )}
             </li>
           </ul>
         </div>

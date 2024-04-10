@@ -2,13 +2,26 @@ import { createLazyFileRoute } from '@tanstack/react-router'
 import Profile from '~/components/Profile'
 import { Link } from '@tanstack/react-router'
 import { useVault } from '@/hooks/useVault'
+import { convertToDecimalString } from '@/lib/coin'
+import { useEffect } from 'react'
 
 export const Route = createLazyFileRoute('/_app/home')({
   component: Home,
 })
 
 function Home() {
-  const { depositedAmount, availableYield } = useVault()
+  const {
+    depositedAmountData,
+    availableYieldData,
+    decimals,
+    chainId,
+    switchChainId,
+  } = useVault()
+
+  useEffect(() => {
+    // switch to Optimism Sepolia
+    switchChainId(11155420)
+  }, [chainId, switchChainId])
 
   return (
     <div className="py-8 space-y-8">
@@ -19,13 +32,21 @@ function Home() {
           <li>
             <div className="header">Estimated Reward</div>
             <div className="text-right text-3xl font-bold">
-              ${availableYield || '0'}
+              $
+              {convertToDecimalString(
+                availableYieldData?.data,
+                decimals.data
+              ) || '0'}
             </div>
           </li>
           <li>
             <div className="header">Deposited USDC</div>
             <div className="text-right text-3xl font-bold">
-              ${depositedAmount || '0'}
+              $
+              {convertToDecimalString(
+                depositedAmountData?.data,
+                decimals?.data
+              ) || '0'}
             </div>
           </li>
         </ul>

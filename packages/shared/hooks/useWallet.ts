@@ -255,10 +255,10 @@ export const useWallet = () => {
 
   // Change EVM network
   const { chain: chainWagmi } = useAccountWagmi()
-  const { switchChainAsync } = useSwitchChainWagmi({ chainId: EVM_CHAINID })
+  const { switchChainAsync } = useSwitchChainWagmi()
   const switchEvmNetworkAsync = useCallback(async () => {
     if (chainWagmi?.id !== EVM_CHAINID) {
-      switchChainAsync && (await switchChainAsync())
+      switchChainAsync && (await switchChainAsync({ chainId: EVM_CHAINID }))
     }
   }, [chainWagmi?.id])
 

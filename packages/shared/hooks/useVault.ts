@@ -1,37 +1,38 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useWallet } from './useWallet'
-import { formatUnits } from 'viem'
 import {
+  useChainId,
+  useSwitchChain,
   useWriteContract,
   useReadContract,
   useWaitForTransactionReceipt,
 } from 'wagmi'
 import { toast } from '../components/ui/sonner'
-import { convertUnixToUTC } from '../lib/converter'
 
 import { usdcContract } from '../constants/testUSDC'
 import { vaultContract } from '../constants/vault'
-import { faucetContract } from '../constants/faucet'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const useVault = () => {
   const { evmAddress } = useWallet()
+  const queryClient = useQueryClient()
+  const { queryKey } = useReadContract()
+
+  const chainId = useChainId()
+  const defaultChainId = 11155420
+  const { switchChain } = useSwitchChain()
+
+  function switchChainId(id: number) {
+    if (chainId !== id) {
+      switchChain({ chainId: id })
+    }
+  }
 
   /* Write contract*/
   const { data: depositHash, writeContract: deposit } = useWriteContract()
   const { data: withdrawHash, writeContract: withdraw } = useWriteContract()
   const { data: approvalHash, writeContract: approve } = useWriteContract()
-  const { data: faucetHash, writeContract: faucet } = useWriteContract()
   const { data: claimPrizeHash, writeContract: claimPrize } = useWriteContract()
-
-  const [userBalance, setUserBalance] = useState<string>()
-  const [approval, setApproval] = useState<string>()
-  const [depositedAmount, setDepositedAmount] = useState<string>()
-  const [poolBalance, setPoolBalance] = useState<string>()
-  const [drawData, setDrawData] = useState<string>()
-  const [currentDrawId, setCurrentDrawId] = useState<number | undefined>(
-    undefined
-  )
-  const [availableYield, setAvailableYield] = useState<string>()
 
   const { isLoading: isLoadingDeposit, isSuccess: isSuccessDeposit } =
     useWaitForTransactionReceipt({
@@ -48,57 +49,76 @@ export const useVault = () => {
       hash: approvalHash,
     })
 
+  const { isLoading: isLoadingClaimPrize, isSuccess: isSuccessClaimPrize } =
+    useWaitForTransactionReceipt({
+      hash: claimPrizeHash,
+    })
+
   /* Read contract*/
   const depositedAmountData = useReadContract({
     ...vaultContract,
     functionName: 'balanceOf',
-    args: [evmAddress],
+    args: [evmAddress as `0x${string}`],
+    chainId: defaultChainId,
   })
 
   const poolbalanceData = useReadContract({
     ...vaultContract,
     functionName: 'totalSupply',
+    chainId: defaultChainId,
   })
 
   const availableYieldData = useReadContract({
     ...vaultContract,
     functionName: 'availableYieldBalance',
-  })
-  const currentDrawIdData = useReadContract({
-    ...vaultContract,
-    functionName: 'currentDrawId',
+    chainId: defaultChainId,
   })
 
   const currentDrawData = useReadContract({
     ...vaultContract,
     functionName: 'getCurrentDrawEndTime',
+    chainId: defaultChainId,
+  })
+  const claimablePrizeData = useReadContract({
+    ...vaultContract,
+    functionName: '_claimablePrize',
+    args: [evmAddress as `0x${string}`],
+    chainId: defaultChainId,
   })
 
   const approvalData = useReadContract({
     ...usdcContract,
     functionName: 'allowance',
-    args: [evmAddress, vaultContract.address],
+    args: [evmAddress as `0x${string}`, vaultContract.address],
+    chainId: defaultChainId,
   })
 
   const usdcBalance = useReadContract({
     ...usdcContract,
     functionName: 'balanceOf',
-    args: [evmAddress],
+    args: [evmAddress as `0x${string}`],
+    chainId: defaultChainId,
   })
   const decimals = useReadContract({
     ...usdcContract,
     functionName: 'decimals',
+    chainId: defaultChainId,
   })
 
   /* Async functions */
+  async function refetch() {
+    await queryClient.invalidateQueries({ queryKey })
+  }
+
   async function depositUSDC(amount: number) {
-    if (!amount || amount == 0) return
-    const fixedAmount = amount * 1e6
+    if (!amount || amount == 0 || !evmAddress) return
+    const fixedAmount = BigInt(amount * 1e6)
     deposit(
       {
         ...vaultContract,
         functionName: 'deposit',
         args: [fixedAmount, evmAddress],
+        chainId: defaultChainId,
       },
       {
         onSuccess: () => toast('Transaction sent!'),
@@ -108,13 +128,14 @@ export const useVault = () => {
   }
 
   async function withdrawUSDC(amount: number) {
-    if (!amount || amount == 0) return
-    const fixedAmount = amount * 1e6
+    if (!amount || amount == 0 || !evmAddress) return
+    const fixedAmount = BigInt(amount * 1e6)
     withdraw(
       {
         ...vaultContract,
         functionName: 'withdraw',
         args: [fixedAmount, evmAddress, evmAddress],
+        chainId: defaultChainId,
       },
       {
         onSuccess: () => toast('Transaction sent!'),
@@ -124,20 +145,25 @@ export const useVault = () => {
   }
 
   async function claimPrizeUSDC(amount: number) {
+    if (!amount || amount == 0) return
+    const fixedAmount = BigInt(amount * 1e6)
     claimPrize({
       ...vaultContract,
       functionName: 'claimPrize',
-      args: [amount],
+      args: [fixedAmount],
+      chainId: defaultChainId,
     })
   }
 
-  async function approveUSDC() {
-    const fixedAmount = 1000000 * 1e6
+  async function approveUSDC(amount: number) {
+    if (!amount || amount == 0) return
+    const fixedAmount = BigInt(amount * 1e6)
     approve(
       {
         ...usdcContract,
         functionName: 'approve',
         args: [vaultContract.address, fixedAmount],
+        chainId: defaultChainId,
       },
       {
         onSuccess: () => toast('Transaction sent!'),
@@ -146,70 +172,49 @@ export const useVault = () => {
     )
   }
 
-  async function faucetUSDC() {
-    faucet({
-      ...faucetContract,
-      functionName: 'drip',
-      args: [usdcContract.address],
-    })
-  }
-
-  useEffect(() => {
-    if (!decimals.data) return
-    const decimalValue = decimals.data as number
-    const fixedBalance = formatUnits(usdcBalance.data as bigint, decimalValue)
-    const fixedDepositedAmount = formatUnits(
-      depositedAmountData.data as bigint,
-      decimalValue
-    )
-    const fixedPoolBalance = formatUnits(
-      poolbalanceData.data as bigint,
-      decimalValue
-    )
-    const fixedYield = formatUnits(
-      availableYieldData.data as bigint,
-      decimalValue
-    )
-    const fixedApproval = formatUnits(approvalData.data as bigint, decimalValue)
-
-    setUserBalance(fixedBalance)
-    setDepositedAmount(fixedDepositedAmount)
-    setApproval(fixedApproval)
-    setPoolBalance(Number(fixedPoolBalance).toFixed(2).toString())
-    setAvailableYield(Number(fixedYield).toFixed(2).toString())
-    setDrawData(convertUnixToUTC(currentDrawData.data as BigInt))
-  }, [evmAddress])
-
   useEffect(() => {
     if (isSuccessDeposit) {
+      refetch()
       toast('Deposit successful')
     }
   }, [isSuccessDeposit])
 
   useEffect(() => {
     if (isSuccessWithdraw) {
+      refetch()
       toast('Withdraw successful')
     }
   }, [isSuccessWithdraw])
 
   useEffect(() => {
     if (isSuccessApproval) {
+      refetch()
       toast('Approval successful')
     }
   }, [isSuccessApproval])
+
+  useEffect(() => {
+    if (isSuccessClaimPrize) {
+      refetch()
+      toast('Claim Prize successful')
+    }
+  }, [isSuccessClaimPrize])
 
   return {
     depositUSDC,
     withdrawUSDC,
     claimPrizeUSDC,
     approveUSDC,
-    faucetUSDC,
-    drawData,
-    poolBalance,
-    depositedAmount,
-    approval,
+    refetch,
+    switchChainId,
+    chainId,
+    depositedAmountData,
+    poolbalanceData,
+    availableYieldData,
+    currentDrawData,
+    claimablePrizeData,
     approvalData,
-    userBalance,
-    availableYield,
+    usdcBalance,
+    decimals,
   }
 }

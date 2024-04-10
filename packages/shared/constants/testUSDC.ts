@@ -306,7 +306,7 @@ const USDC_ABI = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-]
+] as const
 
 export const usdcContract = {
   address: USDC_ADDRESS as `0x${string}`,
