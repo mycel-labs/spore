@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useClient } from '../hooks/useClient'
 import { Domain } from '../types/domain'
 import { useWallet } from '../hooks/useWallet'
@@ -45,6 +45,7 @@ export const useDomainOwnership = (address: string | undefined) => {
 
 export const useBalance = (address?: string | undefined, denom = 'umycel') => {
   const client = useClient()
+  const queryClient = useQueryClient()
   const { mycelAccount } = useWallet()
   const _address = address ?? mycelAccount?.address ?? null
 
@@ -57,12 +58,19 @@ export const useBalance = (address?: string | undefined, denom = 'umycel') => {
         .then((res) => res.data),
   })
 
+  const refetchBalance = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: ['queryBalance', _address],
+    })
+  }
+
   return {
     data,
     error,
     isError,
     isLoading,
     status,
+    refetchBalance,
   }
 }
 
