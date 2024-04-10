@@ -1,3 +1,5 @@
+import { callFn } from '../lib/firebase'
+
 export const SPORE_MAX_REDEMPTIONS: number[] = [
   0, 1, 3, 5, 10, 30, 50, 80, 100, 150, 300,
 ]
@@ -36,4 +38,17 @@ export const getNextRankFromScore = (count: number) => {
     current: count,
     next: SPORE_MAX_REDEMPTIONS[rank + 1],
   }
+}
+
+export const isReferralUserExist = async (
+  mycelName: string
+): Promise<boolean> => {
+  let isReferralUserExist = false
+  try {
+    const { data } = await callFn('getUser')({ uid: mycelName })
+    isReferralUserExist = !!data?.data?.user?.id
+  } catch (e) {
+    console.log('e:', e)
+  }
+  return isReferralUserExist
 }
