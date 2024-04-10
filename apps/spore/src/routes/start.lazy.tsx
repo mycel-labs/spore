@@ -46,7 +46,7 @@ function Start() {
     THRESHOLD,
     isClaimable,
     chainId,
-    switchChainId,
+    // switchChainId // DO NOT ENABLE, IT CAUSES INFINITE LOOP
   ])
 
   useEffect(() => {
