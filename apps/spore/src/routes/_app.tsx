@@ -6,7 +6,8 @@ import { useStore } from '@/store'
 export const Route = createRootRoute({
   beforeLoad: async () => {
     const isConnected: boolean = useStore.getState().isConnected
-    const user: boolean = await isReferralUserExist()
+    const mycelName = useStore.getState().mycelName
+    const user: boolean = await isReferralUserExist(mycelName)
     if (!isConnected) {
       throw redirect({ to: '/' })
     } else if (!user) {
