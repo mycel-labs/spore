@@ -1,10 +1,16 @@
 import { createRootRoute, Outlet, redirect } from '@tanstack/react-router'
 import NavMenu from '~/components/NavMenu2'
+import { isReferralUserExist } from '@/lib/referral'
+import { useStore } from '@/store'
 
 export const Route = createRootRoute({
-  beforeLoad: async ({ context }) => {
-    if (!context.wallet.isConnected) {
+  beforeLoad: async () => {
+    const isConnected: boolean = useStore.getState().isConnected
+    const user: boolean = await isReferralUserExist()
+    if (!isConnected) {
       throw redirect({ to: '/' })
+    } else if (!user) {
+      throw redirect({ to: '/start' })
     }
   },
   component: () => (
