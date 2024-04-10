@@ -45,10 +45,12 @@ type StoreSAction = {
     evmAddress,
     mycelAddress,
     encryptedSignature,
+    mycelName,
   }: {
     evmAddress: EvmAddress
     mycelAddress?: MycelAddress
     encryptedSignature?: string
+    mycelName?: string
   }) => void
   updateAuthenticator: (payload: StoreState['authenticator']) => void
 }
@@ -84,6 +86,7 @@ export const useStore = create<StoreState & StoreSAction>()(
           evmAddress,
           mycelAddress,
           encryptedSignature,
+          mycelName,
         }) =>
           set((state) => ({
             ...state,
@@ -92,6 +95,7 @@ export const useStore = create<StoreState & StoreSAction>()(
               version: 'v1',
               [evmAddress]: {
                 mycelAddress,
+                mycelName,
                 encryptedSignature,
               },
             },
