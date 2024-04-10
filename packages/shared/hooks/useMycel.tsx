@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useClient } from '../hooks/useClient'
 import { Domain } from '../types/domain'
 import { useWallet } from '../hooks/useWallet'
@@ -32,6 +32,7 @@ export const useDomainOwnership = (address: string | undefined) => {
       client.MycelRegistry.query
         .queryDomainOwnership(address)
         .then((res) => res.data),
+    refetchInterval: 1000,
   })
 
   return {
@@ -55,6 +56,7 @@ export const useBalance = (address?: string | undefined, denom = 'umycel') => {
       client.CosmosBankV1Beta1.query
         .queryBalance(_address, { denom })
         .then((res) => res.data),
+    refetchInterval: 1000,
   })
 
   return {
