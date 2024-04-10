@@ -16,7 +16,10 @@ export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
   useEffect(() => {
     // switch to Optimism Sepolia
     switchChainId(11155420)
-  }, [chainId])
+  }, [
+    chainId,
+    // switchChainId // DO NOT ENABLE, IT CAUSES INFINITE LOOP
+  ])
 
   return (
     <Tabs

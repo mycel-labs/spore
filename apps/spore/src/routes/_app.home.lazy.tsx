@@ -21,7 +21,10 @@ function Home() {
   useEffect(() => {
     // switch to Optimism Sepolia
     switchChainId(11155420)
-  }, [chainId, switchChainId])
+  }, [
+    chainId,
+    // switchChainId // DO NOT ENABLE, IT CAUSES INFINITE LOOP
+  ])
 
   return (
     <div className="py-8 space-y-8">
