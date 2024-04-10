@@ -55,7 +55,7 @@ function Start() {
     } else {
       setIsUSDCClaimable(false)
     }
-  }, [usdcBalance.data, isUSDCClaimable])
+  }, [usdcBalance.data])
 
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
@@ -72,6 +72,7 @@ function Start() {
                 isClaimable={isClaimable}
                 isUSDCClaimable={isUSDCClaimable}
                 balance={BigInt(dataBalance?.balance?.amount ?? 0)}
+                usdcBalance={usdcBalance?.data}
               />
             </li>
             <li>
@@ -145,10 +146,12 @@ function Mint({
   isClaimable,
   isUSDCClaimable,
   balance,
+  usdcBalance,
 }: {
   isClaimable: boolean
   isUSDCClaimable: boolean
   balance: bigint
+  usdcBalance: bigint
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { mycelAccount, evmAddress } = useWallet()
@@ -213,11 +216,15 @@ function Mint({
       <span className={cn(!isClaimable ? 'line-through' : undefined)}>
         Mint test token
       </span>
-      {!isClaimable && !isLoading ? (
+      {!isClaimable && !isUSDCClaimable && !isLoading ? (
         <>
           <p className="text-right font-title text-3xl font-bold">
             {convertToDecimalString(balance ?? 0, MYCEL_COIN_DECIMALS)}
             <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
+          </p>
+          <p className="text-right font-title text-3xl font-bold">
+            {convertToDecimalString(usdcBalance ?? 0, MYCEL_COIN_DECIMALS)}
+            <span className="text-xl ml-1.5">USDC</span>
           </p>
         </>
       ) : (

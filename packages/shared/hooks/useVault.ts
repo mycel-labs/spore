@@ -60,18 +60,27 @@ export const useVault = () => {
     functionName: 'balanceOf',
     args: [evmAddress as `0x${string}`],
     chainId: defaultChainId,
+    query: {
+      refetchInterval: 5000,
+    },
   })
 
   const poolbalanceData = useReadContract({
     ...vaultContract,
     functionName: 'totalSupply',
     chainId: defaultChainId,
+    query: {
+      refetchInterval: 5000,
+    },
   })
 
   const availableYieldData = useReadContract({
     ...vaultContract,
     functionName: 'availableYieldBalance',
     chainId: defaultChainId,
+    query: {
+      refetchInterval: 5000,
+    },
   })
 
   const currentDrawData = useReadContract({
@@ -84,6 +93,9 @@ export const useVault = () => {
     functionName: '_claimablePrize',
     args: [evmAddress as `0x${string}`],
     chainId: defaultChainId,
+    query: {
+      refetchInterval: 1000,
+    },
   })
 
   const approvalData = useReadContract({
@@ -91,6 +103,9 @@ export const useVault = () => {
     functionName: 'allowance',
     args: [evmAddress as `0x${string}`, vaultContract.address],
     chainId: defaultChainId,
+    query: {
+      refetchInterval: 1000,
+    },
   })
 
   const usdcBalance = useReadContract({
@@ -98,6 +113,9 @@ export const useVault = () => {
     functionName: 'balanceOf',
     args: [evmAddress as `0x${string}`],
     chainId: defaultChainId,
+    query: {
+      refetchInterval: 1000,
+    },
   })
   const decimals = useReadContract({
     ...usdcContract,
