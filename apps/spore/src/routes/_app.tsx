@@ -8,10 +8,12 @@ export const Route = createRootRoute({
     const isConnected: boolean = useStore.getState().isConnected
     const mycelName = useStore.getState().mycelName
     const user: boolean = await isReferralUserExist(mycelName)
-    if (!isConnected) {
-      throw redirect({ to: '/' })
-    } else if (!user) {
-      throw redirect({ to: '/start' })
+    if (!user) {
+      if (!isConnected) {
+        throw redirect({ to: '/' })
+      } else {
+        throw redirect({ to: '/start' })
+      }
     }
   },
   component: () => (
