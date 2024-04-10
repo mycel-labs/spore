@@ -152,7 +152,6 @@ function Mint({
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { mycelAccount, evmAddress } = useWallet()
-  const { refetchBalance } = useBalance()
   const { refetch } = useVault()
 
   const claimFaucet = async () => {
@@ -167,8 +166,6 @@ function Mint({
       } catch (e) {
         console.error('faucet error: ', e)
         toast('⚠️ Mint MYCEL error!')
-      } finally {
-        refetchBalance()
       }
     } else {
       toast('⚠️ You have enough balance')
@@ -247,9 +244,9 @@ function RegisterCelName({ balance }: { balance: bigint }) {
 
   useEffect(() => {
     // set mycelName (xxx.cel)
-    if (dataOwnDomain?.domainOwnership?.domains[0]) {
+    if (dataOwnDomain?.domain_ownership?.domains[0]) {
       updateMycelName(
-        convertDomainToString(dataOwnDomain?.domainOwnership?.domains[0])
+        convertDomainToString(dataOwnDomain?.domain_ownership?.domains[0])
       )
     }
   }, [dataOwnDomain, isLoadingOwnDomain, updateMycelName])
