@@ -40,6 +40,7 @@ export const wagmiConfig = createConfig({
 export const grazOptions = {
   chains: [MYCEL_CHAIN_INFO],
   defaultWallet: WalletTypeCosmos.KEPLR,
+  autoReconnect: false,
   // walletConnect: {
   //   options: {
   //     projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
