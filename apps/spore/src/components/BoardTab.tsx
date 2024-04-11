@@ -9,10 +9,12 @@ import { useVault } from '@/hooks/useVault'
 import { convertToDecimalString } from '@/lib/coin'
 import { convertUnixToUTC } from '@/lib/converter'
 import {
-  useFirebaseFunction,
   useGetIndividualLeaderBoard,
+  useGetTeamLeaderBoardByUserId,
+  useGetTotalLeaderBoard,
 } from '@/hooks/useReferral'
 import { env } from '@/lib/env'
+import { useStore } from '@/store'
 import {
   mappedLeaderBoard,
   mappedTeamLeaderBoard,
@@ -24,7 +26,16 @@ export default function BoardTab({
 }: {
   tab: 'total' | 'team' | 'player' | undefined
 }) {
-  const { data, isLoading } = useGetIndividualLeaderBoard()
+  const mycelName = useStore((state) => state.mycelName)
+  const {
+    data: individualLeaderBoardData,
+    isLoading: individualLeaderBoardLoading,
+  } = useGetIndividualLeaderBoard()
+  const { data: teamLeaderBoardData, isLoading: teamLeaderBoardLoading } =
+    useGetTeamLeaderBoardByUserId(mycelName)
+  const { data: totalLeaderBoardData, isLoading: totalLeaderBoardLoading } =
+    useGetTotalLeaderBoard()
+
   const mockLB: mappedLeaderBoard[] = [
     {
       userId: 'akira.cel',
@@ -76,9 +87,9 @@ export default function BoardTab({
   ]
 
   const lb =
-    !isLoading && data
+    !individualLeaderBoardLoading && individualLeaderBoardData
       ? (
-          data as {
+          individualLeaderBoardData as {
             success: boolean
             data: { leaderBoard: mappedLeaderBoard[] }
           }
@@ -86,9 +97,9 @@ export default function BoardTab({
       : mockLB
 
   const teamlb =
-    !isLoading && data
+    !teamLeaderBoardLoading && teamLeaderBoardData
       ? (
-          data as {
+          teamLeaderBoardData as {
             success: boolean
             data: { leaderBoard: mappedLeaderBoard[] }
           }
@@ -96,9 +107,9 @@ export default function BoardTab({
       : mockTeamLB
 
   const totallb =
-    !isLoading && data
+    !totalLeaderBoardLoading && totalLeaderBoardData
       ? (
-          data as {
+          totalLeaderBoardData as {
             success: boolean
             data: { leaderBoard: mappedTotalLeaderBoard[] }
           }
