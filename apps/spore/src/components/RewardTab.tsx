@@ -8,20 +8,10 @@ import useConfetti from '@/hooks/useConfetti'
 import { useVault } from '@/hooks/useVault'
 import { convertToDecimalString } from '@/lib/coin'
 import { convertUnixToUTC } from '@/lib/converter'
-import { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Button from './Button'
 
 export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
-  const { chainId, switchChainId } = useVault()
-
-  useEffect(() => {
-    // switch to Optimism Sepolia
-    switchChainId(11155420)
-  }, [
-    chainId,
-    // switchChainId // DO NOT ENABLE, IT CAUSES INFINITE LOOP
-  ])
-
   return (
     <Tabs
       defaultValue={tab === 'withdraw' ? 'withdraw' : 'deposit'}
@@ -82,14 +72,19 @@ const DepositTabContent = () => {
     decimals,
     isLoadingDeposit,
     isLoadingApproval,
+    chainId,
+    defaultChainId,
+    switchChainId,
   } = useVault()
-  const handleInput = (e) => {
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const regex = /^[0-9]*[.,]?[0-9]*$/
     if (regex.test(value) || value === '') {
       setAmount(value)
     }
   }
+
   return (
     <>
       <ul className="list-table bg-light">
@@ -137,7 +132,7 @@ const DepositTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount ? amount : ''}
+          value={amount}
           onChange={(e) => handleInput(e)}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
@@ -147,7 +142,7 @@ const DepositTabContent = () => {
             className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
             isLoading={isLoadingDeposit}
             disabled={Number(amount) === 0 || isLoadingDeposit}
-            onClick={async (e) => {
+            onClick={async (e: React.ChangeEvent<HTMLInputElement>) => {
               await depositUSDC(BigInt(Number(amount) * 1e6))
               runConfetti(e)
             }}
@@ -157,27 +152,38 @@ const DepositTabContent = () => {
           </Button>
         ) : (
           <>
-            <Button
-              type="button"
-              className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-              isLoading={isLoadingApproval}
-              disabled={
-                Number(amount) === 0 ||
-                BigInt(Number(amount) * 1e6) > usdcBalance?.data ||
-                isLoadingApproval
-              }
-              onClick={async (e) => {
-                await approveUSDC(BigInt(Number(amount) * 1e6))
-                runConfetti(e)
-              }}
-            >
-              <span className="btn-inner" />
-              {BigInt(Number(amount) * 1e6) > usdcBalance?.data
-                ? 'Insufficient Balance'
-                : Number(amount) === 0
-                  ? 'Enter Amount'
-                  : 'Approve'}
-            </Button>
+            {chainId !== defaultChainId ? (
+              <button
+                type="button"
+                className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+                onClick={() => switchChainId(defaultChainId)}
+              >
+                <span className="btn-inner" />
+                Switch to Optimism sepolia
+              </button>
+            ) : (
+              <Button
+                type="button"
+                className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+                isLoading={isLoadingApproval}
+                disabled={
+                  Number(amount) === 0 ||
+                  BigInt(Number(amount) * 1e6) > usdcBalance?.data ||
+                  isLoadingApproval
+                }
+                onClick={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                  await approveUSDC(BigInt(Number(amount) * 1e6))
+                  runConfetti(e)
+                }}
+              >
+                <span className="btn-inner" />
+                {BigInt(Number(amount) * 1e6) > usdcBalance?.data
+                  ? 'Insufficient Balance'
+                  : Number(amount) === 0
+                    ? 'Enter Amount'
+                    : 'Approve'}
+              </Button>
+            )}
           </>
         )}
       </div>
@@ -187,18 +193,24 @@ const DepositTabContent = () => {
 
 const WithdrawTabContent = () => {
   const { runSparkles } = useConfetti()
-  const { depositedAmountData, decimals, withdrawUSDC, isLoadingWithdraw } =
-    useVault()
+  const {
+    depositedAmountData,
+    decimals,
+    withdrawUSDC,
+    isLoadingWithdraw,
+    chainId,
+    switchChainId,
+    defaultChainId,
+  } = useVault()
   const [amount, setAmount] = useState<string>('')
 
-  const handleInput = (e) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const regex = /^[0-9]*[.,]?[0-9]*$/
     if (regex.test(value) || value === '') {
       setAmount(value)
     }
   }
-
   return (
     <>
       <div className="border-dark bg-light border-2 rounded px-6 pb-8">
@@ -219,41 +231,61 @@ const WithdrawTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount ? amount : ''}
+          value={amount}
           onChange={(e) => handleInput(e)}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        <Button
-          className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-          isLoading={isLoadingWithdraw}
-          disabled={
-            Number(amount) === 0 ||
-            BigInt(Number(amount) * 1e6) > depositedAmountData?.data ||
-            isLoadingWithdraw
-          }
-          onClick={async (e) => {
-            await withdrawUSDC(BigInt(Number(amount) * 1e6))
-            runSparkles(e)
-          }}
-        >
-          <span className="btn-inner" />
-          {BigInt(Number(amount) * 1e6) > depositedAmountData?.data
-            ? 'Insufficient Balance'
-            : Number(amount) === 0
-              ? 'Enter Amount'
-              : 'Withdraw'}
-        </Button>
+        <>
+          {chainId !== defaultChainId ? (
+            <button
+              type="button"
+              className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+              onClick={() => switchChainId(defaultChainId)}
+            >
+              <span className="btn-inner" />
+              Switch to Optimism sepolia
+            </button>
+          ) : (
+            <Button
+              className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+              isLoading={isLoadingWithdraw}
+              disabled={
+                Number(amount) === 0 ||
+                BigInt(Number(amount) * 1e6) > depositedAmountData?.data ||
+                isLoadingWithdraw
+              }
+              onClick={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                await withdrawUSDC(BigInt(Number(amount) * 1e6))
+                runSparkles(e)
+              }}
+            >
+              <span className="btn-inner" />
+              {BigInt(Number(amount) * 1e6) > depositedAmountData?.data
+                ? 'Insufficient Balance'
+                : Number(amount) === 0
+                  ? 'Enter Amount'
+                  : 'Withdraw'}
+            </Button>
+          )}
+        </>
       </div>
     </>
   )
 }
 const ClaimTabContent = () => {
   const { runSparkles } = useConfetti()
-  const { claimablePrizeData, claimPrizeUSDC, decimals, isLoadingClaimPrize } =
-    useVault()
+  const {
+    claimablePrizeData,
+    claimPrizeUSDC,
+    decimals,
+    isLoadingClaimPrize,
+    chainId,
+    defaultChainId,
+    switchChainId,
+  } = useVault()
   const [amount, setAmount] = useState<string>('')
 
-  const handleInput = (e) => {
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const regex = /^[0-9]*[.,]?[0-9]*$/
     if (regex.test(value) || value === '') {
@@ -286,26 +318,39 @@ const ClaimTabContent = () => {
           onChange={(e) => handleInput(e)}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        <Button
-          className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-          isLoading={isLoadingClaimPrize}
-          disabled={
-            Number(amount) === 0 ||
-            BigInt(Number(amount) * 1e6) > claimablePrizeData?.data ||
-            isLoadingClaimPrize
-          }
-          onClick={async (e) => {
-            await claimPrizeUSDC(BigInt(Number(amount) * 1e6))
-            runSparkles(e)
-          }}
-        >
-          <span className="btn-inner" />
-          {BigInt(Number(amount) * 1e6) > claimablePrizeData?.data
-            ? 'Insufficient Balance'
-            : Number(amount) === 0
-              ? 'Enter Amount'
-              : 'Claim Prize'}
-        </Button>
+        <>
+          {chainId !== defaultChainId ? (
+            <button
+              type="button"
+              className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+              onClick={() => switchChainId(defaultChainId)}
+            >
+              <span className="btn-inner" />
+              Switch to Optimism sepolia
+            </button>
+          ) : (
+            <Button
+              className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+              isLoading={isLoadingClaimPrize}
+              disabled={
+                Number(amount) === 0 ||
+                BigInt(Number(amount) * 1e6) > claimablePrizeData?.data ||
+                isLoadingClaimPrize
+              }
+              onClick={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                await claimPrizeUSDC(BigInt(Number(amount) * 1e6))
+                runSparkles(e)
+              }}
+            >
+              <span className="btn-inner" />
+              {BigInt(Number(amount) * 1e6) > claimablePrizeData?.data
+                ? 'Insufficient Balance'
+                : Number(amount) === 0
+                  ? 'Enter Amount'
+                  : 'Claim Prize'}
+            </Button>
+          )}
+        </>
       </div>
     </>
   )

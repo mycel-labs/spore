@@ -3,28 +3,13 @@ import Profile from '~/components/Profile'
 import { Link } from '@tanstack/react-router'
 import { useVault } from '@/hooks/useVault'
 import { convertToDecimalString } from '@/lib/coin'
-import { useEffect } from 'react'
 
 export const Route = createLazyFileRoute('/_app/home')({
   component: Home,
 })
 
 function Home() {
-  const {
-    depositedAmountData,
-    availableYieldData,
-    decimals,
-    chainId,
-    switchChainId,
-  } = useVault()
-
-  useEffect(() => {
-    // switch to Optimism Sepolia
-    switchChainId(11155420)
-  }, [
-    chainId,
-    // switchChainId // DO NOT ENABLE, IT CAUSES INFINITE LOOP
-  ])
+  const { depositedAmountData, availableYieldData, decimals } = useVault()
 
   return (
     <div className="py-8 space-y-8">

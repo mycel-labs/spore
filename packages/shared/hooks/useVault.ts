@@ -17,10 +17,10 @@ export const useVault = () => {
   const { evmAddress } = useWallet()
   const queryClient = useQueryClient()
   const { queryKey } = useReadContract()
-
   const chainId = useChainId()
-  const defaultChainId = 11155420
   const { switchChain } = useSwitchChain()
+
+  const defaultChainId = 11155420
 
   function switchChainId(id: number) {
     if (chainId !== id) {
@@ -162,7 +162,6 @@ export const useVault = () => {
 
   async function claimPrizeUSDC(amount: bigint) {
     if (!amount || !evmAddress) return
-
     claimPrize({
       ...vaultContract,
       functionName: 'claimPrize',
@@ -222,6 +221,7 @@ export const useVault = () => {
     approveUSDC,
     refetch,
     switchChainId,
+    defaultChainId,
     isLoadingDeposit,
     isLoadingApproval,
     isLoadingWithdraw,
