@@ -57,7 +57,7 @@ function Home() {
           <div className="col-span-2">
             <Link
               type="button"
-              className="btn bg-light font-title font-bold px-6 pt-2.5 pb-0.5 w-full flex flex-col leading-none bg-yellow-200"
+              className="btn bg-light font-title font-bold uppercase px-6 pt-2.5 pb-0.5 w-full flex flex-col leading-none bg-yellow-200"
               to="/referral"
             >
               <span className="btn-inner" />
@@ -79,7 +79,7 @@ function Home() {
           <div>
             <Link
               type="button"
-              className="btn bg-secondary font-title font-bold w-full px-6 pt-2.5 pb-0.5 flex flex-col leading-none"
+              className="btn bg-secondary font-title font-bold w-full uppercase px-6 pt-2.5 pb-0.5 flex flex-col leading-none"
               to="/vaults?t=withdraw"
             >
               <span className="btn-inner" />
