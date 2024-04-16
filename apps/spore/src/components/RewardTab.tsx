@@ -9,6 +9,7 @@ import { useVault } from '@/hooks/useVault'
 import { convertToDecimalString } from '@/lib/coin'
 import { convertUnixToUTC } from '@/lib/converter'
 import { useEffect, useState } from 'react'
+import Button from './Button'
 
 export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
   const { chainId, switchChainId } = useVault()
@@ -69,7 +70,7 @@ const TabsContent = ({ ...props }) => (
 
 const DepositTabContent = () => {
   const { runConfetti } = useConfetti()
-  const [amount, setAmount] = useState<number>(0)
+  const [amount, setAmount] = useState<string>('')
   const {
     depositUSDC,
     approveUSDC,
@@ -79,8 +80,16 @@ const DepositTabContent = () => {
     approvalData,
     usdcBalance,
     decimals,
+    isLoadingDeposit,
+    isLoadingApproval,
   } = useVault()
-
+  const handleInput = (e) => {
+    const value = e.target.value
+    const regex = /^[0-9]*[.,]?[0-9]*$/
+    if (regex.test(value) || value === '') {
+      setAmount(value)
+    }
+  }
   return (
     <>
       <ul className="list-table bg-light">
@@ -117,12 +126,9 @@ const DepositTabContent = () => {
           className="text-right p-1 cursor-pointer"
           onClick={() =>
             setAmount(
-              Number(
-                convertToDecimalString(
-                  usdcBalance?.data,
-                  decimals?.data
-                ).replace(/,/g, '')
-              )
+              convertToDecimalString(usdcBalance?.data, decimals?.data)
+                .replace(/,/g, '')
+                .toString()
             )
           }
         >
@@ -131,32 +137,48 @@ const DepositTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          value={amount ? amount : ''}
+          onChange={(e) => handleInput(e)}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        {approvalData.data >= BigInt(amount * 1e6) ? (
-          <button
+        {approvalData.data >= BigInt(Number(amount) * 1e6) &&
+        BigInt(Number(amount) * 1e6) !== BigInt(0) ? (
+          <Button
             className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+            isLoading={isLoadingDeposit}
+            disabled={Number(amount) === 0 || isLoadingDeposit}
             onClick={async (e) => {
-              await depositUSDC(amount)
+              await depositUSDC(BigInt(Number(amount) * 1e6))
               runConfetti(e)
             }}
           >
             <span className="btn-inner" />
             Deposit
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-            onClick={async (e) => {
-              await approveUSDC(amount)
-              runConfetti(e)
-            }}
-          >
-            <span className="btn-inner" />
-            Approve
-          </button>
+          <>
+            <Button
+              type="button"
+              className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+              isLoading={isLoadingApproval}
+              disabled={
+                Number(amount) === 0 ||
+                BigInt(Number(amount) * 1e6) > usdcBalance?.data ||
+                isLoadingApproval
+              }
+              onClick={async (e) => {
+                await approveUSDC(BigInt(Number(amount) * 1e6))
+                runConfetti(e)
+              }}
+            >
+              <span className="btn-inner" />
+              {BigInt(Number(amount) * 1e6) > usdcBalance?.data
+                ? 'Insufficient Balance'
+                : Number(amount) === 0
+                  ? 'Enter Amount'
+                  : 'Approve'}
+            </Button>
+          </>
         )}
       </div>
     </>
@@ -165,8 +187,17 @@ const DepositTabContent = () => {
 
 const WithdrawTabContent = () => {
   const { runSparkles } = useConfetti()
-  const { depositedAmountData, decimals, withdrawUSDC } = useVault()
-  const [amount, setAmount] = useState(0)
+  const { depositedAmountData, decimals, withdrawUSDC, isLoadingWithdraw } =
+    useVault()
+  const [amount, setAmount] = useState<string>('')
+
+  const handleInput = (e) => {
+    const value = e.target.value
+    const regex = /^[0-9]*[.,]?[0-9]*$/
+    if (regex.test(value) || value === '') {
+      setAmount(value)
+    }
+  }
 
   return (
     <>
@@ -176,12 +207,9 @@ const WithdrawTabContent = () => {
           className="text-right p-1 cursor-pointer"
           onClick={() =>
             setAmount(
-              Number(
-                convertToDecimalString(
-                  depositedAmountData?.data,
-                  decimals?.data
-                ).replace(/,/g, '')
-              )
+              convertToDecimalString(depositedAmountData?.data, decimals?.data)
+                .replace(/,/g, '')
+                .toString()
             )
           }
         >
@@ -191,28 +219,47 @@ const WithdrawTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          value={amount ? amount : ''}
+          onChange={(e) => handleInput(e)}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        <button
+        <Button
           className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+          isLoading={isLoadingWithdraw}
+          disabled={
+            Number(amount) === 0 ||
+            BigInt(Number(amount) * 1e6) > depositedAmountData?.data ||
+            isLoadingWithdraw
+          }
           onClick={async (e) => {
-            await withdrawUSDC(amount)
+            await withdrawUSDC(BigInt(Number(amount) * 1e6))
             runSparkles(e)
           }}
         >
           <span className="btn-inner" />
-          Withdraw
-        </button>
+          {BigInt(Number(amount) * 1e6) > depositedAmountData?.data
+            ? 'Insufficient Balance'
+            : Number(amount) === 0
+              ? 'Enter Amount'
+              : 'Withdraw'}
+        </Button>
       </div>
     </>
   )
 }
 const ClaimTabContent = () => {
   const { runSparkles } = useConfetti()
-  const { claimablePrizeData, claimPrizeUSDC, decimals } = useVault()
-  const [amount, setAmount] = useState(0)
+  const { claimablePrizeData, claimPrizeUSDC, decimals, isLoadingClaimPrize } =
+    useVault()
+  const [amount, setAmount] = useState<string>('')
+
+  const handleInput = (e) => {
+    const value = e.target.value
+    const regex = /^[0-9]*[.,]?[0-9]*$/
+    if (regex.test(value) || value === '') {
+      setAmount(value)
+    }
+  }
 
   return (
     <>
@@ -222,12 +269,9 @@ const ClaimTabContent = () => {
           className="text-right p-1 cursor-pointer"
           onClick={() =>
             setAmount(
-              Number(
-                convertToDecimalString(
-                  claimablePrizeData?.data,
-                  decimals?.data
-                ).replace(/,/g, '')
-              )
+              convertToDecimalString(claimablePrizeData?.data, decimals?.data)
+                .replace(/,/g, '')
+                .toString()
             )
           }
         >
@@ -236,29 +280,32 @@ const ClaimTabContent = () => {
             '0'}
         </p>
         <input
-          type="number"
+          type="text"
+          pattern="^[0-9]*[.,]?[0-9]*$"
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e) => handleInput(e)}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
-        {claimablePrizeData?.data &&
-        BigInt(claimablePrizeData?.data) > BigInt(0) ? (
-          <button
-            className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
-            onClick={async (e) => {
-              await claimPrizeUSDC(amount)
-              runSparkles(e)
-            }}
-          >
-            <span className="btn-inner" />
-            Claim Prize
-          </button>
-        ) : (
-          <button className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6">
-            <span className="btn-inner" />
-            Not eligible
-          </button>
-        )}
+        <Button
+          className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+          isLoading={isLoadingClaimPrize}
+          disabled={
+            Number(amount) === 0 ||
+            BigInt(Number(amount) * 1e6) > claimablePrizeData?.data ||
+            isLoadingClaimPrize
+          }
+          onClick={async (e) => {
+            await claimPrizeUSDC(BigInt(Number(amount) * 1e6))
+            runSparkles(e)
+          }}
+        >
+          <span className="btn-inner" />
+          {BigInt(Number(amount) * 1e6) > claimablePrizeData?.data
+            ? 'Insufficient Balance'
+            : Number(amount) === 0
+              ? 'Enter Amount'
+              : 'Claim Prize'}
+        </Button>
       </div>
     </>
   )

@@ -128,14 +128,13 @@ export const useVault = () => {
     await queryClient.invalidateQueries({ queryKey })
   }
 
-  async function depositUSDC(amount: number) {
-    if (!amount || amount == 0 || !evmAddress) return
-    const fixedAmount = BigInt(amount * 1e6)
+  async function depositUSDC(amount: bigint) {
+    if (!amount || !evmAddress) return
     deposit(
       {
         ...vaultContract,
         functionName: 'deposit',
-        args: [fixedAmount, evmAddress],
+        args: [amount, evmAddress],
         chainId: defaultChainId,
       },
       {
@@ -145,14 +144,13 @@ export const useVault = () => {
     )
   }
 
-  async function withdrawUSDC(amount: number) {
-    if (!amount || amount == 0 || !evmAddress) return
-    const fixedAmount = BigInt(amount * 1e6)
+  async function withdrawUSDC(amount: bigint) {
+    if (!amount || !evmAddress) return
     withdraw(
       {
         ...vaultContract,
         functionName: 'withdraw',
-        args: [fixedAmount, evmAddress, evmAddress],
+        args: [amount, evmAddress, evmAddress],
         chainId: defaultChainId,
       },
       {
@@ -162,25 +160,24 @@ export const useVault = () => {
     )
   }
 
-  async function claimPrizeUSDC(amount: number) {
-    if (!amount || amount == 0) return
-    const fixedAmount = BigInt(amount * 1e6)
+  async function claimPrizeUSDC(amount: bigint) {
+    if (!amount || !evmAddress) return
+
     claimPrize({
       ...vaultContract,
       functionName: 'claimPrize',
-      args: [fixedAmount],
+      args: [amount],
       chainId: defaultChainId,
     })
   }
 
-  async function approveUSDC(amount: number) {
-    if (!amount || amount == 0) return
-    const fixedAmount = BigInt(amount * 1e6)
+  async function approveUSDC(amount: bigint) {
+    if (!amount || !evmAddress) return
     approve(
       {
         ...usdcContract,
         functionName: 'approve',
-        args: [vaultContract.address, fixedAmount],
+        args: [vaultContract.address, amount],
         chainId: defaultChainId,
       },
       {
@@ -225,6 +222,10 @@ export const useVault = () => {
     approveUSDC,
     refetch,
     switchChainId,
+    isLoadingDeposit,
+    isLoadingApproval,
+    isLoadingWithdraw,
+    isLoadingClaimPrize,
     chainId,
     depositedAmountData,
     poolbalanceData,
