@@ -1,41 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { callFn } from '../lib/firebase'
 
-export const useCreateUser = async (
-  userId: string,
-  address: string,
-  evmAddress: string
-) => {
-  const { data, error, isError, status, mutate, mutateAsync } = useMutation({
-    mutationKey: ['muataionCreateUser', userId],
-    mutationFn: async ({
-      code,
-      signature,
-    }: {
-      code: string
-      signature: any
-    }) => {
-      const fn = callFn('createUser')
-      const res = await fn({
-        code,
-        uid: userId,
-        address,
-        evmAddress,
-        signature,
-      })
-      return res.data
-    },
-  })
-  return {
-    data,
-    error,
-    isError,
-    status,
-    mutate,
-    mutateAsync,
-  }
-}
-
 export const useGetUser = (uid: string) => {
   const { data, error, isError, isLoading, status } = useQuery({
     queryKey: ['queryGetUser', uid],
