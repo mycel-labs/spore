@@ -245,7 +245,9 @@ const TeamTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
             </li>
             <li>
               <div className="header">Team member</div>
-              <div className="text-right text-3xl font-bold">123</div>
+              <div className="text-right text-3xl font-bold">
+                {lb?.length ?? 0}
+              </div>
             </li>
             <li>
               <div className="header">Bonus</div>
