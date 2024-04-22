@@ -121,17 +121,8 @@ const DepositTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount === 0 ? '' : amount}
-          placeholder="0"
-          min="0"
-          onChange={(e) => {
-            const newValue = parseInt(e.target.value, 10)
-            if (!isNaN(newValue) && newValue >= 0) {
-              setAmount(newValue)
-            } else {
-              setAmount(0)
-            }
-          }}
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         {approvalData.data >= BigInt(amount * 1e6) ? (
@@ -141,7 +132,6 @@ const DepositTabContent = () => {
               await depositUSDC(amount)
               runConfetti(e)
             }}
-            disabled={amount === 0}
           >
             <span className="btn-inner" />
             Deposit
@@ -153,7 +143,6 @@ const DepositTabContent = () => {
               await approveUSDC(amount)
               runConfetti(e)
             }}
-            disabled={amount === 0}
           >
             <span className="btn-inner" />
             Approve
@@ -192,17 +181,8 @@ const WithdrawTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount === 0 ? '' : amount}
-          placeholder="0"
-          min="0"
-          onChange={(e) => {
-            const newValue = parseInt(e.target.value, 10)
-            if (!isNaN(newValue) && newValue >= 0) {
-              setAmount(newValue)
-            } else {
-              setAmount(0)
-            }
-          }}
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         <button
@@ -211,7 +191,6 @@ const WithdrawTabContent = () => {
             await withdrawUSDC(amount)
             runSparkles(e)
           }}
-          disabled={amount === 0}
         >
           <span className="btn-inner" />
           Withdraw
@@ -248,17 +227,8 @@ const ClaimTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount === 0 ? '' : amount}
-          placeholder="0"
-          min="0"
-          onChange={(e) => {
-            const newValue = parseInt(e.target.value, 10)
-            if (!isNaN(newValue) && newValue >= 0) {
-              setAmount(newValue)
-            } else {
-              setAmount(0)
-            }
-          }}
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         {claimablePrizeData?.data &&
@@ -269,7 +239,6 @@ const ClaimTabContent = () => {
               await claimPrizeUSDC(amount)
               runSparkles(e)
             }}
-            disabled={amount === 0}
           >
             <span className="btn-inner" />
             Claim Prize
