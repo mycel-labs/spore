@@ -40,6 +40,7 @@ export default function CelNameForm({ isClaimable }: { isClaimable: boolean }) {
         code: data.refCode,
         uid: mycelName,
         address: mycelAccount.address,
+        evmAddress: mycelAccount.evmAddress,
         signature,
       })
       toast(`👌 Welcome!`)
