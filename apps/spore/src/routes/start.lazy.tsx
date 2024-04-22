@@ -31,7 +31,7 @@ function Start() {
   const [isClaimable, setIsClaimable] = useState<boolean>(false)
   const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
-  const { usdcBalance, chainId, switchChainId } = useVault()
+  const { usdcBalance } = useVault()
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
@@ -39,15 +39,7 @@ function Start() {
     } else {
       setIsClaimable(false)
     }
-    switchChainId(1)
-  }, [
-    isLoadingBalance,
-    dataBalance,
-    THRESHOLD,
-    isClaimable,
-    chainId,
-    // switchChainId // DO NOT ENABLE, IT CAUSES INFINITE LOOP
-  ])
+  }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
 
   useEffect(() => {
     if (usdcBalance?.data < BigInt(10000 * 1e6)) {
@@ -92,13 +84,30 @@ function Start() {
 
 function Create() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { chainId, switchChainId } = useVault()
   const { deriveKeys, mycelAccount } = useWallet()
 
   const createMycelAddress = async () => {
-    setIsLoading(false)
-    await deriveKeys()
+    const onSuccess = async () => {
+      await deriveKeys()
+      setIsLoading(false)
+    }
+    const onError = () => {
+      setIsLoading(false)
+      toast('⚠️ Please switch to Ethereum Mainnet')
+    }
+
     setIsLoading(true)
-    toast(`Created! "${shortAddress(mycelAccount.address ?? 'mycel...')}"`)
+    if (chainId !== 1) {
+      switchChainId(1, onSuccess, onError)
+    } else {
+      try {
+        await deriveKeys()
+      } catch (e) {
+        toast('⚠️ User rejected the signature request.')
+      }
+      setIsLoading(false)
+    }
   }
 
   return (

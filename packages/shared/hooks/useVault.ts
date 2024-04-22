@@ -22,9 +22,13 @@ export const useVault = () => {
   const defaultChainId = 11155420
   const { switchChain } = useSwitchChain()
 
-  function switchChainId(id: number) {
+  function switchChainId(
+    id: number,
+    onSuccess?: () => void,
+    onError?: () => void
+  ) {
     if (chainId !== id) {
-      switchChain({ chainId: id })
+      switchChain({ chainId: id }, { onSuccess, onError })
     }
   }
 
