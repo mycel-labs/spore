@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute, redirect } from '@tanstack/react-router'
 import ImgIntro from '@/assets/spore-intro.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
 import { useWallet } from '@/hooks/useWallet'
@@ -20,6 +20,7 @@ import {
 } from '@/lib/coin'
 import { convertDomainToString } from '@/lib/domainName'
 import { useStore } from '@/store'
+import { useNavigate } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/start')({
   component: Start,
@@ -32,6 +33,9 @@ function Start() {
   const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
   const { usdcBalance } = useVault()
+  const { mycelAccount } = useWallet()
+  const mycelName = useStore((state) => state.mycelName)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
@@ -48,6 +52,13 @@ function Start() {
       setIsUSDCClaimable(false)
     }
   }, [usdcBalance.data])
+
+  // redirect to home if user already has a mycel address
+  useEffect(() => {
+    if (mycelAccount?.address && mycelName) {
+      navigate({ to: '/home' })
+    }
+  }, [mycelAccount, mycelName, navigate])
 
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
