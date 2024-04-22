@@ -131,6 +131,7 @@ export const useVault = () => {
   }
 
   async function depositUSDC(amount: number) {
+    switchChainId(11155420)
     if (!amount || amount == 0 || !evmAddress) return
     const fixedAmount = BigInt(amount * 1e6)
     deposit(
@@ -148,6 +149,7 @@ export const useVault = () => {
   }
 
   async function withdrawUSDC(amount: number) {
+    switchChainId(11155420)
     if (!amount || amount == 0 || !evmAddress) return
     const fixedAmount = BigInt(amount * 1e6)
     withdraw(
@@ -165,6 +167,7 @@ export const useVault = () => {
   }
 
   async function claimPrizeUSDC(amount: number) {
+    switchChainId(11155420)
     if (!amount || amount == 0) return
     const fixedAmount = BigInt(amount * 1e6)
     claimPrize({
