@@ -27,9 +27,7 @@ export const useVault = () => {
     onSuccess?: () => void,
     onError?: () => void
   ) {
-    if (chainId !== id) {
-      switchChain({ chainId: id }, { onSuccess, onError })
-    }
+    switchChain({ chainId: id }, { onSuccess, onError })
   }
 
   /* Write contract*/
