@@ -95,7 +95,7 @@ function Start() {
 
 function Create() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { chainId, switchChainId } = useVault()
+  const { switchChainId } = useVault()
   const { deriveKeys, mycelAccount } = useWallet()
 
   const createMycelAddress = async () => {
@@ -109,16 +109,13 @@ function Create() {
     }
 
     setIsLoading(true)
-    if (chainId !== 1) {
-      switchChainId(1, onSuccess, onError)
-    } else {
-      try {
-        await deriveKeys()
-      } catch (e) {
-        toast('⚠️ User rejected the signature request.')
-      }
-      setIsLoading(false)
+    switchChainId(1, onSuccess, onError)
+    try {
+      await deriveKeys()
+    } catch (e) {
+      toast('⚠️ User rejected the signature request.')
     }
+    setIsLoading(false)
   }
 
   return (
