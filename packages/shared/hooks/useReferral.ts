@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { callFn } from '../lib/firebase'
+import { mappedLeaderBoard, mappedTotalLeaderBoard } from '@/types/referral'
 
 export const useGetUser = (uid: string) => {
   const { data, error, isError, isLoading, status } = useQuery({
@@ -63,7 +64,7 @@ export const useGetIndividualLeaderBoard = () => {
     queryFn: async () => {
       const fn = callFn('getIndividualLeaderBoard')
       const res = await fn()
-      return res.data
+      return res.data.data.leaderBoard as mappedLeaderBoard[]
     },
   })
   return {
@@ -79,9 +80,10 @@ export const useGetTeamLeaderBoardByUserId = (uid: string) => {
   const { data, error, isError, isLoading, status } = useQuery({
     queryKey: ['queryGetTeamLeaderBoardByUserId', uid],
     queryFn: async () => {
+      if (!uid) return []
       const fn = callFn('getTeamLeaderBoardByUserId')
       const res = await fn({ uid })
-      return res.data
+      return res.data.data.leaderBoard as mappedLeaderBoard[]
     },
   })
   return {
@@ -99,7 +101,7 @@ export const useGetTotalLeaderBoard = () => {
     queryFn: async () => {
       const fn = callFn('getTotalLeaderBoard')
       const res = await fn()
-      return res.data
+      return res.data.data.leaderBoard as mappedTotalLeaderBoard[]
     },
   })
   return {

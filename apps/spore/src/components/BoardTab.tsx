@@ -13,13 +13,8 @@ import {
   useGetTeamLeaderBoardByUserId,
   useGetTotalLeaderBoard,
 } from '@/hooks/useReferral'
-import { env } from '@/lib/env'
 import { useStore } from '@/store'
-import {
-  mappedLeaderBoard,
-  mappedTeamLeaderBoard,
-  mappedTotalLeaderBoard,
-} from '~/types/referral'
+import { mappedLeaderBoard, mappedTotalLeaderBoard } from '@/types/referral'
 
 export default function BoardTab({
   tab,
@@ -32,7 +27,7 @@ export default function BoardTab({
     isLoading: individualLeaderBoardLoading,
   } = useGetIndividualLeaderBoard()
   const { data: teamLeaderBoardData, isLoading: teamLeaderBoardLoading } =
-    useGetTeamLeaderBoardByUserId(mycelName)
+    useGetTeamLeaderBoardByUserId(mycelName ?? '')
   const { data: totalLeaderBoardData, isLoading: totalLeaderBoardLoading } =
     useGetTotalLeaderBoard()
 
@@ -86,34 +81,19 @@ export default function BoardTab({
     },
   ]
 
-  const lb =
+  const lb: mappedLeaderBoard[] =
     !individualLeaderBoardLoading && individualLeaderBoardData
-      ? (
-          individualLeaderBoardData as {
-            success: boolean
-            data: { leaderBoard: mappedLeaderBoard[] }
-          }
-        )?.data.leaderBoard
+      ? individualLeaderBoardData
       : mockLB
 
-  const teamlb =
+  const teamlb: mappedLeaderBoard[] =
     !teamLeaderBoardLoading && teamLeaderBoardData
-      ? (
-          teamLeaderBoardData as {
-            success: boolean
-            data: { leaderBoard: mappedLeaderBoard[] }
-          }
-        )?.data.leaderBoard
+      ? teamLeaderBoardData
       : mockTeamLB
 
-  const totallb =
+  const totallb: mappedTotalLeaderBoard[] =
     !totalLeaderBoardLoading && totalLeaderBoardData
-      ? (
-          totalLeaderBoardData as {
-            success: boolean
-            data: { leaderBoard: mappedTotalLeaderBoard[] }
-          }
-        )?.data.leaderBoard
+      ? totalLeaderBoardData
       : mockTLB
 
   return (
