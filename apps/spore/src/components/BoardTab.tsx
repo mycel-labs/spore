@@ -15,6 +15,7 @@ import {
 } from '@/hooks/useReferral'
 import { useStore } from '@/store'
 import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
+import { TabsTriggerProps, TabsContentProps } from '@radix-ui/react-tabs'
 
 export default function BoardTab({
   tab,
@@ -124,22 +125,21 @@ export default function BoardTab({
     </Tabs>
   )
 }
-
-const TabsTrigger = ({ ...props }) => (
+const TabsTrigger = (props: TabsTriggerProps) => (
   <TabsTrigger_
     className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold py-2 px-2.5 relative text-nowrap tracking-tight"
     {...props}
   />
 )
 
-const TabsContent = ({ ...props }) => (
+const TabsContent = (props: TabsContentProps) => (
   <TabsContent_
     className="bg-light overlay-dot-ll p-6 rounded-xl mt-6 pb-10"
     {...props}
   />
 )
 
-const TotalTabContent = ({ tlb }: { tlb: TeamLeaderBoard[] }) => {
+const TotalTabContent = ({ tlb }: { tlb: TotalLeaderBoard[] }) => {
   const { currentDrawData, availableYieldData, decimals, poolbalanceData } =
     useVault()
   const rows = tlb.map((data) => {
@@ -162,9 +162,9 @@ const TotalTabContent = ({ tlb }: { tlb: TeamLeaderBoard[] }) => {
               <div className="text-right text-3xl font-bold">
                 $
                 {convertToDecimalString(
-                  poolbalanceData?.data,
-                  decimals?.data
-                ) || '0'}
+                  poolbalanceData?.data?.toString() ?? '0',
+                  decimals?.data ?? 0
+                )}
               </div>
             </li>
             <li>
@@ -172,9 +172,9 @@ const TotalTabContent = ({ tlb }: { tlb: TeamLeaderBoard[] }) => {
               <div className="text-right text-3xl font-bold">
                 $
                 {convertToDecimalString(
-                  availableYieldData?.data,
-                  decimals?.data
-                ) || '0'}
+                  availableYieldData?.data?.toString() ?? '0',
+                  decimals?.data ?? 0
+                )}
               </div>
             </li>
             <li>
@@ -183,7 +183,7 @@ const TotalTabContent = ({ tlb }: { tlb: TeamLeaderBoard[] }) => {
                 <div className="text-right text-3xl font-bold">not started</div>
               ) : (
                 <div className="text-right text-3xl font-bold">
-                  {convertUnixToUTC(currentDrawData?.data)}
+                  {convertUnixToUTC(currentDrawData?.data ?? BigInt(0))}
                 </div>
               )}
             </li>
