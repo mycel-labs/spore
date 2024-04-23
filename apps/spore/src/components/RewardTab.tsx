@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import {
   Tabs,
   TabsList,
@@ -8,7 +9,6 @@ import useConfetti from '@/hooks/useConfetti'
 import { useVault } from '@/hooks/useVault'
 import { convertToDecimalString } from '@/lib/coin'
 import { convertUnixToUTC } from '@/lib/converter'
-import React, { useState } from 'react'
 import Button from './Button'
 
 export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {

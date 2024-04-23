@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createLazyFileRoute, redirect } from '@tanstack/react-router'
 import ImgIntro from '@/assets/spore-intro.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
 import { useWallet } from '@/hooks/useWallet'
@@ -20,6 +20,7 @@ import {
 } from '@/lib/coin'
 import { convertDomainToString } from '@/lib/domainName'
 import { useStore } from '@/store'
+import { useNavigate } from '@tanstack/react-router'
 
 export const Route = createLazyFileRoute('/start')({
   component: Start,
@@ -31,7 +32,10 @@ function Start() {
   const [isClaimable, setIsClaimable] = useState<boolean>(false)
   const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
-  const { usdcBalance, chainId, switchChainId } = useVault()
+  const { usdcBalance } = useVault()
+  const { mycelAccount } = useWallet()
+  const mycelName = useStore((state) => state.mycelName)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (BigInt(dataBalance?.balance?.amount ?? 0) < BigInt(THRESHOLD)) {
@@ -39,15 +43,7 @@ function Start() {
     } else {
       setIsClaimable(false)
     }
-    switchChainId(1)
-  }, [
-    isLoadingBalance,
-    dataBalance,
-    THRESHOLD,
-    isClaimable,
-    chainId,
-    // switchChainId // DO NOT ENABLE, IT CAUSES INFINITE LOOP
-  ])
+  }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
 
   useEffect(() => {
     if (usdcBalance?.data < BigInt(10000 * 1e6)) {
@@ -56,6 +52,13 @@ function Start() {
       setIsUSDCClaimable(false)
     }
   }, [usdcBalance.data])
+
+  // redirect to home if user already has a mycel address
+  useEffect(() => {
+    if (mycelAccount?.address && mycelName) {
+      navigate({ to: '/home' })
+    }
+  }, [mycelAccount, mycelName, navigate])
 
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
@@ -92,13 +95,27 @@ function Start() {
 
 function Create() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { switchChainId } = useVault()
   const { deriveKeys, mycelAccount } = useWallet()
 
   const createMycelAddress = async () => {
-    setIsLoading(false)
-    await deriveKeys()
+    const onSuccess = async () => {
+      await deriveKeys()
+      setIsLoading(false)
+    }
+    const onError = () => {
+      setIsLoading(false)
+      toast('⚠️ Please switch to Ethereum Mainnet')
+    }
+
     setIsLoading(true)
-    toast(`Created! "${shortAddress(mycelAccount.address ?? 'mycel...')}"`)
+    switchChainId(1, onSuccess, onError)
+    try {
+      await deriveKeys()
+    } catch (e) {
+      toast('⚠️ User rejected the signature request.')
+    }
+    setIsLoading(false)
   }
 
   return (

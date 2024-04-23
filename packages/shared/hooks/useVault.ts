@@ -32,11 +32,15 @@ export const useVault = () => {
       (item: mappedLeaderBoard) =>
         item.evmAddress || '0x0000000000000000000000000000000000000000'
     )
-
   function switchChainId(id: number) {
-    if (chainId !== id) {
-      switchChain({ chainId: id })
-    }
+    switchChain(
+      {
+        chainId: id,
+      },
+      {
+        onError: (err) => toast(`SwitchChain error! ${err}`),
+      }
+    )
   }
 
   /* Write contract*/
