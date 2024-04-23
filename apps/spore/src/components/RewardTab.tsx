@@ -60,7 +60,7 @@ const TabsContent = ({ ...props }) => (
 
 const DepositTabContent = () => {
   const { runConfetti } = useConfetti()
-  const [amount, setAmount] = useState<string>('')
+  const [amount, setAmount] = useState<number>(0)
   const {
     depositUSDC,
     approveUSDC,
@@ -78,11 +78,11 @@ const DepositTabContent = () => {
   } = useVault()
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value, 10)
+    const newValue = parseInt(e.target.value)
     if (!isNaN(newValue) && newValue >= 0) {
-      setAmount(newValue.toString())
+      setAmount(newValue)
     } else {
-      setAmount('0')
+      setAmount(0)
     }
   }
 
@@ -133,7 +133,7 @@ const DepositTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount === '0' ? '' : amount}
+          value={amount === 0 ? '' : amount}
           placeholder="0"
           min="0"
           onChange={handleInput}
@@ -205,14 +205,14 @@ const WithdrawTabContent = () => {
     switchChainId,
     defaultChainId,
   } = useVault()
-  const [amount, setAmount] = useState<string>('')
+  const [amount, setAmount] = useState<number>(0)
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseInt(e.target.value, 10)
     if (!isNaN(newValue) && newValue >= 0) {
-      setAmount(newValue.toString())
+      setAmount(newValue)
     } else {
-      setAmount('0')
+      setAmount(0)
     }
   }
 
@@ -236,7 +236,7 @@ const WithdrawTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount === '0' ? '' : amount}
+          value={amount === 0 ? '' : amount}
           placeholder="0"
           min="0"
           onChange={handleInput}
@@ -290,7 +290,16 @@ const ClaimTabContent = () => {
     defaultChainId,
     switchChainId,
   } = useVault()
-  const [amount, setAmount] = useState<string>('')
+  const [amount, setAmount] = useState<number>(0)
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseFloat(e.target.value)
+    if (!isNaN(newValue) && newValue >= 0) {
+      setAmount(newValue)
+    } else {
+      setAmount(0)
+    }
+  }
 
   return (
     <>
@@ -312,7 +321,7 @@ const ClaimTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount === '0' ? '' : amount}
+          value={amount === 0 ? '' : amount}
           placeholder="0"
           min="0"
           onChange={handleInput}
