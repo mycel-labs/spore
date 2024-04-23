@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Tabs,
   TabsList,
@@ -8,19 +9,8 @@ import useConfetti from '@/hooks/useConfetti'
 import { useVault } from '@/hooks/useVault'
 import { convertToDecimalString } from '@/lib/coin'
 import { convertUnixToUTC } from '@/lib/converter'
-import { useEffect, useState } from 'react'
 
 export default function RewardTab({ tab }: { tab: 'withdraw' | undefined }) {
-  const { chainId, switchChainId } = useVault()
-
-  useEffect(() => {
-    // switch to Optimism Sepolia
-    switchChainId(11155420)
-  }, [
-    chainId,
-    // switchChainId // DO NOT ENABLE, IT CAUSES INFINITE LOOP
-  ])
-
   return (
     <Tabs
       defaultValue={tab === 'withdraw' ? 'withdraw' : 'deposit'}
@@ -254,7 +244,10 @@ const ClaimTabContent = () => {
             Claim Prize
           </button>
         ) : (
-          <button className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6">
+          <button
+            className="btn bg-secondary h-14 pt-1 px-10 font-title font-bold w-full mt-6"
+            disabled={true}
+          >
             <span className="btn-inner" />
             Not eligible
           </button>
