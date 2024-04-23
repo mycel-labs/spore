@@ -78,10 +78,11 @@ const DepositTabContent = () => {
   } = useVault()
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    const regex = /^[0-9]*[.,]?[0-9]*$/
-    if (regex.test(value) || value === '') {
-      setAmount(value)
+    const newValue = parseInt(e.target.value, 10)
+    if (!isNaN(newValue) && newValue >= 0) {
+      setAmount(newValue.toString())
+    } else {
+      setAmount('0')
     }
   }
 
@@ -132,8 +133,10 @@ const DepositTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount}
-          onChange={(e) => handleInput(e)}
+          value={amount === '0' ? '' : amount}
+          placeholder="0"
+          min="0"
+          onChange={handleInput}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         {approvalData.data >= BigInt(Number(amount) * 1e6) &&
@@ -205,12 +208,14 @@ const WithdrawTabContent = () => {
   const [amount, setAmount] = useState<string>('')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    const regex = /^[0-9]*[.,]?[0-9]*$/
-    if (regex.test(value) || value === '') {
-      setAmount(value)
+    const newValue = parseInt(e.target.value, 10)
+    if (!isNaN(newValue) && newValue >= 0) {
+      setAmount(newValue.toString())
+    } else {
+      setAmount('0')
     }
   }
+
   return (
     <>
       <div className="border-dark bg-light border-2 rounded px-6 pb-8">
@@ -231,8 +236,10 @@ const WithdrawTabContent = () => {
         </p>
         <input
           type="number"
-          value={amount}
-          onChange={(e) => handleInput(e)}
+          value={amount === '0' ? '' : amount}
+          placeholder="0"
+          min="0"
+          onChange={handleInput}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         <>
@@ -285,14 +292,6 @@ const ClaimTabContent = () => {
   } = useVault()
   const [amount, setAmount] = useState<string>('')
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    const regex = /^[0-9]*[.,]?[0-9]*$/
-    if (regex.test(value) || value === '') {
-      setAmount(value)
-    }
-  }
-
   return (
     <>
       <div className="border-dark bg-light border-2 rounded px-6 pb-8">
@@ -312,10 +311,11 @@ const ClaimTabContent = () => {
             '0'}
         </p>
         <input
-          type="text"
-          pattern="^[0-9]*[.,]?[0-9]*$"
-          value={amount}
-          onChange={(e) => handleInput(e)}
+          type="number"
+          value={amount === '0' ? '' : amount}
+          placeholder="0"
+          min="0"
+          onChange={handleInput}
           className="w-full text-right [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         />
         <>
