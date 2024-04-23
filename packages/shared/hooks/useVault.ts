@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useWallet } from './useWallet'
 import {
-  useChainId,
   useSwitchChain,
   useWriteContract,
   useReadContract,
   useWaitForTransactionReceipt,
+  useAccount,
 } from 'wagmi'
 import { toast } from '../components/ui/sonner'
 import { usdcContract } from '../constants/testUSDC'
@@ -20,7 +20,7 @@ export const useVault = () => {
   const { evmAddress } = useWallet()
   const queryClient = useQueryClient()
   const { queryKey } = useReadContract()
-  const chainId = useChainId()
+  const { chainId } = useAccount()
   const { switchChain } = useSwitchChain()
 
   const mycelName = useStore((state) => state.mycelName)
@@ -32,13 +32,18 @@ export const useVault = () => {
       (item: mappedLeaderBoard) =>
         item.evmAddress || '0x0000000000000000000000000000000000000000'
     )
-  function switchChainId(id: number) {
+  function switchChainId(
+    id: number,
+    onSuccess?: () => void,
+    onError?: () => void
+  ) {
     switchChain(
       {
         chainId: id,
       },
       {
-        onError: (err) => toast(`SwitchChain error! ${err}`),
+        onSuccess: onSuccess || (() => toast('Switch chain success')),
+        onError: onError || ((e) => toast(`${e}`)),
       }
     )
   }
