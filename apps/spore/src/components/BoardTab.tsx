@@ -14,7 +14,7 @@ import {
   useGetTotalLeaderBoard,
 } from '@/hooks/useReferral'
 import { useStore } from '@/store'
-import { mappedLeaderBoard, mappedTotalLeaderBoard } from '@/types/referral'
+import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
 
 export default function BoardTab({
   tab,
@@ -31,7 +31,7 @@ export default function BoardTab({
   const { data: totalLeaderBoardData, isLoading: totalLeaderBoardLoading } =
     useGetTotalLeaderBoard()
 
-  const mockLB: mappedLeaderBoard[] = [
+  const mockLB: LeaderBoard[] = [
     {
       userId: 'akira.cel',
       totalPoints: 200,
@@ -49,7 +49,7 @@ export default function BoardTab({
       totalPoints: 10,
     },
   ]
-  const mockTeamLB: mappedLeaderBoard[] = [
+  const mockTeamLB: LeaderBoard[] = [
     {
       userId: 'akira.cel',
       totalPoints: 200,
@@ -63,7 +63,7 @@ export default function BoardTab({
       totalPoints: 140,
     },
   ]
-  const mockTLB: mappedTotalLeaderBoard[] = [
+  const mockTLB: TotalLeaderBoard[] = [
     {
       teamId: 'O2EYDIUcRcVmL5pMehRESerN11LIr6QK',
       teamName: 'Team Awesome',
@@ -81,17 +81,17 @@ export default function BoardTab({
     },
   ]
 
-  const lb: mappedLeaderBoard[] =
+  const lb: LeaderBoard[] =
     !individualLeaderBoardLoading && individualLeaderBoardData
       ? individualLeaderBoardData
       : mockLB
 
-  const teamlb: mappedLeaderBoard[] =
+  const teamlb: LeaderBoard[] =
     !teamLeaderBoardLoading && teamLeaderBoardData
       ? teamLeaderBoardData
       : mockTeamLB
 
-  const totallb: mappedTotalLeaderBoard[] =
+  const totallb: TotalLeaderBoard[] =
     !totalLeaderBoardLoading && totalLeaderBoardData
       ? totalLeaderBoardData
       : mockTLB
@@ -139,7 +139,7 @@ const TabsContent = ({ ...props }) => (
   />
 )
 
-const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
+const TotalTabContent = ({ tlb }: { tlb: TeamLeaderBoard[] }) => {
   const { currentDrawData, availableYieldData, decimals, poolbalanceData } =
     useVault()
   const rows = tlb.map((data) => {
@@ -203,7 +203,7 @@ const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
   )
 }
 
-const TeamTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
+const TeamTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
@@ -249,7 +249,7 @@ const TeamTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
   )
 }
 
-const PlayerTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
+const PlayerTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
