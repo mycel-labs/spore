@@ -8,19 +8,30 @@ import {
   useWaitForTransactionReceipt,
 } from 'wagmi'
 import { toast } from '../components/ui/sonner'
-
 import { usdcContract } from '../constants/testUSDC'
 import { vaultContract } from '../constants/vault'
+import { useStore } from '../store'
+import { useGetTeamLeaderBoardByUserId } from './useReferral'
+import { mappedLeaderBoard } from '../types/referral'
 import { useQueryClient } from '@tanstack/react-query'
 
 export const useVault = () => {
+  const defaultChainId = 11155420
   const { evmAddress } = useWallet()
   const queryClient = useQueryClient()
   const { queryKey } = useReadContract()
   const chainId = useChainId()
   const { switchChain } = useSwitchChain()
 
-  const defaultChainId = 11155420
+  const mycelName = useStore((state) => state.mycelName)
+  const { data: teamLeaderBoardData } = useGetTeamLeaderBoardByUserId(
+    mycelName!
+  )
+  const teamAddresses: `0x${string}`[] =
+    teamLeaderBoardData?.data?.leaderBoard.map(
+      (item: mappedLeaderBoard) =>
+        item.evmAddress || '0x0000000000000000000000000000000000000000'
+    )
 
   function switchChainId(id: number) {
     if (chainId !== id) {
@@ -88,6 +99,19 @@ export const useVault = () => {
     functionName: 'getCurrentDrawEndTime',
     chainId: defaultChainId,
   })
+  const currentDrawIdData = useReadContract({
+    ...vaultContract,
+    functionName: 'currentDrawId',
+    chainId: defaultChainId,
+  })
+
+  const teamPoolValueData = useReadContract({
+    ...vaultContract,
+    functionName: 'calculateTeamTwabBetween',
+    args: [teamAddresses, currentDrawIdData?.data as number],
+    chainId: defaultChainId,
+  })
+
   const claimablePrizeData = useReadContract({
     ...vaultContract,
     functionName: '_claimablePrize',
@@ -231,6 +255,7 @@ export const useVault = () => {
     poolbalanceData,
     availableYieldData,
     currentDrawData,
+    teamPoolValueData,
     claimablePrizeData,
     approvalData,
     usdcBalance,
