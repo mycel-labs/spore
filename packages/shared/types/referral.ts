@@ -26,6 +26,7 @@ export interface mappedLeaderBoard {
   rank?: number
   userId: string
   userAddress?: string
+  evmAddress?: string
   totalPoints: number
   countIssuedReferralCodes?: number
 }

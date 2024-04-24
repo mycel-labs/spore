@@ -232,6 +232,8 @@ const TeamTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
       </tr>
     )
   })
+  const { teamPoolValueData, currentDrawData, decimals } = useVault()
+
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Team Board</h2>
@@ -241,7 +243,17 @@ const TeamTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
           <ul className="list-table bg-light">
             <li>
               <div className="header">Pool Value</div>
-              <div className="text-right text-3xl font-bold">$9,100,000</div>
+              {currentDrawData?.data == BigInt(0) ? (
+                <div className="text-right text-3xl font-bold">not started</div>
+              ) : (
+                <div className="text-right text-3xl font-bold">
+                  $
+                  {convertToDecimalString(
+                    teamPoolValueData?.data,
+                    decimals?.data
+                  ) ?? '0'}
+                </div>
+              )}
             </li>
             <li>
               <div className="header">Team member</div>

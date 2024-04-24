@@ -95,27 +95,33 @@ function Start() {
 
 function Create() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { switchChainId } = useVault()
+  const { switchChainId, chainId } = useVault()
   const { deriveKeys, mycelAccount } = useWallet()
 
-  const createMycelAddress = async () => {
-    const onSuccess = async () => {
-      await deriveKeys()
-      setIsLoading(false)
-    }
-    const onError = () => {
-      setIsLoading(false)
-      toast('⚠️ Please switch to Ethereum Mainnet')
-    }
-
-    setIsLoading(true)
-    switchChainId(1, onSuccess, onError)
-    try {
-      await deriveKeys()
-    } catch (e) {
-      toast('⚠️ User rejected the signature request.')
-    }
+  const onSuccess = async () => {
+    await deriveKeys()
     setIsLoading(false)
+  }
+  const onError = () => {
+    setIsLoading(false)
+    toast('⚠️ Please switch to Ethereum Mainnet')
+  }
+
+  const createMycelAddress = async () => {
+    setIsLoading(true)
+
+    if (chainId !== 1) {
+      switchChainId(1, onSuccess, onError)
+    } else {
+      try {
+        await deriveKeys()
+      } catch {
+        setIsLoading(false)
+        toast('⚠️ User rejected the signature request.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
   }
 
   return (

@@ -1,33 +1,51 @@
 import { useEffect } from 'react'
 import { useWallet } from './useWallet'
 import {
-  useChainId,
   useSwitchChain,
   useWriteContract,
   useReadContract,
   useWaitForTransactionReceipt,
+  useAccount,
 } from 'wagmi'
 import { toast } from '../components/ui/sonner'
-
 import { usdcContract } from '../constants/testUSDC'
 import { vaultContract } from '../constants/vault'
+import { useStore } from '../store'
+import { useGetTeamLeaderBoardByUserId } from './useReferral'
+import { mappedLeaderBoard } from '../types/referral'
 import { useQueryClient } from '@tanstack/react-query'
 
 export const useVault = () => {
+  const defaultChainId = 11155420
   const { evmAddress } = useWallet()
   const queryClient = useQueryClient()
   const { queryKey } = useReadContract()
-
-  const chainId = useChainId()
-  const defaultChainId = 11155420
+  const { chainId } = useAccount()
   const { switchChain } = useSwitchChain()
 
+  const mycelName = useStore((state) => state.mycelName)
+  const { data: teamLeaderBoardData } = useGetTeamLeaderBoardByUserId(
+    mycelName!
+  )
+  const teamAddresses: `0x${string}`[] =
+    teamLeaderBoardData?.data?.leaderBoard.map(
+      (item: mappedLeaderBoard) =>
+        item.evmAddress || '0x0000000000000000000000000000000000000000'
+    )
   function switchChainId(
     id: number,
     onSuccess?: () => void,
     onError?: () => void
   ) {
-    switchChain({ chainId: id }, { onSuccess, onError })
+    switchChain(
+      {
+        chainId: id,
+      },
+      {
+        onSuccess: onSuccess || (() => toast('Switch chain success')),
+        onError: onError || ((e) => toast(`${e}`)),
+      }
+    )
   }
 
   /* Write contract*/
@@ -90,6 +108,19 @@ export const useVault = () => {
     functionName: 'getCurrentDrawEndTime',
     chainId: defaultChainId,
   })
+  const currentDrawIdData = useReadContract({
+    ...vaultContract,
+    functionName: 'currentDrawId',
+    chainId: defaultChainId,
+  })
+
+  const teamPoolValueData = useReadContract({
+    ...vaultContract,
+    functionName: 'calculateTeamTwabBetween',
+    args: [teamAddresses, currentDrawIdData?.data as number],
+    chainId: defaultChainId,
+  })
+
   const claimablePrizeData = useReadContract({
     ...vaultContract,
     functionName: '_claimablePrize',
@@ -130,15 +161,13 @@ export const useVault = () => {
     await queryClient.invalidateQueries({ queryKey })
   }
 
-  async function depositUSDC(amount: number) {
-    switchChainId(11155420)
-    if (!amount || amount == 0 || !evmAddress) return
-    const fixedAmount = BigInt(amount * 1e6)
+  async function depositUSDC(amount: bigint) {
+    if (!amount || !evmAddress) return
     deposit(
       {
         ...vaultContract,
         functionName: 'deposit',
-        args: [fixedAmount, evmAddress],
+        args: [amount, evmAddress],
         chainId: defaultChainId,
       },
       {
@@ -148,15 +177,13 @@ export const useVault = () => {
     )
   }
 
-  async function withdrawUSDC(amount: number) {
-    switchChainId(11155420)
-    if (!amount || amount == 0 || !evmAddress) return
-    const fixedAmount = BigInt(amount * 1e6)
+  async function withdrawUSDC(amount: bigint) {
+    if (!amount || !evmAddress) return
     withdraw(
       {
         ...vaultContract,
         functionName: 'withdraw',
-        args: [fixedAmount, evmAddress, evmAddress],
+        args: [amount, evmAddress, evmAddress],
         chainId: defaultChainId,
       },
       {
@@ -166,26 +193,23 @@ export const useVault = () => {
     )
   }
 
-  async function claimPrizeUSDC(amount: number) {
-    switchChainId(11155420)
-    if (!amount || amount == 0) return
-    const fixedAmount = BigInt(amount * 1e6)
+  async function claimPrizeUSDC(amount: bigint) {
+    if (!amount || !evmAddress) return
     claimPrize({
       ...vaultContract,
       functionName: 'claimPrize',
-      args: [fixedAmount],
+      args: [amount],
       chainId: defaultChainId,
     })
   }
 
-  async function approveUSDC(amount: number) {
-    if (!amount || amount == 0) return
-    const fixedAmount = BigInt(amount * 1e6)
+  async function approveUSDC(amount: bigint) {
+    if (!amount || !evmAddress) return
     approve(
       {
         ...usdcContract,
         functionName: 'approve',
-        args: [vaultContract.address, fixedAmount],
+        args: [vaultContract.address, amount],
         chainId: defaultChainId,
       },
       {
@@ -230,11 +254,17 @@ export const useVault = () => {
     approveUSDC,
     refetch,
     switchChainId,
+    defaultChainId,
+    isLoadingDeposit,
+    isLoadingApproval,
+    isLoadingWithdraw,
+    isLoadingClaimPrize,
     chainId,
     depositedAmountData,
     poolbalanceData,
     availableYieldData,
     currentDrawData,
+    teamPoolValueData,
     claimablePrizeData,
     approvalData,
     usdcBalance,
