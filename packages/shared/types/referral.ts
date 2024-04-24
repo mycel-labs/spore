@@ -22,7 +22,7 @@ export interface ReferralCode {
   maxRedemptions?: number
   active?: boolean
 }
-export interface mappedLeaderBoard {
+export interface LeaderBoard {
   rank?: number
   userId: string
   userAddress?: string
@@ -31,7 +31,7 @@ export interface mappedLeaderBoard {
   countIssuedReferralCodes?: number
 }
 
-export interface mappedTotalLeaderBoard {
+export interface TotalLeaderBoard {
   teamId: string
   teamName: string
   totalPoints: number

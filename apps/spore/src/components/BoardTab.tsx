@@ -13,13 +13,9 @@ import {
   useGetTeamLeaderBoardByUserId,
   useGetTotalLeaderBoard,
 } from '@/hooks/useReferral'
-import { env } from '@/lib/env'
 import { useStore } from '@/store'
-import {
-  mappedLeaderBoard,
-  mappedTeamLeaderBoard,
-  mappedTotalLeaderBoard,
-} from '~/types/referral'
+import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
+import { TabsTriggerProps, TabsContentProps } from '@radix-ui/react-tabs'
 
 export default function BoardTab({
   tab,
@@ -32,11 +28,11 @@ export default function BoardTab({
     isLoading: individualLeaderBoardLoading,
   } = useGetIndividualLeaderBoard()
   const { data: teamLeaderBoardData, isLoading: teamLeaderBoardLoading } =
-    useGetTeamLeaderBoardByUserId(mycelName)
+    useGetTeamLeaderBoardByUserId(mycelName ?? '')
   const { data: totalLeaderBoardData, isLoading: totalLeaderBoardLoading } =
     useGetTotalLeaderBoard()
 
-  const mockLB: mappedLeaderBoard[] = [
+  const mockLB: LeaderBoard[] = [
     {
       userId: 'akira.cel',
       totalPoints: 200,
@@ -54,7 +50,7 @@ export default function BoardTab({
       totalPoints: 10,
     },
   ]
-  const mockTeamLB: mappedLeaderBoard[] = [
+  const mockTeamLB: LeaderBoard[] = [
     {
       userId: 'akira.cel',
       totalPoints: 200,
@@ -68,7 +64,7 @@ export default function BoardTab({
       totalPoints: 140,
     },
   ]
-  const mockTLB: mappedTotalLeaderBoard[] = [
+  const mockTLB: TotalLeaderBoard[] = [
     {
       teamId: 'O2EYDIUcRcVmL5pMehRESerN11LIr6QK',
       teamName: 'Team Awesome',
@@ -86,34 +82,19 @@ export default function BoardTab({
     },
   ]
 
-  const lb =
+  const lb: LeaderBoard[] =
     !individualLeaderBoardLoading && individualLeaderBoardData
-      ? (
-          individualLeaderBoardData as {
-            success: boolean
-            data: { leaderBoard: mappedLeaderBoard[] }
-          }
-        )?.data.leaderBoard
+      ? individualLeaderBoardData
       : mockLB
 
-  const teamlb =
+  const teamlb: LeaderBoard[] =
     !teamLeaderBoardLoading && teamLeaderBoardData
-      ? (
-          teamLeaderBoardData as {
-            success: boolean
-            data: { leaderBoard: mappedLeaderBoard[] }
-          }
-        )?.data.leaderBoard
+      ? teamLeaderBoardData
       : mockTeamLB
 
-  const totallb =
+  const totallb: TotalLeaderBoard[] =
     !totalLeaderBoardLoading && totalLeaderBoardData
-      ? (
-          totalLeaderBoardData as {
-            success: boolean
-            data: { leaderBoard: mappedTotalLeaderBoard[] }
-          }
-        )?.data.leaderBoard
+      ? totalLeaderBoardData
       : mockTLB
 
   return (
@@ -144,22 +125,21 @@ export default function BoardTab({
     </Tabs>
   )
 }
-
-const TabsTrigger = ({ ...props }) => (
+const TabsTrigger = (props: TabsTriggerProps) => (
   <TabsTrigger_
     className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold py-2 px-2.5 relative text-nowrap tracking-tight"
     {...props}
   />
 )
 
-const TabsContent = ({ ...props }) => (
+const TabsContent = (props: TabsContentProps) => (
   <TabsContent_
     className="bg-light overlay-dot-ll p-6 rounded-xl mt-6 pb-10"
     {...props}
   />
 )
 
-const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
+const TotalTabContent = ({ tlb }: { tlb: TotalLeaderBoard[] }) => {
   const { currentDrawData, availableYieldData, decimals, poolbalanceData } =
     useVault()
   const rows = tlb.map((data) => {
@@ -182,9 +162,9 @@ const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
               <div className="text-right text-3xl font-bold">
                 $
                 {convertToDecimalString(
-                  poolbalanceData?.data,
-                  decimals?.data
-                ) || '0'}
+                  poolbalanceData?.data?.toString() ?? '0',
+                  decimals?.data ?? 0
+                )}
               </div>
             </li>
             <li>
@@ -192,9 +172,9 @@ const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
               <div className="text-right text-3xl font-bold">
                 $
                 {convertToDecimalString(
-                  availableYieldData?.data,
-                  decimals?.data
-                ) || '0'}
+                  availableYieldData?.data?.toString() ?? '0',
+                  decimals?.data ?? 0
+                )}
               </div>
             </li>
             <li>
@@ -203,7 +183,7 @@ const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
                 <div className="text-right text-3xl font-bold">not started</div>
               ) : (
                 <div className="text-right text-3xl font-bold">
-                  {convertUnixToUTC(currentDrawData?.data)}
+                  {convertUnixToUTC(currentDrawData?.data ?? BigInt(0))}
                 </div>
               )}
             </li>
@@ -223,7 +203,7 @@ const TotalTabContent = ({ tlb }: { tlb: mappedTeamLeaderBoard[] }) => {
   )
 }
 
-const TeamTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
+const TeamTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
@@ -281,7 +261,7 @@ const TeamTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
   )
 }
 
-const PlayerTabContent = ({ lb }: { lb: mappedLeaderBoard[] }) => {
+const PlayerTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
