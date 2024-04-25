@@ -21,6 +21,7 @@ import {
 import { convertDomainToString } from '@/lib/domainName'
 import { useStore } from '@/store'
 import { useNavigate } from '@tanstack/react-router'
+import { useGetUser } from '@/hooks/useReferral'
 
 export const Route = createLazyFileRoute('/start')({
   component: Start,
@@ -33,8 +34,11 @@ function Start() {
   const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
   const { usdcBalance } = useVault()
-  const { mycelAccount } = useWallet()
+  const { mycelAccount, isConnected } = useWallet()
   const mycelName = useStore((state) => state.mycelName)
+  const { isLoading: isLoadingReferral, data: dataReferral } = useGetUser(
+    mycelName ?? ''
+  )
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -55,10 +59,15 @@ function Start() {
 
   // redirect to home if user already has a mycel address
   useEffect(() => {
-    if (mycelAccount?.address && mycelName) {
+    if (
+      mycelAccount?.address &&
+      isConnected &&
+      !isLoadingReferral &&
+      dataReferral?.data
+    ) {
       navigate({ to: '/home' })
     }
-  }, [mycelAccount, mycelName, navigate])
+  }, [mycelAccount, isConnected, dataReferral, isLoadingReferral, navigate])
 
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
