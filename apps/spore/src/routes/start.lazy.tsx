@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { createLazyFileRoute, redirect } from '@tanstack/react-router'
+import { LogOut } from 'lucide-react'
 import ImgIntro from '@/assets/spore-intro.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
 import { useWallet } from '@/hooks/useWallet'
@@ -34,7 +35,7 @@ function Start() {
   const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
   const { usdcBalance } = useVault()
-  const { mycelAccount, isConnected } = useWallet()
+  const { mycelAccount, isConnected, disconnectWallet } = useWallet()
   const mycelName = useStore((state) => state.mycelName)
   const { isLoading: isLoadingReferral, data: dataReferral } = useGetUser(
     mycelName ?? ''
@@ -69,6 +70,11 @@ function Start() {
     }
   }, [mycelAccount, isConnected, dataReferral, isLoadingReferral, navigate])
 
+  const handleSignout = async (): Promise<void> => {
+    await disconnectWallet()
+    navigate({ to: '/' })
+  }
+
   return (
     <div className="min-h-screen sm:max-w-screen-sm mx-auto py-8 px-4 sm:px-6">
       <img src={ImgLogo} className="h-16 mx-auto mb-6" />
@@ -96,6 +102,21 @@ function Start() {
               <CheckRefCode isClaimable={isClaimable} />
             </li>
           </ol>
+        </div>
+      </div>
+      <div className="px-4 sm:px-6 pb-6">
+        <div className="list-decimal text-xl font-title p-4">
+          <span>Having trouble?</span>
+          <button
+            onClick={handleSignout}
+            className="btn bg-secondary py-2 px-6 h-14 w-full mt-6"
+          >
+            <span className="btn-inner" />
+            <div className="flex items-center font-title text-xl">
+              <LogOut size={28} strokeWidth={3} className="mr-4" />
+              Disconnect
+            </div>
+          </button>
         </div>
       </div>
     </div>
