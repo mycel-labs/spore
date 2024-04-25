@@ -20,6 +20,7 @@ export default function CelNameForm({ isClaimable }: { isClaimable: boolean }) {
   const refCode = useStore((state) => state.refCode)
   const updateRefCode = useStore((state) => state.updateRefCode)
   const mycelName = useStore((state) => state.mycelName)
+  const evmAddress = useStore((state) => state.evmAddress)
   const {
     register,
     handleSubmit,
@@ -36,13 +37,14 @@ export default function CelNameForm({ isClaimable }: { isClaimable: boolean }) {
     setIsLoading(true)
     try {
       const { signature } = await signDomainName(mycelName)
-      await callFn('createUser')({
+      const reqData = {
         code: data.refCode,
         uid: mycelName,
         address: mycelAccount.address,
-        evmAddress: mycelAccount.evmAddress,
+        evmAddress: evmAddress,
         signature,
-      })
+      }
+      await callFn('createUser')(reqData)
       toast(`👌 Welcome!`)
       updateRefCode(undefined)
       navigate({ to: '/home' })
