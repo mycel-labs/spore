@@ -4,10 +4,6 @@ import {
   TabsTrigger as TabsTrigger_,
   TabsContent as TabsContent_,
 } from '@/components/ui/tabs'
-import ImgEnoki from '@/assets/enoki.svg'
-import { useVault } from '@/hooks/useVault'
-import { convertToDecimalString } from '@/lib/coin'
-import { convertUnixToUTC } from '@/lib/converter'
 import {
   useGetIndividualLeaderBoard,
   useGetTeamLeaderBoardByUserId,
@@ -140,8 +136,6 @@ const TabsContent = (props: TabsContentProps) => (
 )
 
 const TotalTabContent = ({ tlb }: { tlb: TotalLeaderBoard[] }) => {
-  const { currentDrawData, availableYieldData, decimals, poolbalanceData } =
-    useVault()
   const rows = tlb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.teamId}>
@@ -153,43 +147,6 @@ const TotalTabContent = ({ tlb }: { tlb: TotalLeaderBoard[] }) => {
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
-      <div className="grid grid-cols-4 gap-4">
-        <img src={ImgEnoki} />
-        <div className="col-span-3 pt-2">
-          <ul className="list-table bg-light">
-            <li>
-              <div className="header">Pool Value</div>
-              <div className="text-right text-3xl font-bold">
-                $
-                {convertToDecimalString(
-                  poolbalanceData?.data?.toString() ?? '0',
-                  decimals?.data ?? 0
-                )}
-              </div>
-            </li>
-            <li>
-              <div className="header">Total Estimated Reward</div>
-              <div className="text-right text-3xl font-bold">
-                $
-                {convertToDecimalString(
-                  availableYieldData?.data?.toString() ?? '0',
-                  decimals?.data ?? 0
-                )}
-              </div>
-            </li>
-            <li>
-              <div className="header">Payout Date</div>
-              {currentDrawData?.data == BigInt(0) ? (
-                <div className="text-right text-3xl font-bold">not started</div>
-              ) : (
-                <div className="text-right text-3xl font-bold">
-                  {convertUnixToUTC(currentDrawData?.data ?? BigInt(0))}
-                </div>
-              )}
-            </li>
-          </ul>
-        </div>
-      </div>
       <table className="bg-light border-dark border-2 font-title w-full mt-8">
         <tbody>
           <tr className="bg-dark text-light uppercase [&>th]:p-1">
@@ -212,42 +169,10 @@ const TeamTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
       </tr>
     )
   })
-  const { teamPoolValueData, currentDrawData, decimals } = useVault()
 
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Team Board</h2>
-      <div className="grid grid-cols-4 gap-4">
-        <img src={ImgEnoki} />
-        <div className="col-span-3 pt-2">
-          <ul className="list-table bg-light">
-            <li>
-              <div className="header">Pool Value</div>
-              {currentDrawData?.data == BigInt(0) ? (
-                <div className="text-right text-3xl font-bold">not started</div>
-              ) : (
-                <div className="text-right text-3xl font-bold">
-                  $
-                  {convertToDecimalString(
-                    teamPoolValueData?.data,
-                    decimals?.data
-                  ) ?? '0'}
-                </div>
-              )}
-            </li>
-            <li>
-              <div className="header">Team member</div>
-              <div className="text-right text-3xl font-bold">
-                {lb?.length ?? 0}
-              </div>
-            </li>
-            <li>
-              <div className="header">Bonus</div>
-              <div className="text-right text-3xl font-bold">x 2.15</div>
-            </li>
-          </ul>
-        </div>
-      </div>
       <table className="bg-light border-dark border-2 font-title w-full mt-8">
         <tbody>
           <tr className="bg-dark text-light uppercase [&>th]:p-1">

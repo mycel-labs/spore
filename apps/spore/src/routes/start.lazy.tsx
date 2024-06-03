@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { LogOut } from 'lucide-react'
+import { useSwitchChain } from 'wagmi'
 import ImgIntro from '@/assets/spore-intro.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
 import { useWallet } from '@/hooks/useWallet'
 import { useBalance } from '@/hooks/useMycel'
 import { useDomainOwnership } from '@/hooks/useMycel'
-import { useVault } from '@/hooks/useVault'
 import { toast } from '@/components/ui/sonner'
 import { shortAddress } from '@/lib/wallets'
 import { copyClipboard, cn } from '@/lib/utils'
@@ -113,32 +113,21 @@ function Start() {
 
 function Create() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { switchChainId, chainId } = useVault()
+  const { switchChain } = useSwitchChain()
   const { deriveKeys, mycelAccount } = useWallet()
-
-  const onSuccess = async () => {
-    await deriveKeys()
-    setIsLoading(false)
-  }
-  const onError = () => {
-    setIsLoading(false)
-    toast('⚠️ Please switch to Ethereum Mainnet')
-  }
 
   const createMycelAddress = async () => {
     setIsLoading(true)
 
-    if (chainId !== 1) {
-      switchChainId(1, onSuccess, onError)
-    } else {
-      try {
-        await deriveKeys()
-      } catch {
-        setIsLoading(false)
-        toast('⚠️ User rejected the signature request.')
-      } finally {
-        setIsLoading(false)
-      }
+    switchChain({ chainId: 1 })
+
+    try {
+      await deriveKeys()
+    } catch {
+      setIsLoading(false)
+      toast('⚠️ User rejected the signature request.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
