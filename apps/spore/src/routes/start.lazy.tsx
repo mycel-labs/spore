@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createLazyFileRoute, redirect } from '@tanstack/react-router'
+import { createLazyFileRoute } from '@tanstack/react-router'
 import { LogOut } from 'lucide-react'
 import ImgIntro from '@/assets/spore-intro.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
@@ -32,9 +32,7 @@ function Start() {
   const THRESHOLD: number =
     import.meta.env.VITE_FAUCET_CLAIMABLE_THRESHOLD ?? 1000000
   const [isClaimable, setIsClaimable] = useState<boolean>(false)
-  const [isUSDCClaimable, setIsUSDCClaimable] = useState<boolean>(false)
   const { isLoading: isLoadingBalance, data: dataBalance } = useBalance()
-  const { usdcBalance } = useVault()
   const { mycelAccount, isConnected, disconnectWallet } = useWallet()
   const mycelName = useStore((state) => state.mycelName)
   const { isLoading: isLoadingReferral, data: dataReferral } = useGetUser(
@@ -49,14 +47,6 @@ function Start() {
       setIsClaimable(false)
     }
   }, [isLoadingBalance, dataBalance, THRESHOLD, isClaimable])
-
-  useEffect(() => {
-    if (usdcBalance?.data < BigInt(10000 * 1e6)) {
-      setIsUSDCClaimable(true)
-    } else {
-      setIsUSDCClaimable(false)
-    }
-  }, [usdcBalance.data])
 
   // redirect to home if user already has a mycel address
   useEffect(() => {
@@ -88,9 +78,7 @@ function Start() {
             <li>
               <Mint
                 isClaimable={isClaimable}
-                isUSDCClaimable={isUSDCClaimable}
                 balance={BigInt(dataBalance?.balance?.amount ?? 0)}
-                usdcBalance={usdcBalance?.data}
               />
             </li>
             <li>
@@ -197,18 +185,13 @@ function Create() {
 
 function Mint({
   isClaimable,
-  isUSDCClaimable,
   balance,
-  usdcBalance,
 }: {
   isClaimable: boolean
-  isUSDCClaimable: boolean
   balance: bigint
-  usdcBalance: bigint
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { mycelAccount, evmAddress } = useWallet()
-  const { refetch } = useVault()
+  const { mycelAccount } = useWallet()
 
   const claimFaucet = async () => {
     if (isClaimable && mycelAccount?.address) {
@@ -232,31 +215,10 @@ function Mint({
     }
   }
 
-  const claimUSDC = async () => {
-    if (isUSDCClaimable && evmAddress) {
-      try {
-        await fetch(
-          `${import.meta.env.VITE_USDC_FAUCET_URL!}/api/usdc?address=${evmAddress}`
-        ).then((res) => {
-          console.log('usdc faucet succeeded!', res)
-          toast('👌 USDC Minted!')
-        })
-      } catch (e) {
-        console.error('usdc faucet error: ', e)
-        toast('⚠️ Mint USDC error!')
-      } finally {
-        refetch()
-      }
-    } else {
-      toast('⚠️ You have enough USDC')
-    }
-  }
-
   const mintTestToken = async () => {
     setIsLoading(true)
     try {
       await claimFaucet()
-      await claimUSDC()
     } catch (e) {
       toast('⚠️ Mint error!')
     } finally {
@@ -269,15 +231,11 @@ function Mint({
       <span className={cn(!isClaimable ? 'line-through' : undefined)}>
         Mint test token
       </span>
-      {!isClaimable && !isUSDCClaimable && !isLoading ? (
+      {!isClaimable && !isLoading ? (
         <>
           <p className="text-right font-title text-3xl font-bold">
             {convertToDecimalString(balance ?? 0, MYCEL_COIN_DECIMALS)}
-            <span className="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
-          </p>
-          <p className="text-right font-title text-3xl font-bold">
-            {convertToDecimalString(usdcBalance ?? 0, MYCEL_COIN_DECIMALS)}
-            <span className="text-xl ml-1.5">USDC</span>
+            <span clasName="text-xl ml-1.5">{MYCEL_HUMAN_COIN_UNIT}</span>
           </p>
         </>
       ) : (
