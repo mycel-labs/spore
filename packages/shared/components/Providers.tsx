@@ -1,4 +1,3 @@
-import { GrazProvider, WalletType as WalletTypeCosmos } from 'graz'
 import { http, createConfig, WagmiProvider } from 'wagmi'
 import { mainnet, optimismSepolia } from 'wagmi/chains'
 import { injected, walletConnect } from 'wagmi/connectors'
@@ -37,23 +36,10 @@ export const wagmiConfig = createConfig({
   },
 })
 
-export const grazOptions = {
-  chains: [MYCEL_CHAIN_INFO],
-  defaultWallet: WalletTypeCosmos.KEPLR,
-  autoReconnect: false,
-  // walletConnect: {
-  //   options: {
-  //     projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
-  //   },
-  // },
-}
-
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={wagmiConfig}>
-      <QueryClientProvider client={queryClient}>
-        <GrazProvider grazOptions={grazOptions}>{children}</GrazProvider>
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   )
 }
