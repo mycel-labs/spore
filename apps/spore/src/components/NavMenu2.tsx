@@ -16,11 +16,6 @@ type NavItem = {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  {
-    name: 'Vaults',
-    link: '/vaults',
-    klass: 'bg-light',
-  },
   { name: 'Referral', link: '/referral', klass: 'bg-light' },
   { name: 'LeaderBoard', link: '/board', klass: 'bg-light' },
   { name: 'About', link: '/about', klass: 'bg-light' },
