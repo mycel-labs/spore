@@ -1,33 +1,46 @@
+import { useSwitchChain, useSendTransaction } from 'wagmi'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
+import { shortAddress } from '@/lib/wallets'
 
 export const Route = createLazyFileRoute('/_app/mint')({
   component: About,
 })
 
-// Handler
-async function handleCreateTA() {
-  console.log('create transferable account')
-}
-
-async function handleApproveTransferTA() {
-  console.log('approve transferable account')
-}
-
-async function handleDepositETH() {
-  console.log('deposit eth')
-}
-
-async function handleSignMintRequest() {
-  console.log('sign mint request')
-}
-
-async function handleMintNFT() {
-  console.log('mint nft')
-}
-
 // Component
 function About() {
+  const { switchChain } = useSwitchChain()
+  const { data: hash, sendTransaction } = useSendTransaction()
+
+  // Handler
+  async function handleCreateTA() {
+    console.log('create transferable account')
+  }
+
+  async function handleApproveTransferTA() {
+    console.log('approve transferable account')
+  }
+
+  async function handleDepositETH() {
+    switchChain({ chainId: 11155111 })
+    // send 1 wei to TA
+    const TA = '0x0000000000000000000000000000000000000000'
+    const amount = BigInt('1')
+    sendTransaction({
+      to: TA,
+      value: amount,
+      gas: BigInt(21000),
+    })
+  }
+
+  async function handleSignMintRequest() {
+    console.log('sign mint request')
+  }
+
+  async function handleMintNFT() {
+    console.log('mint nft')
+  }
+
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl">
@@ -74,9 +87,25 @@ function About() {
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleDepositETH()}
+                disabled={!!hash}
               >
                 Deposit
               </Button>
+              {hash && (
+                <div className="text-sm m-4">
+                  <p>
+                    Tx Hash:{' '}
+                    <a
+                      className="text-blue-500 underline"
+                      href={`https://sepolia.etherscan.io/tx/${hash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {shortAddress(hash)}
+                    </a>
+                  </p>
+                </div>
+              )}
             </li>
             <li>
               Sign mint request
