@@ -11,9 +11,9 @@ module.exports = {
   prefix: '',
   theme: {
     fontFamily: {
-      sans: ['DotGothic16', ...defaultTheme.fontFamily.sans],
+      sans: ['Minecraft', ...defaultTheme.fontFamily.sans],
       title: ['Minecraft', ...defaultTheme.fontFamily.sans],
-      mono: ['DotGothic16', ...defaultTheme.fontFamily.mono],
+      mono: ['Minecraft', ...defaultTheme.fontFamily.mono],
     },
     container: {
       center: true,
