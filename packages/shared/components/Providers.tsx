@@ -1,5 +1,5 @@
 import { http, createConfig, WagmiProvider } from 'wagmi'
-import { mainnet, optimismSepolia } from 'wagmi/chains'
+import { mainnet, sepolia } from 'wagmi/chains'
 import { injected, walletConnect } from 'wagmi/connectors'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MYCEL_CHAIN_INFO } from '../lib/wallets'
@@ -7,7 +7,7 @@ import { MYCEL_CHAIN_INFO } from '../lib/wallets'
 const queryClient = new QueryClient()
 
 export const wagmiConfig = createConfig({
-  chains: [mainnet, optimismSepolia],
+  chains: [mainnet, sepolia],
   connectors: [
     injected(),
     walletConnect({
@@ -27,12 +27,13 @@ export const wagmiConfig = createConfig({
         key: 'alchemy',
       }
     ),
-    [optimismSepolia.id]: http(
-      `https://opt-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY}`,
+    [sepolia.id]: http(
+      `https://eth-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY}`,
       {
         key: 'alchemy',
       }
     ),
+    [16813125]: http(`https://rpc.rigil.suave.flashbots.net`),
   },
 })
 
