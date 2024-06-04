@@ -5,6 +5,28 @@ export const Route = createLazyFileRoute('/_app/mint')({
   component: About,
 })
 
+// Handler
+async function handleCreateTA() {
+  console.log('create transferable account')
+}
+
+async function handleApproveTransferTA() {
+  console.log('approve transferable account')
+}
+
+async function handleDepositETH() {
+  console.log('deposit eth')
+}
+
+async function handleSignMintRequest() {
+  console.log('sign mint request')
+}
+
+async function handleMintNFT() {
+  console.log('mint nft')
+}
+
+// Component
 function About() {
   return (
     <div className="py-8 space-y-8">
@@ -31,31 +53,46 @@ function About() {
           <ol className="list-decimal text-xl font-title list-inside space-y-6 px-4">
             <li>
               Create Transferable Account (TA)
-              <Button className="btn bg-secondary w-full h-14 mt-2">
+              <Button
+                className="btn bg-secondary w-full h-14 mt-2"
+                onClick={async () => await handleCreateTA()}
+              >
                 Create
               </Button>
             </li>
             <li>
               Approve to Transfer TA
-              <Button className="btn bg-secondary w-full h-14 mt-2">
+              <Button
+                className="btn bg-secondary w-full h-14 mt-2"
+                onClick={async () => await handleApproveTransferTA()}
+              >
                 Approve
               </Button>
             </li>
             <li>
               Deposit SepETH to TA
-              <Button className="btn bg-secondary w-full h-14 mt-2">
+              <Button
+                className="btn bg-secondary w-full h-14 mt-2"
+                onClick={async () => await handleDepositETH()}
+              >
                 Deposit
               </Button>
             </li>
             <li>
               Sign mint request
-              <Button className="btn bg-secondary w-full h-14 mt-2">
+              <Button
+                className="btn bg-secondary w-full h-14 mt-2"
+                onClick={async () => await handleSignMintRequest()}
+              >
                 Sign
               </Button>
             </li>
             <li>
               Mint NFT on Sepolia
-              <Button className="btn bg-secondary w-full h-14 mt-2">
+              <Button
+                className="btn bg-secondary w-full h-14 mt-2"
+                onClick={async () => await handleMintNFT()}
+              >
                 Mint
               </Button>
             </li>
