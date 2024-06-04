@@ -51,7 +51,7 @@ function About() {
           wallet to sign mint requests on SUAVE Rigil Testnet.
         </p>
         <div className="text-center text-sm px-8">
-          For information on the methods and risks of deactivation, see:
+          For information on the methods and risks of activation, see:
         </div>
         <div className="text-center text-sm px-8 text-blue-500 underline font-bold">
           <a
