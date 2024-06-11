@@ -236,7 +236,7 @@ function Mint() {
                   !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
                 }
                 isLoading={getSignaturePending}
-                success={signature}
+                success={!!signature}
               >
                 Sign
               </Button>
