@@ -160,11 +160,16 @@ export const getTypedData = () =>
 
 export const shortAddress = (
   address: string | undefined,
-  prefix = 8,
+  prefix = 6,
   suffix = 4
 ) => {
   if (!address) return ''
   return `${address.slice(0, prefix)}...${address.slice(-suffix)}`
+}
+
+export const shortTx = (tx: string | undefined, prefix = 10, suffix = 16) => {
+  if (!tx) return ''
+  return `${tx.slice(0, prefix)}...${tx.slice(-suffix)}`
 }
 
 export const getSignDomainData = (address: string, uid: string) => {

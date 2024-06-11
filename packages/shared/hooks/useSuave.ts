@@ -1,6 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { http, waitForTransactionReceipt, createConfig } from '@wagmi/core'
-import { sepolia } from '@wagmi/core/chains'
+import { useQuery, useMutation } from '@tanstack/react-query'
 
 type HealthResponse = {
   ok: boolean
@@ -56,32 +54,6 @@ export const useHealth = () => {
     isError,
     isLoading,
     status,
-  }
-}
-
-export const useWaitForTransactionReceiptSepolia = () => {
-  const mutation = useMutation({
-    mutationFn: async (hash: string): Promise<void> => {
-      const config = createConfig({
-        chains: [sepolia],
-        transports: {
-          [sepolia.id]: http(),
-        },
-      })
-      try {
-        await waitForTransactionReceipt(config, {
-          hash: hash as `0x${string}`,
-        })
-        return Promise.resolve()
-      } catch (error) {
-        return Promise.reject(error)
-      }
-    },
-  })
-
-  return {
-    ...mutation,
-    mutateAsync: mutation.mutateAsync,
   }
 }
 

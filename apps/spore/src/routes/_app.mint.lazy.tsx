@@ -1,13 +1,18 @@
-import { useSwitchChain, useSendTransaction, useAccount } from 'wagmi'
+import {
+  useSwitchChain,
+  useSendTransaction,
+  useAccount,
+  useWaitForTransactionReceipt,
+} from 'wagmi'
 import { sepolia } from 'wagmi/chains'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
 import {
   useCreateAccount,
   // useGetSignature,
-  useWaitForTransactionReceiptSepolia,
 } from '@/hooks/useSuave'
 import { useState } from 'react'
+import { shortTx } from '@/lib/wallets'
 
 export const Route = createLazyFileRoute('/_app/mint')({
   component: Mint,
@@ -22,8 +27,13 @@ function Mint() {
   const [faAddress, setFaAddress] = useState<string>('')
   const { mutateAsync: createAccount, isPending: createAccountPending } =
     useCreateAccount()
-  const { mutateAsync: waitForTransactionReceipt } =
-    useWaitForTransactionReceiptSepolia()
+  const {
+    isError: receiptError,
+    isLoading: receiptLoading,
+    isSuccess: receiptSuccess,
+  } = useWaitForTransactionReceipt({
+    hash,
+  })
 
   // handleDepositETH is a function to deposit SepETH to TA on Sepolia
   async function handleCreateTA() {
@@ -50,12 +60,6 @@ function Mint() {
           gas: BigInt(21000),
           chainId: sepolia.id,
         })
-        // wait for transaction to be mined
-        try {
-          await waitForTransactionReceipt(hash as `0x${string}`)
-        } catch (error) {
-          console.error('Failed to wait for transaction receipt:', error)
-        }
       } else {
         console.error('Invalid faAddress:', faAddress)
       }
@@ -128,7 +132,8 @@ function Mint() {
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleDepositETH()}
                 disabled={chainId !== sepolia.id || !faAddress}
-                success={!!hash}
+                isLoading={receiptLoading}
+                success={receiptSuccess}
               >
                 {chainId === sepolia.id
                   ? 'Deposit'
@@ -136,15 +141,39 @@ function Mint() {
               </Button>
               {hash && (
                 <div className="text-sm m-4">
+                  {receiptLoading && (
+                    <p>
+                      <span role="img" aria-label="success">
+                        ⏳
+                      </span>{' '}
+                      Waiting for transaction to be confirmed...
+                    </p>
+                  )}
+                  {receiptError && (
+                    <p>
+                      <span role="img" aria-label="success">
+                        ❌
+                      </span>{' '}
+                      Failed to wait for transaction receipt: {receiptError}
+                    </p>
+                  )}
+                  {receiptSuccess && (
+                    <p>
+                      <span role="img" aria-label="success">
+                        ✅
+                      </span>{' '}
+                      Transaction confirmed!{' '}
+                    </p>
+                  )}
                   <p>
-                    Tx Hash:{' '}
+                    {' '}
                     <a
                       className="text-blue-500 underline"
                       href={`https://sepolia.etherscan.io/tx/${hash}`}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {shortAddress(hash)}
+                      {shortTx(hash)}
                     </a>
                   </p>
                 </div>
