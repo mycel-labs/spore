@@ -2,10 +2,9 @@ import { useSwitchChain, useSendTransaction, useAccount } from 'wagmi'
 import { sepolia } from 'wagmi/chains'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
-import { shortAddress } from '@/lib/wallets'
 import {
   useCreateAccount,
-  useGetSignature,
+  // useGetSignature,
   useWaitForTransactionReceiptSepolia,
 } from '@/hooks/useSuave'
 import { useState } from 'react'
@@ -26,7 +25,6 @@ function Mint() {
   const { mutateAsync: waitForTransactionReceipt } =
     useWaitForTransactionReceiptSepolia()
 
-  // Handler
   // handleDepositETH is a function to deposit SepETH to TA on Sepolia
   async function handleCreateTA() {
     const account = await createAccount()
