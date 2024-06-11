@@ -3,56 +3,64 @@ import { sepolia } from 'wagmi/chains'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
 import { shortAddress } from '@/lib/wallets'
+import {
+  useCreateAccount,
+  useGetSignature,
+  useWaitForTransactionReceiptSepolia,
+} from '@/hooks/useSuave'
+import { useState } from 'react'
 
 export const Route = createLazyFileRoute('/_app/mint')({
-  component: About,
+  component: Mint,
 })
 
 // Component
-function About() {
+function Mint() {
   const { switchChain } = useSwitchChain()
   const { chainId } = useAccount()
   const { data: hash, sendTransaction } = useSendTransaction()
-  const rigil = { id: 16813125 }
+  const [accountId, setAccountId] = useState<string>('')
+  const [faAddress, setFaAddress] = useState<string>('')
+  const { mutateAsync: createAccount, isPending: createAccountPending } =
+    useCreateAccount()
+  const { mutateAsync: waitForTransactionReceipt } =
+    useWaitForTransactionReceiptSepolia()
 
   // Handler
+  // handleDepositETH is a function to deposit SepETH to TA on Sepolia
   async function handleCreateTA() {
-    console.log('create transferable account')
-  }
-
-  async function handleApproveTransferTA() {
-    console.log('approve transferable account')
-  }
-  async function handleSwitchNetwork(_chainId: number) {
-    if (chainId === _chainId) {
-      return
-    }
-    if (_chainId === rigil.id) {
-      // switchChain of wagmi does not work for this chain
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [
-          {
-            chainId: '0x1008C45',
-          },
-        ],
-      })
+    const account = await createAccount()
+    if (account) {
+      console.log('Account created:', account)
+      setAccountId(account.accountId)
+      setFaAddress(account.address)
     } else {
-      switchChain({ chainId: _chainId })
+      console.error('Failed to create account')
     }
   }
 
   async function handleDepositETH() {
+    switchChain({ chainId: sepolia.id })
     if (chainId === sepolia.id) {
       // send 1 wei to TA
-      const TA = '0x0000000000000000000000000000000000000000'
-      const amount = BigInt('1')
-      sendTransaction({
-        to: TA,
-        value: amount,
-        gas: BigInt(21000),
-        chainId: sepolia.id,
-      })
+      if (/^0x[a-fA-F0-9]{40}$/.test(faAddress)) {
+        const TA = faAddress as `0x${string}`
+        const amount = BigInt('1')
+        sendTransaction({
+          to: TA,
+          value: amount,
+          gas: BigInt(21000),
+          chainId: sepolia.id,
+        })
+        // wait for transaction to be mined
+        try {
+          await waitForTransactionReceipt(hash as `0x${string}`)
+        } catch (error) {
+          console.error('Failed to wait for transaction receipt:', error)
+        }
+      } else {
+        console.error('Invalid faAddress:', faAddress)
+      }
     }
   }
 
@@ -60,7 +68,9 @@ function About() {
     console.log('sign mint request')
   }
 
+  // handleMintNFT is a function to mint NFT on Sepolia with signature
   async function handleMintNFT() {
+    switchChain({ chainId: sepolia.id })
     console.log('mint nft')
   }
 
@@ -69,17 +79,12 @@ function About() {
       <div className="bg-light overlay-dot-ll rounded-xl">
         <h2 className="text-center text-3xl font-bold pt-8 centerline">Mint</h2>
         <div className="pb-4">
-          <h3 className="text-center text-xl font-bold py-2 centerline">
-            Prerequisites
-          </h3>
-          <p className="text-center text-sm px-8">
-            <span className="font-bold text-yellow-500">⚠</span> This feature
-            requires you to have a
-            <span className="font-bold"> SUAVE Rigil Testnet</span> in your
-            wallet.
+          <p className="text-center text-sm px-8 pt-4">
+            This feature allows you to mint NFTs on Sepolia Testnet with SUAVE
+            Rigil Testnet by using a Transferable Account (TA).
           </p>
           <div className="text-center text-sm px-8">
-            For information on how to add a Rigil Testnet to your wallet, see:
+            For information of Rigil Testnet, see:
           </div>
           <div className="text-center text-sm px-8 text-blue-500 underline font-bold">
             <a
@@ -90,24 +95,11 @@ function About() {
               🔗 Rigil Testnet Chain info
             </a>
           </div>
-          <div className="h-4" />
-          <p className="text-center text-sm px-8">
-            <span className="font-bold text-yellow-500">⚠</span>{' '}
-            <span className="font-bold">eth_sign</span> must be enabled on your
-            wallet to sign mint requests on SUAVE Rigil Testnet.
+          <p className="text-center text-sm px-8 pt-4">
+            <strong>
+              Please make sure you have enough SepETH in your TA to mint NFT.
+            </strong>
           </p>
-          <div className="text-center text-sm px-8">
-            For information on the methods and risks of activation, see:
-          </div>
-          <div className="text-center text-sm px-8 text-blue-500 underline font-bold">
-            <a
-              href="https://support.metamask.io/privacy-and-security/what-is-eth_sign-and-why-is-it-a-risk/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              🔗 What is &apos;eth sign&apos; and why is it a risk?
-            </a>
-          </div>
         </div>
         <div className="px-8 pb-16">
           <h3 className="text-center text-xl font-bold py-2 centerline">
@@ -117,44 +109,32 @@ function About() {
             <li>
               Create Transferable Account (TA)
               <Button
-                className="btn bg-secondary w-full h-14 mt-2 mb-4"
-                onClick={async () => await handleSwitchNetwork(rigil.id)}
-                disabled={chainId === rigil.id}
-              >
-                Change network to Rigil
-              </Button>
-              <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleCreateTA()}
-                disabled={chainId !== rigil.id}
+                isLoading={createAccountPending}
+                success={!!accountId}
               >
                 Create
               </Button>
-            </li>
-            <li>
-              Approve to Transfer TA
-              <Button
-                className="btn bg-secondary w-full h-14 mt-2"
-                onClick={async () => await handleApproveTransferTA()}
-              >
-                Approve
-              </Button>
+              {accountId && (
+                <div className="text-sm m-4">
+                  <p>
+                    <strong>TA Address:</strong> {faAddress}
+                  </p>
+                </div>
+              )}
             </li>
             <li>
               Deposit SepETH to TA
               <Button
-                className="btn bg-secondary w-full h-14 mt-2 mb-4"
-                onClick={async () => await handleSwitchNetwork(sepolia.id)}
-                disabled={chainId === sepolia.id}
-              >
-                Change network to Sepolia
-              </Button>
-              <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleDepositETH()}
-                disabled={!!hash || chainId !== sepolia.id}
+                disabled={chainId !== sepolia.id || !faAddress}
+                success={!!hash}
               >
-                Deposit
+                {chainId === sepolia.id
+                  ? 'Deposit'
+                  : 'Change network to Sepolia'}
               </Button>
               {hash && (
                 <div className="text-sm m-4">
@@ -175,16 +155,8 @@ function About() {
             <li>
               Sign mint request
               <Button
-                className="btn bg-secondary w-full h-14 mt-2 mb-4"
-                onClick={async () => await handleSwitchNetwork(rigil.id)}
-                disabled={chainId === rigil.id}
-              >
-                Change network to Rigil
-              </Button>
-              <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleSignMintRequest()}
-                disabled={chainId !== rigil.id}
               >
                 Sign
               </Button>
@@ -192,18 +164,10 @@ function About() {
             <li>
               Mint NFT
               <Button
-                className="btn bg-secondary w-full h-14 mt-2 mb-4"
-                onClick={async () => await handleSwitchNetwork(sepolia.id)}
-                disabled={chainId === sepolia.id}
-              >
-                Change network to Sepolia
-              </Button>
-              <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleMintNFT()}
-                disabled={chainId !== sepolia.id}
               >
-                Mint
+                {chainId === sepolia.id ? 'Mint' : 'Change network to Sepolia'}
               </Button>
             </li>
           </ol>
