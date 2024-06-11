@@ -8,8 +8,10 @@ import { sepolia } from 'wagmi/chains'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
 import {
+  GetSignatureRequest,
+  GetSignatureResponse,
   useCreateAccount,
-  // useGetSignature,
+  useGetSignature,
 } from '@/hooks/useSuave'
 import { useState } from 'react'
 import { shortTx } from '@/lib/wallets'
@@ -21,12 +23,16 @@ export const Route = createLazyFileRoute('/_app/mint')({
 // Component
 function Mint() {
   const { switchChain } = useSwitchChain()
-  const { chainId } = useAccount()
+  const { chainId, address } = useAccount()
   const { data: hash, sendTransaction } = useSendTransaction()
   const [accountId, setAccountId] = useState<string>('')
   const [faAddress, setFaAddress] = useState<string>('')
+  const [recipientAddress, setRecipientAddress] = useState<string>('')
+  const [signature, setSignature] = useState<GetSignatureResponse | null>(null)
   const { mutateAsync: createAccount, isPending: createAccountPending } =
     useCreateAccount()
+  const { mutateAsync: getSignature, isPending: getSignaturePending } =
+    useGetSignature()
   const {
     isError: receiptError,
     isLoading: receiptLoading,
@@ -67,7 +73,18 @@ function Mint() {
   }
 
   async function handleSignMintRequest() {
-    console.log('sign mint request')
+    if (!accountId || !recipientAddress) {
+      console.error('Invalid accountId or recipientAddress')
+      return
+    }
+    const body: GetSignatureRequest = {
+      recipient: recipientAddress,
+      accountId,
+    }
+    console.log(body)
+    const signature: GetSignatureResponse = await getSignature(body)
+    console.log('signature:', signature)
+    setSignature(signature)
   }
 
   // handleMintNFT is a function to mint NFT on Sepolia with signature
@@ -181,9 +198,45 @@ function Mint() {
             </li>
             <li>
               Sign mint request
+              <input
+                type="text"
+                className="input w-full h-14 mt-2"
+                placeholder="Recipient Ethereum Address"
+                value={recipientAddress}
+                onChange={(e) => setRecipientAddress(e.target.value)}
+              />
+              <p className="text-right text-xs p-2">
+                <a
+                  className="text-blue-500 underline cursor-pointer"
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setRecipientAddress(address as `0x${string}`)
+                  }}
+                >
+                  Use connected wallet address
+                </a>
+              </p>
+              {!/^0x[a-fA-F0-9]{40}$/.test(recipientAddress) &&
+                recipientAddress && (
+                  <p className="text-red-500 text-right text-sm p-2">
+                    <span role="img" aria-label="success">
+                      ❌
+                    </span>{' '}
+                    Invalid Ethereum address format
+                  </p>
+                )}
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleSignMintRequest()}
+                disabled={
+                  !accountId ||
+                  !receiptSuccess ||
+                  !recipientAddress ||
+                  !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
+                }
+                isLoading={getSignaturePending}
+                success={signature}
               >
                 Sign
               </Button>
@@ -193,6 +246,7 @@ function Mint() {
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleMintNFT()}
+                disabled={!accountId || !receiptSuccess}
               >
                 {chainId === sepolia.id ? 'Mint' : 'Change network to Sepolia'}
               </Button>

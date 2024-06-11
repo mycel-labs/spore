@@ -9,12 +9,12 @@ type CreateAccountResponse = {
   address: string
 }
 
-type GetSignatureRequest = {
+export type GetSignatureRequest = {
   recipient: string
   accountId: string
 }
 
-type GetSignatureResponse = {
+export type GetSignatureResponse = {
   signature: string
   v: string
   r: string
