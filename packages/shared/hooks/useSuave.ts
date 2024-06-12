@@ -29,7 +29,10 @@ export type MintResponse = {
 
 type path = 'createAccount' | 'getSignature' | 'health' | 'mint'
 
-const SUAVE_API_URL = 'http://localhost:8080'
+// TODO: make this accept env variable only
+const SUAVE_API_URL =
+  import.meta.env.VITE_SUAVE_API_URL ||
+  'http://suave-crosschain-nft-alb-01-169699636.ap-northeast-1.elb.amazonaws.com'
 
 async function apiClient(path: path, body: any) {
   const response = await fetch(`${SUAVE_API_URL}/${path}`, {
