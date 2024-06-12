@@ -21,7 +21,13 @@ export type GetSignatureResponse = {
   s: string
 }
 
-type path = 'createAccount' | 'getSignature' | 'health'
+export type MintRequest = GetSignatureRequest
+
+export type MintResponse = {
+  txHash: string
+}
+
+type path = 'createAccount' | 'getSignature' | 'health' | 'mint'
 
 const SUAVE_API_URL = 'http://localhost:8080'
 
@@ -74,6 +80,18 @@ export const useGetSignature = () => {
     mutationFn: async (
       body: GetSignatureRequest
     ): Promise<GetSignatureResponse> => await apiClient('getSignature', body),
+  })
+
+  return {
+    ...mutation,
+    mutateAsync: mutation.mutateAsync,
+  }
+}
+
+export const useMint = () => {
+  const mutation = useMutation({
+    mutationFn: async (body: MintRequest): Promise<MintResponse> =>
+      await apiClient('mint', body),
   })
 
   return {

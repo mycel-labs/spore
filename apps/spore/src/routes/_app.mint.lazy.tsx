@@ -8,10 +8,12 @@ import { sepolia } from 'wagmi/chains'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
 import {
-  GetSignatureRequest,
-  GetSignatureResponse,
+  // GetSignatureRequest,
+  // GetSignatureResponse,
+  MintRequest,
   useCreateAccount,
-  useGetSignature,
+  // useGetSignature,
+  useMint,
 } from '@/hooks/useSuave'
 import { useState } from 'react'
 import { shortTx } from '@/lib/wallets'
@@ -28,11 +30,13 @@ function Mint() {
   const [accountId, setAccountId] = useState<string>('')
   const [faAddress, setFaAddress] = useState<string>('')
   const [recipientAddress, setRecipientAddress] = useState<string>('')
-  const [signature, setSignature] = useState<GetSignatureResponse | null>(null)
+  // const [signature, setSignature] = useState<GetSignatureResponse | null>(null)
+  const [mintTxHash, setMintTxHash] = useState<string>('')
   const { mutateAsync: createAccount, isPending: createAccountPending } =
     useCreateAccount()
-  const { mutateAsync: getSignature, isPending: getSignaturePending } =
-    useGetSignature()
+  // const { mutateAsync: getSignature, isPending: getSignaturePending } =
+  //   useGetSignature()
+  const { mutateAsync: mint, isPending: mintPending } = useMint()
   const {
     isError: receiptError,
     isLoading: receiptLoading,
@@ -72,27 +76,31 @@ function Mint() {
     }
   }
 
-  async function handleSignMintRequest() {
-    if (!accountId || !recipientAddress) {
-      console.error('Invalid accountId or recipientAddress')
+  // async function handleSignMintRequest() {
+  //   if (!accountId || !recipientAddress) {
+  //     console.error('Invalid accountId or recipientAddress')
+  //     return
+  //   }
+  //   const body: GetSignatureRequest = {
+  //     recipient: recipientAddress,
+  //     accountId,
+  //   }
+  //   const signature: GetSignatureResponse = await getSignature(body)
+  //   setSignature(signature)
+  // }
+
+  async function handleMintNFT() {
+    if (!accountId) {
+      console.error('Invalid accountId')
       return
     }
-    const body: GetSignatureRequest = {
+    const body: MintRequest = {
       recipient: recipientAddress,
       accountId,
     }
-    console.log(body)
-    const signature: GetSignatureResponse = await getSignature(body)
-    console.log('signature:', signature)
-    setSignature(signature)
+    const resp = await mint(body)
+    setMintTxHash(resp.txHash)
   }
-
-  // handleMintNFT is a function to mint NFT on Sepolia with signature
-  async function handleMintNFT() {
-    switchChain({ chainId: sepolia.id })
-    console.log('mint nft')
-  }
-
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl">
@@ -114,9 +122,14 @@ function Mint() {
               🔗 Rigil Testnet Chain info
             </a>
           </div>
-          <p className="text-center text-sm px-8 pt-4">
+          {/* <p className="text-center text-sm px-8 pt-4">
             <strong>
               Please make sure you have enough SepETH in your TA to mint NFT.
+            </strong>
+          </p> */}
+          <p className="text-center text-sm px-8 pt-4">
+            <strong>
+              This feature is in alpha. Specifications may change suddenly.
             </strong>
           </p>
         </div>
@@ -197,7 +210,8 @@ function Mint() {
               )}
             </li>
             <li>
-              Sign mint request
+              {/* Sign mint request */}
+              Mint NFT
               <input
                 type="text"
                 className="input w-full h-14 mt-2"
@@ -226,7 +240,7 @@ function Mint() {
                     Invalid Ethereum address format
                   </p>
                 )}
-              <Button
+              {/* <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleSignMintRequest()}
                 disabled={
@@ -239,17 +253,43 @@ function Mint() {
                 success={!!signature}
               >
                 Sign
-              </Button>
-            </li>
-            <li>
-              Mint NFT
+              </Button> */}
+              {/* </li>
+            <li> */}
+              {/* Mint NFT */}
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleMintNFT()}
-                disabled={!accountId || !receiptSuccess}
+                // disabled={!accountId || !receiptSuccess}
+                disabled={
+                  !accountId ||
+                  !receiptSuccess ||
+                  !recipientAddress ||
+                  !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
+                }
+                isLoading={mintPending}
+                success={!!mintTxHash}
               >
                 {chainId === sepolia.id ? 'Mint' : 'Change network to Sepolia'}
               </Button>
+              {mintTxHash && (
+                <p className="text-sm p-4 pb-0">
+                  <p>
+                    <span role="img" aria-label="success">
+                      ✅
+                    </span>{' '}
+                    Minted NFT!
+                  </p>
+                  <a
+                    className="text-blue-500 underline"
+                    href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {shortTx(mintTxHash)}
+                  </a>
+                </p>
+              )}
             </li>
           </ol>
         </div>
