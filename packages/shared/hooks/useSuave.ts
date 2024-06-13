@@ -31,8 +31,7 @@ type path = 'createAccount' | 'getSignature' | 'health' | 'mint'
 
 // TODO: make this accept env variable only
 const SUAVE_API_URL =
-  import.meta.env.VITE_SUAVE_API_URL ||
-  'http://suave-crosschain-nft-alb-01-169699636.ap-northeast-1.elb.amazonaws.com'
+  import.meta.env.VITE_SUAVE_API_URL || 'https://nft.api.spore.shugyo.mycel.id'
 
 async function apiClient(path: path, body: any) {
   const response = await fetch(`${SUAVE_API_URL}/${path}`, {
