@@ -1,6 +1,5 @@
 import { onboarding } from '@dydxprotocol/v4-client-js'
 import { ChainInfo } from '@keplr-wallet/types'
-import { WalletType as CosmosWalletType } from 'graz'
 import {
   MYCEL_BASE_COIN_UNIT,
   MYCEL_HUMAN_COIN_UNIT,
@@ -122,15 +121,6 @@ export const WALLET_CONFIG = {
     getUrl: 'https://web3.bitget.com',
     showMobile: false,
   },
-  Keplr: {
-    id: CosmosWalletType.KEPLR,
-    name: 'Keplr',
-    display: 'Keplr',
-    chainType: 'cosmos',
-    icon: KeplrIcon,
-    getUrl: 'https://www.keplr.app/download',
-    showMobile: false,
-  },
   // Passkey: {
   //   id: 'passkey',
   //   name: 'Passkey',
@@ -170,7 +160,7 @@ export const getTypedData = () =>
 
 export const shortAddress = (
   address: string | undefined,
-  prefix = 8,
+  prefix = 6,
   suffix = 4
 ) => {
   if (!address) return ''
@@ -179,7 +169,7 @@ export const shortAddress = (
 
 export const getSignDomainData = (address: string, uid: string) => {
   return {
-    chain_id: "",
+    chain_id: '',
     account_number: '0',
     sequence: '0',
     fee: {

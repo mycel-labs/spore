@@ -1,14 +1,12 @@
-import { GrazProvider, WalletType as WalletTypeCosmos } from 'graz'
 import { http, createConfig, WagmiProvider } from 'wagmi'
-import { mainnet, optimismSepolia } from 'wagmi/chains'
+import { mainnet, sepolia } from 'wagmi/chains'
 import { injected, walletConnect } from 'wagmi/connectors'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { MYCEL_CHAIN_INFO } from '../lib/wallets'
 
 const queryClient = new QueryClient()
 
 export const wagmiConfig = createConfig({
-  chains: [mainnet, optimismSepolia],
+  chains: [mainnet, sepolia],
   connectors: [
     injected(),
     walletConnect({
@@ -28,8 +26,8 @@ export const wagmiConfig = createConfig({
         key: 'alchemy',
       }
     ),
-    [optimismSepolia.id]: http(
-      `https://opt-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY}`,
+    [sepolia.id]: http(
+      `https://eth-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY}`,
       {
         key: 'alchemy',
       }
@@ -37,23 +35,10 @@ export const wagmiConfig = createConfig({
   },
 })
 
-export const grazOptions = {
-  chains: [MYCEL_CHAIN_INFO],
-  defaultWallet: WalletTypeCosmos.KEPLR,
-  autoReconnect: false,
-  // walletConnect: {
-  //   options: {
-  //     projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID,
-  //   },
-  // },
-}
-
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={wagmiConfig}>
-      <QueryClientProvider client={queryClient}>
-        <GrazProvider grazOptions={grazOptions}>{children}</GrazProvider>
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   )
 }

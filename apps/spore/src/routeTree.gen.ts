@@ -19,9 +19,9 @@ import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
-const AppVaultsLazyImport = createFileRoute('/_app/vaults')()
 const AppSettingLazyImport = createFileRoute('/_app/setting')()
 const AppReferralLazyImport = createFileRoute('/_app/referral')()
+const AppMintLazyImport = createFileRoute('/_app/mint')()
 const AppHomeLazyImport = createFileRoute('/_app/home')()
 const AppBoardLazyImport = createFileRoute('/_app/board')()
 const AppAboutLazyImport = createFileRoute('/_app/about')()
@@ -43,11 +43,6 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const AppVaultsLazyRoute = AppVaultsLazyImport.update({
-  path: '/vaults',
-  getParentRoute: () => AppRoute,
-} as any).lazy(() => import('./routes/_app.vaults.lazy').then((d) => d.Route))
-
 const AppSettingLazyRoute = AppSettingLazyImport.update({
   path: '/setting',
   getParentRoute: () => AppRoute,
@@ -57,6 +52,11 @@ const AppReferralLazyRoute = AppReferralLazyImport.update({
   path: '/referral',
   getParentRoute: () => AppRoute,
 } as any).lazy(() => import('./routes/_app.referral.lazy').then((d) => d.Route))
+
+const AppMintLazyRoute = AppMintLazyImport.update({
+  path: '/mint',
+  getParentRoute: () => AppRoute,
+} as any).lazy(() => import('./routes/_app.mint.lazy').then((d) => d.Route))
 
 const AppHomeLazyRoute = AppHomeLazyImport.update({
   path: '/home',
@@ -101,16 +101,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHomeLazyImport
       parentRoute: typeof AppImport
     }
+    '/_app/mint': {
+      preLoaderRoute: typeof AppMintLazyImport
+      parentRoute: typeof AppImport
+    }
     '/_app/referral': {
       preLoaderRoute: typeof AppReferralLazyImport
       parentRoute: typeof AppImport
     }
     '/_app/setting': {
       preLoaderRoute: typeof AppSettingLazyImport
-      parentRoute: typeof AppImport
-    }
-    '/_app/vaults': {
-      preLoaderRoute: typeof AppVaultsLazyImport
       parentRoute: typeof AppImport
     }
   }
@@ -124,9 +124,9 @@ export const routeTree = rootRoute.addChildren([
     AppAboutLazyRoute,
     AppBoardLazyRoute,
     AppHomeLazyRoute,
+    AppMintLazyRoute,
     AppReferralLazyRoute,
     AppSettingLazyRoute,
-    AppVaultsLazyRoute,
   ]),
   StartRoute,
 ])
