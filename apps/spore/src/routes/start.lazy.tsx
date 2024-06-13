@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import { LogOut } from 'lucide-react'
-import { useSwitchChain } from 'wagmi'
 import ImgIntro from '@/assets/spore-intro.svg'
 import ImgLogo from '@/assets/spore-logo.svg'
 import { useWallet } from '@/hooks/useWallet'
@@ -113,13 +112,12 @@ function Start() {
 
 function Create() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { switchChain } = useSwitchChain()
-  const { deriveKeys, mycelAccount } = useWallet()
+  const { deriveKeys, mycelAccount, switchEvmNetworkAsync } = useWallet()
 
   const createMycelAddress = async () => {
     setIsLoading(true)
 
-    switchChain({ chainId: 1 })
+    await switchEvmNetworkAsync(1)
 
     try {
       await deriveKeys()

@@ -32,7 +32,6 @@
     "@tanstack/router-vite-plugin": "^1.19.0",
     "@uidotdev/usehooks": "^2.4.1",
     "@vitejs/plugin-react": "^4.2.1",
-    "@wagmi/core": "^2.10.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "dotenv": "^16.4.5",
@@ -48,7 +47,6 @@
     "tailwindcss-animate": "^1.0.7",
     "vite": "^5.1.5",
     "vite-plugin-radar": "^0.9.3",
-    "wagmi": "^2.5.7",
     "zod": "^3.22.4"
   },
   "devDependencies": {

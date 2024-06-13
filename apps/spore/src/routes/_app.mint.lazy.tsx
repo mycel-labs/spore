@@ -1,10 +1,3 @@
-import {
-  useSwitchChain,
-  useSendTransaction,
-  useAccount,
-  useWaitForTransactionReceipt,
-} from 'wagmi'
-import { sepolia } from 'wagmi/chains'
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
 import {
@@ -17,6 +10,7 @@ import {
 } from '@/hooks/useSuave'
 import { useState } from 'react'
 import { shortAddress } from '@/lib/wallets'
+import { useWallet } from '@/hooks/useWallet'
 
 export const Route = createLazyFileRoute('/_app/mint')({
   component: Mint,
@@ -24,9 +18,16 @@ export const Route = createLazyFileRoute('/_app/mint')({
 
 // Component
 function Mint() {
-  const { switchChain } = useSwitchChain()
-  const { chainId, address } = useAccount()
-  const { data: hash, sendTransaction } = useSendTransaction()
+  const {
+    switchEvmNetworkAsync,
+    signerWagmi,
+    hash,
+    sendTransaction,
+    receiptError,
+    receiptLoading,
+    receiptSuccess,
+  } = useWallet()
+
   const [accountId, setAccountId] = useState<string>('')
   const [faAddress, setFaAddress] = useState<string>('')
   const [recipientAddress, setRecipientAddress] = useState<string>('')
@@ -37,13 +38,8 @@ function Mint() {
   // const { mutateAsync: getSignature, isPending: getSignaturePending } =
   //   useGetSignature()
   const { mutateAsync: mint, isPending: mintPending } = useMint()
-  const {
-    isError: receiptError,
-    isLoading: receiptLoading,
-    isSuccess: receiptSuccess,
-  } = useWaitForTransactionReceipt({
-    hash,
-  })
+
+  const sepolia = { id: 11155111 }
 
   // handleDepositETH is a function to deposit SepETH to TA on Sepolia
   async function handleCreateTA() {
@@ -58,8 +54,8 @@ function Mint() {
   }
 
   async function handleDepositETH() {
-    switchChain({ chainId: sepolia.id })
-    if (chainId === sepolia.id) {
+    switchEvmNetworkAsync(sepolia.id)
+    if (signerWagmi?.chain.id === sepolia.id) {
       // send 1 wei to TA
       if (/^0x[a-fA-F0-9]{40}$/.test(faAddress)) {
         const TA = faAddress as `0x${string}`
@@ -166,11 +162,11 @@ function Mint() {
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleDepositETH()}
-                disabled={chainId !== sepolia.id || !faAddress}
+                disabled={!faAddress}
                 isLoading={receiptLoading}
                 success={receiptSuccess}
               >
-                {chainId === sepolia.id
+                {signerWagmi?.chain.id === sepolia.id
                   ? 'Deposit'
                   : 'Change network to Sepolia'}
               </Button>
@@ -230,7 +226,9 @@ function Mint() {
                   type="button"
                   onClick={(e) => {
                     e.preventDefault()
-                    setRecipientAddress(address as `0x${string}`)
+                    setRecipientAddress(
+                      signerWagmi?.account.address as `0x${string}`
+                    )
                   }}
                 >
                   Use connected wallet address
@@ -275,7 +273,9 @@ function Mint() {
                 isLoading={mintPending}
                 success={!!mintTxHash}
               >
-                {chainId === sepolia.id ? 'Mint' : 'Change network to Sepolia'}
+                {signerWagmi?.chain.id === sepolia.id
+                  ? 'Mint'
+                  : 'Change network to Sepolia'}
               </Button>
               {mintTxHash && (
                 <p className="text-sm p-4 pb-0">

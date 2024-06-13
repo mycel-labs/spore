@@ -7,6 +7,8 @@ import {
   useSignTypedData,
   useAccount as useAccountWagmi,
   useSwitchChain as useSwitchChainWagmi,
+  useSendTransaction,
+  useWaitForTransactionReceipt,
 } from 'wagmi'
 import { LocalWallet, onboarding } from '@dydxprotocol/v4-client-js'
 import { DirectSecp256k1HdWallet, OfflineSigner } from '@cosmjs/proto-signing'
@@ -39,6 +41,15 @@ export const useWallet = () => {
   // const publicClientWagmi = usePublicClientWagmi();
   const { data: signerWagmi } = useWalletClientWagmi()
   const { disconnectAsync: disconnectWagmi } = useDisconnectWagmi()
+  const { data: hash, sendTransaction } = useSendTransaction()
+  const {
+    data: receipt,
+    isError: receiptError,
+    isLoading: receiptLoading,
+    isSuccess: receiptSuccess,
+  } = useWaitForTransactionReceipt({
+    hash,
+  })
 
   // Cosmos
   const mycelAddress = useStore((state) => state.mycelAddress)
@@ -228,11 +239,14 @@ export const useWallet = () => {
   // Change EVM network
   const { chain: chainWagmi } = useAccountWagmi()
   const { switchChainAsync } = useSwitchChainWagmi()
-  const switchEvmNetworkAsync = useCallback(async () => {
-    if (chainWagmi?.id !== EVM_CHAINID) {
-      switchChainAsync && (await switchChainAsync({ chainId: EVM_CHAINID }))
-    }
-  }, [chainWagmi?.id])
+  const switchEvmNetworkAsync = useCallback(
+    async (chainId: number) => {
+      if (chainWagmi?.id !== chainId) {
+        switchChainAsync && (await switchChainAsync({ chainId }))
+      }
+    },
+    [chainWagmi?.id]
+  )
 
   // LocalWallet
   useEffect(() => {
@@ -271,7 +285,14 @@ export const useWallet = () => {
     signerWagmi,
     connectorsWagmi,
     evmChainId: chainWagmi?.id,
-    // switchEvmNetworkAsync,
+    switchEvmNetworkAsync,
+    // EVM Transaction
+    hash,
+    sendTransaction,
+    receipt,
+    receiptError,
+    receiptLoading,
+    receiptSuccess,
     // Cosmos
     mycelAddress,
     // EVM → mycel account derivation
