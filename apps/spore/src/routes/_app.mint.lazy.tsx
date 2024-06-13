@@ -16,7 +16,7 @@ import {
   useMint,
 } from '@/hooks/useSuave'
 import { useState } from 'react'
-import { shortTx } from '@/lib/wallets'
+import { shortAddress } from '@/lib/wallets'
 
 export const Route = createLazyFileRoute('/_app/mint')({
   component: Mint,
@@ -208,7 +208,7 @@ function Mint() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {shortTx(hash)}
+                      {shortAddress(hash, 10, 16)}
                     </a>
                   </p>
                 </div>
@@ -229,8 +229,8 @@ function Mint() {
                   className="text-blue-500 underline cursor-pointer"
                   type="button"
                   onClick={(e) => {
-                    e.preventDefault();
-                    setRecipientAddress(address as `0x${string}`);
+                    e.preventDefault()
+                    setRecipientAddress(address as `0x${string}`)
                   }}
                 >
                   Use connected wallet address
@@ -291,7 +291,7 @@ function Mint() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {shortTx(mintTxHash)}
+                    {shortAddress(mintTxHash, 10, 16)}
                   </a>
                 </p>
               )}

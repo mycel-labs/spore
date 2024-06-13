@@ -152,7 +152,7 @@ function Create() {
             readOnly
             type="text"
             className="w-full mt-2"
-            value={shortAddress(mycelAccount.address)}
+            value={shortAddress(mycelAccount.address, 8)}
           />
           <button
             onClick={() => {
