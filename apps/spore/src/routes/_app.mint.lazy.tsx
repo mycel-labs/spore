@@ -98,9 +98,14 @@ function Mint() {
       recipient: recipientAddress,
       accountId,
     }
-    const resp = await mint(body)
-    setMintTxHash(resp.txHash)
+    try {
+      const resp = await mint(body)
+      setMintTxHash(resp.txHash)
+    } catch (error) {
+      console.error('Failed to mint NFT:', error)
+    }
   }
+
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl">
