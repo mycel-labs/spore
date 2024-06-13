@@ -227,10 +227,10 @@ function Mint() {
               <p className="text-right text-xs p-2">
                 <a
                   className="text-blue-500 underline cursor-pointer"
-                  href="#"
+                  type="button"
                   onClick={(e) => {
-                    e.preventDefault()
-                    setRecipientAddress(address as `0x${string}`)
+                    e.preventDefault();
+                    setRecipientAddress(address as `0x${string}`);
                   }}
                 >
                   Use connected wallet address
