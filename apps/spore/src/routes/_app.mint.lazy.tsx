@@ -11,6 +11,7 @@ import {
 import { useState } from 'react'
 import { shortAddress } from '@/lib/wallets'
 import { useWallet } from '@/hooks/useWallet'
+import { isMobile } from '@/lib/utils'
 
 export const Route = createLazyFileRoute('/_app/mint')({
   component: Mint,
@@ -152,7 +153,8 @@ function Mint() {
               {accountId && (
                 <div className="text-sm m-4">
                   <p>
-                    <strong>TA Address:</strong> {faAddress}
+                    <strong>TA Address:</strong>{' '}
+                    {isMobile() ? shortAddress(faAddress, 6) : faAddress}
                   </p>
                 </div>
               )}
@@ -204,7 +206,9 @@ function Mint() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {shortAddress(hash, 10, 16)}
+                      {isMobile()
+                        ? shortAddress(hash, 8, 10)
+                        : shortAddress(hash, 10, 16)}
                     </a>
                   </p>
                 </div>
@@ -291,7 +295,9 @@ function Mint() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {shortAddress(mintTxHash, 10, 16)}
+                    {isMobile()
+                      ? shortAddress(mintTxHash, 8, 10)
+                      : shortAddress(mintTxHash, 10, 16)}
                   </a>
                 </p>
               )}
