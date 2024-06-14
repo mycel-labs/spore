@@ -11,6 +11,7 @@ import {
 } from '@/hooks/useReferral'
 import { useStore } from '@/store'
 import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
+import LoaderCircle from './LoaderCircle'
 
 export default function BoardTab({
   tab,
@@ -109,13 +110,13 @@ export default function BoardTab({
         </TabsTrigger>
       </TabsList>
       <TabsContent value="total">
-        <TotalTabContent tlb={totallb} />
+        <TotalTabContent tlb={totallb} isLoading={isTotalLeaderBoardLoading} />
       </TabsContent>
       <TabsContent value="team">
-        <TeamTabContent lb={teamlb} />
+        <TeamTabContent lb={teamlb} isLoading={isTeamLeaderBoardLoading} />
       </TabsContent>
       <TabsContent value="player">
-        <PlayerTabContent lb={lb} />
+        <PlayerTabContent lb={lb} isLoading={isIndividualLeaderBoardLoading} />
       </TabsContent>
     </Tabs>
   )
@@ -134,7 +135,13 @@ const TabsContent = (props: React.ComponentProps<typeof TabsContent_>) => (
   />
 )
 
-const TotalTabContent = ({ tlb }: { tlb: TotalLeaderBoard[] }) => {
+const TotalTabContent = ({
+  tlb,
+  isLoading,
+}: {
+  tlb: TotalLeaderBoard[]
+  isLoading: boolean
+}) => {
   const rows = tlb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.teamId}>
@@ -146,20 +153,32 @@ const TotalTabContent = ({ tlb }: { tlb: TotalLeaderBoard[] }) => {
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
-      <table className="bg-light border-dark border-2 font-title w-full mt-8">
-        <tbody>
-          <tr className="bg-dark text-light uppercase [&>th]:p-1">
-            <th>Team Rank</th>
-            <th>Point</th>
-          </tr>
-          {rows}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <div className="m-8">
+          <LoaderCircle />
+        </div>
+      ) : (
+        <table className="bg-light border-dark border-2 font-title w-full mt-8">
+          <tbody>
+            <tr className="bg-dark text-light uppercase [&>th]:p-1">
+              <th>Team Rank</th>
+              <th>Point</th>
+            </tr>
+            {rows}
+          </tbody>
+        </table>
+      )}
     </>
   )
 }
 
-const TeamTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
+const TeamTabContent = ({
+  lb,
+  isLoading,
+}: {
+  lb: LeaderBoard[]
+  isLoading: boolean
+}) => {
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
@@ -172,20 +191,32 @@ const TeamTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Team Board</h2>
-      <table className="bg-light border-dark border-2 font-title w-full mt-8">
-        <tbody>
-          <tr className="bg-dark text-light uppercase [&>th]:p-1">
-            <th>Player</th>
-            <th>Point</th>
-          </tr>
-          {rows}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <div className="m-8">
+          <LoaderCircle />
+        </div>
+      ) : (
+        <table className="bg-light border-dark border-2 font-title w-full mt-8">
+          <tbody>
+            <tr className="bg-dark text-light uppercase [&>th]:p-1">
+              <th>Player</th>
+              <th>Point</th>
+            </tr>
+            {rows}
+          </tbody>
+        </table>
+      )}
     </>
   )
 }
 
-const PlayerTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
+const PlayerTabContent = ({
+  lb,
+  isLoading,
+}: {
+  lb: LeaderBoard[]
+  isLoading: boolean
+}) => {
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
@@ -197,15 +228,21 @@ const PlayerTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
   return (
     <>
       <h2 className="centerline font-bold text-3xl py-4">Player Board</h2>
-      <table className="bg-light border-dark border-2 font-title w-full mt-4">
-        <tbody>
-          <tr className="bg-dark text-light uppercase [&>th]:p-1">
-            <th>Player</th>
-            <th>Point</th>
-          </tr>
-          {rows}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <div className="m-8">
+          <LoaderCircle />
+        </div>
+      ) : (
+        <table className="bg-light border-dark border-2 font-title w-full mt-4">
+          <tbody>
+            <tr className="bg-dark text-light uppercase [&>th]:p-1">
+              <th>Player</th>
+              <th>Point</th>
+            </tr>
+            {rows}
+          </tbody>
+        </table>
+      )}
     </>
   )
 }
