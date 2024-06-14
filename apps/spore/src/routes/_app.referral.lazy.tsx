@@ -16,13 +16,13 @@ export const Route = createLazyFileRoute('/_app/referral')({
 
 function Referral() {
   const mycelName = useStore((state) => state.mycelName)
-  const user = useGetUser(mycelName)
+  const user = useGetUser(mycelName || '')
   const invitedUserCount =
     !user.isLoading && user.data
       ? (user.data.data as { user: User })?.user?.invitedUserCount
       : 0
 
-  const refCode = useGetReferralCodeByIssuerUserId(mycelName)
+  const refCode = useGetReferralCodeByIssuerUserId(mycelName || '')
   const codes =
     !refCode.isLoading && refCode.data
       ? (refCode.data.data?.referralCodes as ReferralCode[])
