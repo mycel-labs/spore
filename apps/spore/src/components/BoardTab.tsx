@@ -11,7 +11,6 @@ import {
 } from '@/hooks/useReferral'
 import { useStore } from '@/store'
 import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
-import { TabsTriggerProps, TabsContentProps } from '@radix-ui/react-tabs'
 
 export default function BoardTab({
   tab,
@@ -121,14 +120,14 @@ export default function BoardTab({
     </Tabs>
   )
 }
-const TabsTrigger = (props: TabsTriggerProps) => (
+const TabsTrigger = (props: React.ComponentProps<typeof TabsTrigger_>) => (
   <TabsTrigger_
     className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold py-2 px-2.5 relative text-nowrap tracking-tight"
     {...props}
   />
 )
 
-const TabsContent = (props: TabsContentProps) => (
+const TabsContent = (props: React.ComponentProps<typeof TabsContent_>) => (
   <TabsContent_
     className="bg-light overlay-dot-ll p-6 rounded-xl mt-6 pb-10"
     {...props}
