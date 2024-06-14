@@ -28,70 +28,35 @@ export default function BoardTab({
   const { data: totalLeaderBoardData, isLoading: isTotalLeaderBoardLoading } =
     useGetTotalLeaderBoard()
 
-  const mockLB: LeaderBoard[] = [
+  const errorLB: LeaderBoard[] = [
     {
-      userId: 'akira.cel',
-      totalPoints: 200,
-    },
-    {
-      userId: 'taro.cel',
-      totalPoints: 190,
-    },
-    {
-      userId: 'yosui.cel',
-      totalPoints: 140,
-    },
-    {
-      userId: 'anon.cel',
-      totalPoints: 10,
+      userId: 'error.cel',
+      totalPoints: 500,
     },
   ]
-  const mockTeamLB: LeaderBoard[] = [
+
+  const errorTLB: TotalLeaderBoard[] = [
     {
-      userId: 'akira.cel',
-      totalPoints: 200,
-    },
-    {
-      userId: 'taro.cel',
-      totalPoints: 190,
-    },
-    {
-      userId: 'yosui.cel',
-      totalPoints: 140,
-    },
-  ]
-  const mockTLB: TotalLeaderBoard[] = [
-    {
-      teamId: 'O2EYDIUcRcVmL5pMehRESerN11LIr6QK',
-      teamName: 'Team Awesome',
-      totalPoints: 1000,
-    },
-    {
-      teamId: 'H8c1mGSptHxbYLWH51U4Ts4jkLLiXkW6',
-      teamName: 'Team Blavo',
-      totalPoints: 900,
-    },
-    {
-      teamId: 'oSL4GXoibQ7dJdnAuFoRMvrVGjRzqx5J',
-      teamName: 'Team Cool',
-      totalPoints: 750,
+      teamId: 'error.cel',
+      teamName: 'Error: failed to fetch leaderboard',
+      totalPoints: 500,
     },
   ]
 
   const lb: LeaderBoard[] =
     !isIndividualLeaderBoardLoading && individualLeaderBoardData
       ? individualLeaderBoardData
-      : mockLB
+      : errorLB
 
   const teamlb: LeaderBoard[] =
     !isTeamLeaderBoardLoading && teamLeaderBoardData
       ? teamLeaderBoardData
-      : mockTeamLB
+      : errorLB
 
   const totallb: TotalLeaderBoard[] =
     !isTotalLeaderBoardLoading && totalLeaderBoardData
       ? totalLeaderBoardData
-      : mockTLB
+      : errorTLB
 
   return (
     <Tabs defaultValue={tab ?? 'total'} className="w-full">
