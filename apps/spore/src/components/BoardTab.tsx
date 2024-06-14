@@ -20,11 +20,11 @@ export default function BoardTab({
   const mycelName = useStore((state) => state.mycelName)
   const {
     data: individualLeaderBoardData,
-    isLoading: individualLeaderBoardLoading,
+    isLoading: isIndividualLeaderBoardLoading,
   } = useGetIndividualLeaderBoard()
-  const { data: teamLeaderBoardData, isLoading: teamLeaderBoardLoading } =
+  const { data: teamLeaderBoardData, isLoading: isTeamLeaderBoardLoading } =
     useGetTeamLeaderBoardByUserId(mycelName ?? '')
-  const { data: totalLeaderBoardData, isLoading: totalLeaderBoardLoading } =
+  const { data: totalLeaderBoardData, isLoading: isTotalLeaderBoardLoading } =
     useGetTotalLeaderBoard()
 
   const mockLB: LeaderBoard[] = [
@@ -78,17 +78,17 @@ export default function BoardTab({
   ]
 
   const lb: LeaderBoard[] =
-    !individualLeaderBoardLoading && individualLeaderBoardData
+    !isIndividualLeaderBoardLoading && individualLeaderBoardData
       ? individualLeaderBoardData
       : mockLB
 
   const teamlb: LeaderBoard[] =
-    !teamLeaderBoardLoading && teamLeaderBoardData
+    !isTeamLeaderBoardLoading && teamLeaderBoardData
       ? teamLeaderBoardData
       : mockTeamLB
 
   const totallb: TotalLeaderBoard[] =
-    !totalLeaderBoardLoading && totalLeaderBoardData
+    !isTotalLeaderBoardLoading && totalLeaderBoardData
       ? totalLeaderBoardData
       : mockTLB
 
