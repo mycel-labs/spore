@@ -9,6 +9,7 @@ import { User, ReferralCode } from '@/types/referral'
 import { SPORE_SHARE_URL } from '@/constants/spore'
 import { useStore } from '@/store'
 import { ClipboardCopy } from 'lucide-react'
+import LoaderCircle from '~/components/LoaderCircle'
 
 export const Route = createLazyFileRoute('/_app/referral')({
   component: Referral,
@@ -51,12 +52,18 @@ function Referral() {
           </li>
         </ul>
         <div className="px-6 mb-2 mt-8">
-          <input
-            type="text"
-            value={referralUrl}
-            readOnly
-            className="w-full font-lg font-title"
-          />
+          {refCode.isLoading ? (
+            <div className="py-4">
+              <LoaderCircle />
+            </div>
+          ) : (
+            <input
+              type="text"
+              value={referralUrl}
+              readOnly
+              className="w-full font-lg font-title"
+            />
+          )}
           <button
             className="btn bg-secondary h-14 px-10 font-bold font-title w-full mt-4"
             onClick={() => {
