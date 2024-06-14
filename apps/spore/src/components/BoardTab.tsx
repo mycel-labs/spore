@@ -11,7 +11,7 @@ import {
 } from '@/hooks/useReferral'
 import { useStore } from '@/store'
 import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
-import { TabsTriggerProps, TabsContentProps } from '@radix-ui/react-tabs'
+import LoaderCircle from './LoaderCircle'
 
 export default function BoardTab({
   tab,
@@ -21,77 +21,42 @@ export default function BoardTab({
   const mycelName = useStore((state) => state.mycelName)
   const {
     data: individualLeaderBoardData,
-    isLoading: individualLeaderBoardLoading,
+    isLoading: isIndividualLeaderBoardLoading,
   } = useGetIndividualLeaderBoard()
-  const { data: teamLeaderBoardData, isLoading: teamLeaderBoardLoading } =
+  const { data: teamLeaderBoardData, isLoading: isTeamLeaderBoardLoading } =
     useGetTeamLeaderBoardByUserId(mycelName ?? '')
-  const { data: totalLeaderBoardData, isLoading: totalLeaderBoardLoading } =
+  const { data: totalLeaderBoardData, isLoading: isTotalLeaderBoardLoading } =
     useGetTotalLeaderBoard()
 
-  const mockLB: LeaderBoard[] = [
+  const errorLB: LeaderBoard[] = [
     {
-      userId: 'akira.cel',
-      totalPoints: 200,
-    },
-    {
-      userId: 'taro.cel',
-      totalPoints: 190,
-    },
-    {
-      userId: 'yosui.cel',
-      totalPoints: 140,
-    },
-    {
-      userId: 'anon.cel',
-      totalPoints: 10,
+      userId: 'error.cel',
+      totalPoints: 500,
     },
   ]
-  const mockTeamLB: LeaderBoard[] = [
+
+  const errorTLB: TotalLeaderBoard[] = [
     {
-      userId: 'akira.cel',
-      totalPoints: 200,
-    },
-    {
-      userId: 'taro.cel',
-      totalPoints: 190,
-    },
-    {
-      userId: 'yosui.cel',
-      totalPoints: 140,
-    },
-  ]
-  const mockTLB: TotalLeaderBoard[] = [
-    {
-      teamId: 'O2EYDIUcRcVmL5pMehRESerN11LIr6QK',
-      teamName: 'Team Awesome',
-      totalPoints: 1000,
-    },
-    {
-      teamId: 'H8c1mGSptHxbYLWH51U4Ts4jkLLiXkW6',
-      teamName: 'Team Blavo',
-      totalPoints: 900,
-    },
-    {
-      teamId: 'oSL4GXoibQ7dJdnAuFoRMvrVGjRzqx5J',
-      teamName: 'Team Cool',
-      totalPoints: 750,
+      teamId: 'error.cel',
+      teamName: 'Error: failed to fetch leaderboard',
+      totalPoints: 500,
     },
   ]
 
   const lb: LeaderBoard[] =
-    !individualLeaderBoardLoading && individualLeaderBoardData
+    !isIndividualLeaderBoardLoading && individualLeaderBoardData
       ? individualLeaderBoardData
-      : mockLB
+      : errorLB
 
   const teamlb: LeaderBoard[] =
-    !teamLeaderBoardLoading && teamLeaderBoardData
+    !isTeamLeaderBoardLoading && teamLeaderBoardData
       ? teamLeaderBoardData
-      : mockTeamLB
+      : errorLB
 
   const totallb: TotalLeaderBoard[] =
-    !totalLeaderBoardLoading && totalLeaderBoardData
+    !isTotalLeaderBoardLoading && totalLeaderBoardData
       ? totalLeaderBoardData
-      : mockTLB
+      : errorTLB
 
   return (
     <Tabs defaultValue={tab ?? 'total'} className="w-full">
@@ -110,32 +75,38 @@ export default function BoardTab({
         </TabsTrigger>
       </TabsList>
       <TabsContent value="total">
-        <TotalTabContent tlb={totallb} />
+        <TotalTabContent tlb={totallb} isLoading={isTotalLeaderBoardLoading} />
       </TabsContent>
       <TabsContent value="team">
-        <TeamTabContent lb={teamlb} />
+        <TeamTabContent lb={teamlb} isLoading={isTeamLeaderBoardLoading} />
       </TabsContent>
       <TabsContent value="player">
-        <PlayerTabContent lb={lb} />
+        <PlayerTabContent lb={lb} isLoading={isIndividualLeaderBoardLoading} />
       </TabsContent>
     </Tabs>
   )
 }
-const TabsTrigger = (props: TabsTriggerProps) => (
+const TabsTrigger = (props: React.ComponentProps<typeof TabsTrigger_>) => (
   <TabsTrigger_
     className="btn flex-1 data-[state=inactive]:bg-light h-14 data-[state=active]:bg-secondary data-[state=active]:translate-y-2 data-[state=active]:shadow-solid-xxs uppercase font-bold py-2 px-2.5 relative text-nowrap tracking-tight"
     {...props}
   />
 )
 
-const TabsContent = (props: TabsContentProps) => (
+const TabsContent = (props: React.ComponentProps<typeof TabsContent_>) => (
   <TabsContent_
     className="bg-light overlay-dot-ll p-6 rounded-xl mt-6 pb-10"
     {...props}
   />
 )
 
-const TotalTabContent = ({ tlb }: { tlb: TotalLeaderBoard[] }) => {
+const TotalTabContent = ({
+  tlb,
+  isLoading,
+}: {
+  tlb: TotalLeaderBoard[]
+  isLoading: boolean
+}) => {
   const rows = tlb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.teamId}>
@@ -147,20 +118,32 @@ const TotalTabContent = ({ tlb }: { tlb: TotalLeaderBoard[] }) => {
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Total Board</h2>
-      <table className="bg-light border-dark border-2 font-title w-full mt-8">
-        <tbody>
-          <tr className="bg-dark text-light uppercase [&>th]:p-1">
-            <th>Team Rank</th>
-            <th>Point</th>
-          </tr>
-          {rows}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <div className="m-8">
+          <LoaderCircle />
+        </div>
+      ) : (
+        <table className="bg-light border-dark border-2 font-title w-full mt-8">
+          <tbody>
+            <tr className="bg-dark text-light uppercase [&>th]:p-1">
+              <th>Team Rank</th>
+              <th>Point</th>
+            </tr>
+            {rows}
+          </tbody>
+        </table>
+      )}
     </>
   )
 }
 
-const TeamTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
+const TeamTabContent = ({
+  lb,
+  isLoading,
+}: {
+  lb: LeaderBoard[]
+  isLoading: boolean
+}) => {
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
@@ -173,20 +156,32 @@ const TeamTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
   return (
     <>
       <h2 className="centerline text-3xl py-4 font-bold">Team Board</h2>
-      <table className="bg-light border-dark border-2 font-title w-full mt-8">
-        <tbody>
-          <tr className="bg-dark text-light uppercase [&>th]:p-1">
-            <th>Player</th>
-            <th>Point</th>
-          </tr>
-          {rows}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <div className="m-8">
+          <LoaderCircle />
+        </div>
+      ) : (
+        <table className="bg-light border-dark border-2 font-title w-full mt-8">
+          <tbody>
+            <tr className="bg-dark text-light uppercase [&>th]:p-1">
+              <th>Player</th>
+              <th>Point</th>
+            </tr>
+            {rows}
+          </tbody>
+        </table>
+      )}
     </>
   )
 }
 
-const PlayerTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
+const PlayerTabContent = ({
+  lb,
+  isLoading,
+}: {
+  lb: LeaderBoard[]
+  isLoading: boolean
+}) => {
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
@@ -198,15 +193,21 @@ const PlayerTabContent = ({ lb }: { lb: LeaderBoard[] }) => {
   return (
     <>
       <h2 className="centerline font-bold text-3xl py-4">Player Board</h2>
-      <table className="bg-light border-dark border-2 font-title w-full mt-4">
-        <tbody>
-          <tr className="bg-dark text-light uppercase [&>th]:p-1">
-            <th>Player</th>
-            <th>Point</th>
-          </tr>
-          {rows}
-        </tbody>
-      </table>
+      {isLoading ? (
+        <div className="m-8">
+          <LoaderCircle />
+        </div>
+      ) : (
+        <table className="bg-light border-dark border-2 font-title w-full mt-4">
+          <tbody>
+            <tr className="bg-dark text-light uppercase [&>th]:p-1">
+              <th>Player</th>
+              <th>Point</th>
+            </tr>
+            {rows}
+          </tbody>
+        </table>
+      )}
     </>
   )
 }

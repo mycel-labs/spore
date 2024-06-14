@@ -10,6 +10,7 @@ export const useGetUser = (uid: string) => {
       const res = await fn({ uid })
       return res.data
     },
+    enabled: !!uid,
   })
   return {
     data,
@@ -47,6 +48,7 @@ export const useGetReferralCodeByIssuerUserId = (issuerUserId: string) => {
       const res = await fn({ uid: issuerUserId })
       return res.data
     },
+    enabled: !!issuerUserId,
   })
   return {
     data,
