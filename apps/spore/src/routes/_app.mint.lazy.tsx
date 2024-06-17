@@ -317,9 +317,7 @@ function Mint() {
                 isLoading={mintPending}
                 success={!!mintTxHash && !!mintTxHashBase}
               >
-                {evmChainId === sepolia.id
-                  ? 'Mint'
-                  : 'Change network to Sepolia'}
+                Mint
               </Button>
               {mintButtonStatus !== 'idle' && (
                 <div className="text-sm p-4 pt-6 pb-0">
