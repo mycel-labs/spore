@@ -7,6 +7,7 @@ import {
   useCreateAccount,
   // useGetSignature,
   useMint,
+  Network,
 } from '@/hooks/useSuave'
 import { useState } from 'react'
 import { shortAddress } from '@/lib/wallets'
@@ -99,19 +100,23 @@ function Mint() {
       console.error('Invalid accountId')
       return
     }
-    const networks = ['sepolia', 'baseSepolia'];
+    const networks: Network[] = ['sepolia', 'baseSepolia']
     for (const network of networks) {
-      setMintButtonStatus('minting');
-      const body: MintRequest = { recipient: recipientAddress, accountId, network };
+      setMintButtonStatus('minting')
+      const body: MintRequest = {
+        recipient: recipientAddress,
+        accountId,
+        network,
+      }
       try {
-        const resp = await mint(body);
-        if (network === 'sepolia') setMintTxHash(resp.txHash);
-        else setMintTxHashBase(resp.txHash);
+        const resp = await mint(body)
+        if (network === 'sepolia') setMintTxHash(resp.txHash)
+        else setMintTxHashBase(resp.txHash)
       } catch (error) {
-        console.error(`Failed to mint NFT on ${network}:`, error);
+        console.error(`Failed to mint NFT on ${network}:`, error)
       }
     }
-    setMintButtonStatus('minted');
+    setMintButtonStatus('minted')
   }
 
   return (
