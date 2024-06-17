@@ -36,6 +36,7 @@ function Mint() {
   const [recipientAddress, setRecipientAddress] = useState<string>('')
   // const [signature, setSignature] = useState<GetSignatureResponse | null>(null)
   const [mintTxHash, setMintTxHash] = useState<string>('')
+  const [mintTxHashBase, setMintTxHashBase] = useState<string>('')
   const { mutateAsync: createAccount, isPending: createAccountPending } =
     useCreateAccount()
   // const { mutateAsync: getSignature, isPending: getSignaturePending } =
@@ -95,13 +96,29 @@ function Mint() {
       console.error('Invalid accountId')
       return
     }
+
+    // mint on sepolia
     const body: MintRequest = {
       recipient: recipientAddress,
       accountId,
+      network: 'sepolia',
     }
     try {
       const resp = await mint(body)
       setMintTxHash(resp.txHash)
+    } catch (error) {
+      console.error('Failed to mint NFT:', error)
+    }
+
+    // mint on baseSepolia
+    const bodyBase: MintRequest = {
+      recipient: recipientAddress,
+      accountId,
+      network: 'baseSepolia',
+    }
+    try {
+      const resp = await mint(bodyBase)
+      setMintTxHashBase(resp.txHash)
     } catch (error) {
       console.error('Failed to mint NFT:', error)
     }
@@ -113,8 +130,8 @@ function Mint() {
         <h2 className="text-center text-3xl font-bold pt-8 centerline">Mint</h2>
         <div className="pb-4">
           <p className="text-center text-sm px-8 pt-4">
-            This feature allows you to mint NFTs on Sepolia Testnet with SUAVE
-            Rigil Testnet by using a Transferable Account (TA).
+            This feature allows you to mint NFTs on Sepolia and Base Sepolia
+            with SUAVE Rigil Testnet powered by Transferable Account (TA).
           </p>
           <div className="text-center text-sm px-8">
             For information of Rigil Testnet, see:
@@ -193,7 +210,7 @@ function Mint() {
                   : 'Change network to Sepolia'}
               </Button>
               {hash && (
-                <div className="text-sm m-4">
+                <div className="text-sm m-4 mt-6">
                   {receiptLoading && (
                     <p>
                       <span role="img" aria-label="success">
@@ -300,23 +317,39 @@ function Mint() {
                   : 'Change network to Sepolia'}
               </Button>
               {mintTxHash && (
-                <p className="text-sm p-4 pb-0">
+                <p className="text-sm p-4 pt-6 pb-0">
                   <p>
                     <span role="img" aria-label="success">
                       ✅
                     </span>{' '}
                     Minted NFT!
                   </p>
-                  <a
-                    className="text-blue-500 underline"
-                    href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {isMobile()
-                      ? shortAddress(mintTxHash, 8, 10)
-                      : shortAddress(mintTxHash, 10, 16)}
-                  </a>
+                  <div>
+                    <span>Sepolia: </span>
+                    <a
+                      className="text-blue-500 underline"
+                      href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {isMobile()
+                        ? shortAddress(mintTxHash, 8, 10)
+                        : shortAddress(mintTxHash, 10, 16)}
+                    </a>
+                  </div>
+                  <div>
+                    <span>Base Sepolia: </span>
+                    <a
+                      className="text-blue-500 underline"
+                      href={`https://sepolia.basescan.org/tx/${mintTxHashBase}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {isMobile()
+                        ? shortAddress(mintTxHashBase, 8, 10)
+                        : shortAddress(mintTxHashBase, 10, 16)}
+                    </a>
+                  </div>
                 </p>
               )}
             </li>
