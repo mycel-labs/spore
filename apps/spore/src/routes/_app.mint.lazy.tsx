@@ -99,35 +99,19 @@ function Mint() {
       console.error('Invalid accountId')
       return
     }
-
-    setMintButtonStatus('minting')
-
-    // mint on sepolia
-    const body: MintRequest = {
-      recipient: recipientAddress,
-      accountId,
-      network: 'sepolia',
+    const networks = ['sepolia', 'baseSepolia'];
+    for (const network of networks) {
+      setMintButtonStatus('minting');
+      const body: MintRequest = { recipient: recipientAddress, accountId, network };
+      try {
+        const resp = await mint(body);
+        if (network === 'sepolia') setMintTxHash(resp.txHash);
+        else setMintTxHashBase(resp.txHash);
+      } catch (error) {
+        console.error(`Failed to mint NFT on ${network}:`, error);
+      }
     }
-    try {
-      const resp = await mint(body)
-      setMintTxHash(resp.txHash)
-    } catch (error) {
-      console.error('Failed to mint NFT:', error)
-    }
-
-    // mint on baseSepolia
-    const bodyBase: MintRequest = {
-      recipient: recipientAddress,
-      accountId,
-      network: 'baseSepolia',
-    }
-    try {
-      const resp = await mint(bodyBase)
-      setMintTxHashBase(resp.txHash)
-    } catch (error) {
-      console.error('Failed to mint NFT:', error)
-    }
-    setMintButtonStatus('minted')
+    setMintButtonStatus('minted');
   }
 
   return (
