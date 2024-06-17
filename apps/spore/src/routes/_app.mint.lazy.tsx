@@ -37,6 +37,9 @@ function Mint() {
   // const [signature, setSignature] = useState<GetSignatureResponse | null>(null)
   const [mintTxHash, setMintTxHash] = useState<string>('')
   const [mintTxHashBase, setMintTxHashBase] = useState<string>('')
+  const [mintButtonStatus, setMintButtonStatus] = useState<
+    'idle' | 'minting' | 'minted'
+  >('idle')
   const { mutateAsync: createAccount, isPending: createAccountPending } =
     useCreateAccount()
   // const { mutateAsync: getSignature, isPending: getSignaturePending } =
@@ -97,6 +100,8 @@ function Mint() {
       return
     }
 
+    setMintButtonStatus('minting')
+
     // mint on sepolia
     const body: MintRequest = {
       recipient: recipientAddress,
@@ -122,6 +127,7 @@ function Mint() {
     } catch (error) {
       console.error('Failed to mint NFT:', error)
     }
+    setMintButtonStatus('minted')
   }
 
   return (
@@ -172,7 +178,7 @@ function Mint() {
                 Create
               </Button>
               {accountId && (
-                <div className="text-sm m-4">
+                <div className="text-sm m-4 mt-6">
                   <p>
                     <strong>TA Address:</strong>{' '}
                     {isMobile() ? shortAddress(faAddress, 6) : faAddress}
@@ -302,7 +308,6 @@ function Mint() {
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleMintNFT()}
-                // disabled={!accountId || !receiptSuccess}
                 disabled={
                   !accountId ||
                   !receiptSuccess ||
@@ -310,47 +315,63 @@ function Mint() {
                   !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
                 }
                 isLoading={mintPending}
-                success={!!mintTxHash}
+                success={!!mintTxHash && !!mintTxHashBase}
               >
                 {evmChainId === sepolia.id
                   ? 'Mint'
                   : 'Change network to Sepolia'}
               </Button>
-              {mintTxHash && (
-                <p className="text-sm p-4 pt-6 pb-0">
+              {mintButtonStatus !== 'idle' && (
+                <div className="text-sm p-4 pt-6 pb-0">
+                  {(!mintTxHash || !mintTxHashBase) && (
+                    <p>
+                      <span role="img" aria-label="waiting">
+                        ⏳
+                      </span>{' '}
+                      Minting...
+                    </p>
+                  )}
+                  {mintTxHash && mintTxHashBase && (
+                    <p>
+                      <span role="img" aria-label="success">
+                        ✅
+                      </span>{' '}
+                      Minted NFT!
+                    </p>
+                  )}
                   <p>
-                    <span role="img" aria-label="success">
-                      ✅
-                    </span>{' '}
-                    Minted NFT!
+                    <div>
+                      <span>Sepolia: </span>
+                      {mintTxHash && (
+                        <a
+                          className="text-blue-500 underline"
+                          href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {isMobile()
+                            ? shortAddress(mintTxHash, 8, 10)
+                            : shortAddress(mintTxHash, 10, 16)}
+                        </a>
+                      )}
+                    </div>
                   </p>
                   <div>
-                    <span>Sepolia: </span>
-                    <a
-                      className="text-blue-500 underline"
-                      href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {isMobile()
-                        ? shortAddress(mintTxHash, 8, 10)
-                        : shortAddress(mintTxHash, 10, 16)}
-                    </a>
-                  </div>
-                  <div>
                     <span>Base Sepolia: </span>
-                    <a
-                      className="text-blue-500 underline"
-                      href={`https://sepolia.basescan.org/tx/${mintTxHashBase}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {isMobile()
-                        ? shortAddress(mintTxHashBase, 8, 10)
-                        : shortAddress(mintTxHashBase, 10, 16)}
-                    </a>
+                    {mintTxHashBase && (
+                      <a
+                        className="text-blue-500 underline"
+                        href={`https://sepolia.basescan.org/tx/${mintTxHashBase}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {isMobile()
+                          ? shortAddress(mintTxHashBase, 8, 10)
+                          : shortAddress(mintTxHashBase, 10, 16)}
+                      </a>
+                    )}
                   </div>
-                </p>
+                </div>
               )}
             </li>
           </ol>
