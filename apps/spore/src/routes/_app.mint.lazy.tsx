@@ -20,8 +20,10 @@ export const Route = createLazyFileRoute('/_app/mint')({
 // Component
 function Mint() {
   const {
+    evmAddressWagmi,
+    balance,
+    evmChainId,
     switchEvmNetworkAsync,
-    signerWagmi,
     hash,
     sendTransaction,
     receiptError,
@@ -41,6 +43,8 @@ function Mint() {
   const { mutateAsync: mint, isPending: mintPending } = useMint()
 
   const sepolia = { id: 11155111 }
+  const hasBalanceSepolia =
+    evmChainId === sepolia.id && balance && balance > BigInt(5e15) // 0.005 ETH
 
   // handleDepositETH is a function to deposit SepETH to TA on Sepolia
   async function handleCreateTA() {
@@ -56,7 +60,7 @@ function Mint() {
 
   async function handleDepositETH() {
     switchEvmNetworkAsync(sepolia.id)
-    if (signerWagmi?.chain.id === sepolia.id) {
+    if (evmChainId === sepolia.id) {
       // send 1 wei to TA
       if (/^0x[a-fA-F0-9]{40}$/.test(faAddress)) {
         const TA = faAddress as `0x${string}`
@@ -161,14 +165,30 @@ function Mint() {
             </li>
             <li>
               Deposit SepETH to TA
+              {!hasBalanceSepolia ? (
+                <div className="text-sm m-4 font-bold">
+                  <p>⚠️ Your balance is quite low.</p>
+                  <span>You can get sepETH from : </span>
+                  <a
+                    className="text-blue-500 underline"
+                    href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    🔗 Google Cloud Faucet
+                  </a>
+                </div>
+              ) : (
+                ''
+              )}
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleDepositETH()}
-                disabled={!faAddress}
+                disabled={!faAddress || !hasBalanceSepolia}
                 isLoading={receiptLoading}
                 success={receiptSuccess}
               >
-                {signerWagmi?.chain.id === sepolia.id
+                {evmChainId === sepolia.id
                   ? 'Deposit'
                   : 'Change network to Sepolia'}
               </Button>
@@ -230,9 +250,7 @@ function Mint() {
                   type="button"
                   onClick={(e) => {
                     e.preventDefault()
-                    setRecipientAddress(
-                      signerWagmi?.account.address as `0x${string}`
-                    )
+                    setRecipientAddress(evmAddressWagmi as `0x${string}`)
                   }}
                 >
                   Use connected wallet address
@@ -277,7 +295,7 @@ function Mint() {
                 isLoading={mintPending}
                 success={!!mintTxHash}
               >
-                {signerWagmi?.chain.id === sepolia.id
+                {evmChainId === sepolia.id
                   ? 'Mint'
                   : 'Change network to Sepolia'}
               </Button>

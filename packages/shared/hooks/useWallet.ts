@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useStore } from '../store/index'
 import {
+  useBalance as useBalanceWagmi,
   useConnect as useConnectWagmi,
   useDisconnect as useDisconnectWagmi,
   useWalletClient as useWalletClientWagmi,
@@ -49,6 +50,9 @@ export const useWallet = () => {
     isSuccess: receiptSuccess,
   } = useWaitForTransactionReceipt({
     hash,
+  })
+  const balance = useBalanceWagmi({
+    address: evmAddressWagmi,
   })
 
   // Cosmos
@@ -286,6 +290,7 @@ export const useWallet = () => {
     connectorsWagmi,
     evmChainId: chainWagmi?.id,
     switchEvmNetworkAsync,
+    balance: balance.data?.value,
     // EVM Transaction
     hash,
     sendTransaction,
