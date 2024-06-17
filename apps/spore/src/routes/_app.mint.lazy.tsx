@@ -165,7 +165,7 @@ function Mint() {
             </li>
             <li>
               Deposit SepETH to TA
-              {!hasBalanceSepolia ? (
+              {!hasBalanceSepolia && evmChainId === sepolia.id ? (
                 <div className="text-sm m-4 font-bold">
                   <p>⚠️ Your balance is quite low.</p>
                   <span>You can get sepETH from : </span>
@@ -184,7 +184,7 @@ function Mint() {
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleDepositETH()}
-                disabled={!faAddress || !hasBalanceSepolia}
+                disabled={!faAddress}
                 isLoading={receiptLoading}
                 success={receiptSuccess}
               >
