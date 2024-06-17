@@ -21,7 +21,13 @@ export type GetSignatureResponse = {
   s: string
 }
 
-export type MintRequest = GetSignatureRequest
+export type Network = 'sepolia' | 'baseSepolia'
+
+export type MintRequest = {
+  recipient: string
+  accountId: string
+  network?: Network // if empty, default to sepolia
+}
 
 export type MintResponse = {
   txHash: string

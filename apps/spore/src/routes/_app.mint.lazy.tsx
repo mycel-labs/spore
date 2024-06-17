@@ -7,6 +7,7 @@ import {
   useCreateAccount,
   // useGetSignature,
   useMint,
+  Network,
 } from '@/hooks/useSuave'
 import { useState } from 'react'
 import { shortAddress } from '@/lib/wallets'
@@ -36,6 +37,10 @@ function Mint() {
   const [recipientAddress, setRecipientAddress] = useState<string>('')
   // const [signature, setSignature] = useState<GetSignatureResponse | null>(null)
   const [mintTxHash, setMintTxHash] = useState<string>('')
+  const [mintTxHashBase, setMintTxHashBase] = useState<string>('')
+  const [mintButtonStatus, setMintButtonStatus] = useState<
+    'idle' | 'minting' | 'minted'
+  >('idle')
   const { mutateAsync: createAccount, isPending: createAccountPending } =
     useCreateAccount()
   // const { mutateAsync: getSignature, isPending: getSignaturePending } =
@@ -95,16 +100,23 @@ function Mint() {
       console.error('Invalid accountId')
       return
     }
-    const body: MintRequest = {
-      recipient: recipientAddress,
-      accountId,
+    const networks: Network[] = ['sepolia', 'baseSepolia']
+    for (const network of networks) {
+      setMintButtonStatus('minting')
+      const body: MintRequest = {
+        recipient: recipientAddress,
+        accountId,
+        network,
+      }
+      try {
+        const resp = await mint(body)
+        if (network === 'sepolia') setMintTxHash(resp.txHash)
+        else setMintTxHashBase(resp.txHash)
+      } catch (error) {
+        console.error(`Failed to mint NFT on ${network}:`, error)
+      }
     }
-    try {
-      const resp = await mint(body)
-      setMintTxHash(resp.txHash)
-    } catch (error) {
-      console.error('Failed to mint NFT:', error)
-    }
+    setMintButtonStatus('minted')
   }
 
   return (
@@ -113,8 +125,8 @@ function Mint() {
         <h2 className="text-center text-3xl font-bold pt-8 centerline">Mint</h2>
         <div className="pb-4">
           <p className="text-center text-sm px-8 pt-4">
-            This feature allows you to mint NFTs on Sepolia Testnet with SUAVE
-            Rigil Testnet by using a Transferable Account (TA).
+            This feature allows you to mint NFTs on Sepolia and Base Sepolia
+            with SUAVE Rigil Testnet powered by Transferable Account (TA).
           </p>
           <div className="text-center text-sm px-8">
             For information of Rigil Testnet, see:
@@ -155,7 +167,7 @@ function Mint() {
                 Create
               </Button>
               {accountId && (
-                <div className="text-sm m-4">
+                <div className="text-sm m-4 mt-6">
                   <p>
                     <strong>TA Address:</strong>{' '}
                     {isMobile() ? shortAddress(faAddress, 6) : faAddress}
@@ -165,7 +177,7 @@ function Mint() {
             </li>
             <li>
               Deposit SepETH to TA
-              {!hasBalanceSepolia ? (
+              {!hasBalanceSepolia && evmChainId === sepolia.id ? (
                 <div className="text-sm m-4 font-bold">
                   <p>⚠️ Your balance is quite low.</p>
                   <span>You can get sepETH from : </span>
@@ -184,7 +196,7 @@ function Mint() {
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleDepositETH()}
-                disabled={!faAddress || !hasBalanceSepolia}
+                disabled={!faAddress}
                 isLoading={receiptLoading}
                 success={receiptSuccess}
               >
@@ -193,7 +205,7 @@ function Mint() {
                   : 'Change network to Sepolia'}
               </Button>
               {hash && (
-                <div className="text-sm m-4">
+                <div className="text-sm m-4 mt-6">
                   {receiptLoading && (
                     <p>
                       <span role="img" aria-label="success">
@@ -285,7 +297,6 @@ function Mint() {
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleMintNFT()}
-                // disabled={!accountId || !receiptSuccess}
                 disabled={
                   !accountId ||
                   !receiptSuccess ||
@@ -293,31 +304,61 @@ function Mint() {
                   !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
                 }
                 isLoading={mintPending}
-                success={!!mintTxHash}
+                success={!!mintTxHash && !!mintTxHashBase}
               >
-                {evmChainId === sepolia.id
-                  ? 'Mint'
-                  : 'Change network to Sepolia'}
+                Mint
               </Button>
-              {mintTxHash && (
-                <p className="text-sm p-4 pb-0">
+              {mintButtonStatus !== 'idle' && (
+                <div className="text-sm p-4 pt-6 pb-0">
+                  {(!mintTxHash || !mintTxHashBase) && (
+                    <p>
+                      <span role="img" aria-label="waiting">
+                        ⏳
+                      </span>{' '}
+                      Minting...
+                    </p>
+                  )}
+                  {mintTxHash && mintTxHashBase && (
+                    <p>
+                      <span role="img" aria-label="success">
+                        ✅
+                      </span>{' '}
+                      Minted NFT!
+                    </p>
+                  )}
                   <p>
-                    <span role="img" aria-label="success">
-                      ✅
-                    </span>{' '}
-                    Minted NFT!
+                    <div>
+                      <span>Sepolia: </span>
+                      {mintTxHash && (
+                        <a
+                          className="text-blue-500 underline"
+                          href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {isMobile()
+                            ? shortAddress(mintTxHash, 8, 10)
+                            : shortAddress(mintTxHash, 10, 16)}
+                        </a>
+                      )}
+                    </div>
                   </p>
-                  <a
-                    className="text-blue-500 underline"
-                    href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {isMobile()
-                      ? shortAddress(mintTxHash, 8, 10)
-                      : shortAddress(mintTxHash, 10, 16)}
-                  </a>
-                </p>
+                  <div>
+                    <span>Base Sepolia: </span>
+                    {mintTxHashBase && (
+                      <a
+                        className="text-blue-500 underline"
+                        href={`https://sepolia.basescan.org/tx/${mintTxHashBase}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {isMobile()
+                          ? shortAddress(mintTxHashBase, 8, 10)
+                          : shortAddress(mintTxHashBase, 10, 16)}
+                      </a>
+                    )}
+                  </div>
+                </div>
               )}
             </li>
           </ol>
