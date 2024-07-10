@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
+import ProfileImg from '~/components/ProfileImg'
 import {
   // GetSignatureRequest,
   // GetSignatureResponse,
@@ -319,12 +320,16 @@ function Mint() {
                     </p>
                   )}
                   {mintTxHash && mintTxHashBase && (
-                    <p>
-                      <span role="img" aria-label="success">
-                        ✅
-                      </span>{' '}
-                      Minted NFT!
-                    </p>
+                    <div className="flex flex-col md:flex-row md:m-4 md:mb-6 justify-center items-center">
+                      <div className="md:w-1/3 w-1/2">
+                        <ProfileImg rank={1} />
+                      </div>
+                      <div className="md:w-1/3 w-1/2 md:text-xl font-bold pl-4">
+                        <span role="img" aria-label="success">
+                          ✅ Minted!
+                        </span>{' '}
+                      </div>
+                    </div>
                   )}
                   <p>
                     <div>
