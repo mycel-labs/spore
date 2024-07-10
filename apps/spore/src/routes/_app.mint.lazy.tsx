@@ -1,11 +1,9 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
+import ProfileImg from '~/components/ProfileImg'
 import {
-  // GetSignatureRequest,
-  // GetSignatureResponse,
   MintRequest,
   useCreateAccount,
-  // useGetSignature,
   useMint,
   Network,
 } from '@/hooks/useSuave'
@@ -35,7 +33,6 @@ function Mint() {
   const [accountId, setAccountId] = useState<string>('')
   const [faAddress, setFaAddress] = useState<string>('')
   const [recipientAddress, setRecipientAddress] = useState<string>('')
-  // const [signature, setSignature] = useState<GetSignatureResponse | null>(null)
   const [mintTxHash, setMintTxHash] = useState<string>('')
   const [mintTxHashBase, setMintTxHashBase] = useState<string>('')
   const [mintButtonStatus, setMintButtonStatus] = useState<
@@ -43,8 +40,6 @@ function Mint() {
   >('idle')
   const { mutateAsync: createAccount, isPending: createAccountPending } =
     useCreateAccount()
-  // const { mutateAsync: getSignature, isPending: getSignaturePending } =
-  //   useGetSignature()
   const { mutateAsync: mint, isPending: mintPending } = useMint()
 
   const sepolia = { id: 11155111 }
@@ -81,19 +76,6 @@ function Mint() {
       }
     }
   }
-
-  // async function handleSignMintRequest() {
-  //   if (!accountId || !recipientAddress) {
-  //     console.error('Invalid accountId or recipientAddress')
-  //     return
-  //   }
-  //   const body: GetSignatureRequest = {
-  //     recipient: recipientAddress,
-  //     accountId,
-  //   }
-  //   const signature: GetSignatureResponse = await getSignature(body)
-  //   setSignature(signature)
-  // }
 
   async function handleMintNFT() {
     if (!accountId) {
@@ -140,11 +122,6 @@ function Mint() {
               🔗 Rigil Testnet Chain info
             </a>
           </div>
-          {/* <p className="text-center text-sm px-8 pt-4">
-            <strong>
-              Please make sure you have enough SepETH in your TA to mint NFT.
-            </strong>
-          </p> */}
           <p className="text-center text-sm px-8 pt-4">
             <strong>
               This feature is in alpha. Specifications may change suddenly.
@@ -247,7 +224,6 @@ function Mint() {
               )}
             </li>
             <li>
-              {/* Sign mint request */}
               Mint NFT
               <input
                 type="text"
@@ -277,23 +253,6 @@ function Mint() {
                     Invalid Ethereum address format
                   </p>
                 )}
-              {/* <Button
-                className="btn bg-secondary w-full h-14 mt-2"
-                onClick={async () => await handleSignMintRequest()}
-                disabled={
-                  !accountId ||
-                  !receiptSuccess ||
-                  !recipientAddress ||
-                  !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
-                }
-                isLoading={getSignaturePending}
-                success={!!signature}
-              >
-                Sign
-              </Button> */}
-              {/* </li>
-            <li> */}
-              {/* Mint NFT */}
               <Button
                 className="btn bg-secondary w-full h-14 mt-2"
                 onClick={async () => await handleMintNFT()}
@@ -319,12 +278,16 @@ function Mint() {
                     </p>
                   )}
                   {mintTxHash && mintTxHashBase && (
-                    <p>
-                      <span role="img" aria-label="success">
-                        ✅
-                      </span>{' '}
-                      Minted NFT!
-                    </p>
+                    <div className="flex flex-col md:flex-row md:m-4 md:mb-6 justify-center items-center">
+                      <div className="md:w-1/3 w-1/2">
+                        <ProfileImg rank={1} />
+                      </div>
+                      <div className="md:w-1/3  md:text-xl font-bold md:pl-4">
+                        <span role="img" aria-label="success">
+                          ✅ Minted!
+                        </span>{' '}
+                      </div>
+                    </div>
                   )}
                   <p>
                     <div>
