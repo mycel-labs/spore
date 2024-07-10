@@ -133,7 +133,7 @@ function Mint() {
           </div>
           <div className="text-center text-sm px-8 text-blue-500 underline font-bold">
             <a
-              href="https://suave-alpha.flashbots.net/tutorials/rigil#chain-info"
+              href="https://suave-alpha.flashbots.net/rigil"
               target="_blank"
               rel="noreferrer"
             >
