@@ -282,7 +282,7 @@ function Mint() {
                       <div className="md:w-1/3 w-1/2">
                         <ProfileImg rank={1} />
                       </div>
-                      <div className="md:w-1/3 w-1/2 md:text-xl font-bold pl-4">
+                      <div className="md:w-1/3  md:text-xl font-bold md:pl-4">
                         <span role="img" aria-label="success">
                           ✅ Minted!
                         </span>{' '}
