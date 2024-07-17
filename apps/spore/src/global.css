@@ -64,6 +64,7 @@
   body,
   div#root {
     height: 100%;
+    overflow: auto;
   }
 
   body {
