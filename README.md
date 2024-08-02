@@ -11,7 +11,7 @@ pnpm i
 
 ### Enviroment Values
 ```
-cp apps/spore/.env_example apps/spore/.env
+cp apps/spore/.env.example apps/spore/.env
 ```
 
 ### Run Spore
