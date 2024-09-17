@@ -20,7 +20,15 @@ export default function AccordionDemo() {
           chain. (Spore only supports Sepolia and Base Sepolia. But we plan to
           support the BTC testnet soon.) Learn more about Transferable Account
           (TA) 👇
-          https://medium.com/@mycel/introduction-to-transferable-account-c764ee982fa4
+          <div className="text-sm text-blue-500 underline font-bold m-2 ml-0">
+            <a
+              href="https://medium.com/@mycel/introduction-to-transferable-account-c764ee982fa4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              🔗 Introduction to Transferable Account
+            </a>
+          </div>
           This innovative platform is designed to enhance the user experience
           within the Mycelien ecosystem by enabling seamless account portability
           and interaction.
@@ -38,7 +46,15 @@ export default function AccordionDemo() {
         <AccordionTrigger>How it works?</AccordionTrigger>
         <AccordionContent>
           Learn more about how Spore works:
-          https://medium.com/@mycel/introducing-spore-our-very-first-public-testnet-60a331debf0d
+          <div className="text-sm text-blue-500 underline font-bold m-2 ml-0">
+            <a
+              href="https://medium.com/@mycel/introducing-spore-our-very-first-public-testnet-60a331debf0d"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              🔗 Introducing SPORE: Our Very First Public Testnet
+            </a>
+          </div>
         </AccordionContent>
       </AccordionItem>
     </Accordion>
