@@ -12,21 +12,33 @@ export default function AccordionDemo() {
       <AccordionItem value="item-1">
         <AccordionTrigger>What is SPORE?</AccordionTrigger>
         <AccordionContent>
-          Yes. It adheres to the WAI-ARIA design pattern.
+          Spore is a decentralized application (dapp) built specifically for
+          Myceliens🍄, utilizing the power of Transferable Account. With
+          Mycel&apos;s Transferable Account, NFTs can be minted across different
+          chains. For example, you could mint NFTs on the Ethereum mainnet even
+          if you only have BNB token on the BNB chain. It works across any
+          chain. (Spore only supports Sepolia and Base Sepolia. But we plan to
+          support the BTC testnet soon.) Learn more about Transferable Account
+          (TA) 👇
+          https://medium.com/@mycel/introduction-to-transferable-account-c764ee982fa4
+          This innovative platform is designed to enhance the user experience
+          within the Mycelien ecosystem by enabling seamless account portability
+          and interaction.
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger>Why SPORE?</AccordionTrigger>
         <AccordionContent>
-          Yes. It comes with default styles that matches the other
-          components&apos; aesthetic.
+          With Spore, market participants can earn points, level up their
+          Citizen Cards, and enjoy a clear and engaging experience of
+          Transferable Accounts&apos; use cases in the form of NFTs.
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-3">
         <AccordionTrigger>How it works?</AccordionTrigger>
         <AccordionContent>
-          Yes. It&apos;s animated by default, but you can disable it if you
-          prefer.
+          Learn more about how Spore works:
+          https://medium.com/@mycel/introducing-spore-our-very-first-public-testnet-60a331debf0d
         </AccordionContent>
       </AccordionItem>
     </Accordion>
