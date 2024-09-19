@@ -13,6 +13,19 @@ import { useStore } from '@/store'
 import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
 import LoaderCircle from './LoaderCircle'
 
+/*
+ * utils
+ */
+function truncateName(name: string, visibleChars: number = 10): string {
+  if (name.length <= visibleChars) return name
+  const lastPart = name.slice(-5)
+  const firstPart = name.slice(0, visibleChars - 5)
+  return `${firstPart}...${lastPart}`
+}
+
+/*
+ * components
+ */
 export default function BoardTab({
   tab,
 }: {
@@ -147,7 +160,7 @@ const TeamTabContent = ({
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
-        <td>{data.userId}</td>
+        <td>{truncateName(data.userId)}</td>
         <td className="text-right">{data.totalPoints}</td>
       </tr>
     )
@@ -185,7 +198,7 @@ const PlayerTabContent = ({
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
-        <td>{data.userId}</td>
+        <td>{truncateName(data.userId)}</td>
         <td className="text-right">{data.totalPoints}</td>
       </tr>
     )
