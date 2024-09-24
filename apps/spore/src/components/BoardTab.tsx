@@ -9,6 +9,7 @@ import {
   useGetTeamLeaderBoardByUserId,
   useGetTotalLeaderBoard,
 } from '@/hooks/useReferral'
+import { isMobile } from '@/lib/utils'
 import { useStore } from '@/store'
 import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
 import LoaderCircle from './LoaderCircle'
@@ -16,10 +17,17 @@ import LoaderCircle from './LoaderCircle'
 /*
  * utils
  */
-function truncateName(name: string, visibleChars: number = 25): string {
+function truncateName(
+  name: string,
+  visibleCharsMobile: number = 15,
+  visibleCharsPC: number = 25
+): string {
+  const visibleChars = isMobile() ? visibleCharsMobile : visibleCharsPC
+
   if (name.length <= visibleChars) return name
-  const lastPart = name.slice(-visibleChars)
-  const firstPart = name.slice(0, visibleChars - lastPart.length)
+  const lastPartLength = visibleChars - 5
+  const lastPart = name.slice(-lastPartLength)
+  const firstPart = name.slice(0, visibleChars - lastPartLength)
   return `${firstPart}...${lastPart}`
 }
 
