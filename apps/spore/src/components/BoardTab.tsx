@@ -16,10 +16,10 @@ import LoaderCircle from './LoaderCircle'
 /*
  * utils
  */
-function truncateName(name: string, visibleChars: number = 10): string {
+function truncateName(name: string, visibleChars: number = 25): string {
   if (name.length <= visibleChars) return name
-  const lastPart = name.slice(-5)
-  const firstPart = name.slice(0, visibleChars - 5)
+  const lastPart = name.slice(-visibleChars)
+  const firstPart = name.slice(0, visibleChars - lastPart.length)
   return `${firstPart}...${lastPart}`
 }
 
