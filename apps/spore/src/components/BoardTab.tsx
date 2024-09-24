@@ -9,10 +9,31 @@ import {
   useGetTeamLeaderBoardByUserId,
   useGetTotalLeaderBoard,
 } from '@/hooks/useReferral'
+import { isMobile } from '@/lib/utils'
 import { useStore } from '@/store'
 import { LeaderBoard, TotalLeaderBoard } from '@/types/referral'
 import LoaderCircle from './LoaderCircle'
 
+/*
+ * utils
+ */
+function truncateName(
+  name: string,
+  visibleCharsMobile: number = 15,
+  visibleCharsPC: number = 25
+): string {
+  const visibleChars = isMobile() ? visibleCharsMobile : visibleCharsPC
+
+  if (name.length <= visibleChars) return name
+  const lastPartLength = visibleChars - 5
+  const lastPart = name.slice(-lastPartLength)
+  const firstPart = name.slice(0, visibleChars - lastPartLength)
+  return `${firstPart}...${lastPart}`
+}
+
+/*
+ * components
+ */
 export default function BoardTab({
   tab,
 }: {
@@ -147,7 +168,7 @@ const TeamTabContent = ({
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
-        <td>{data.userId}</td>
+        <td>{truncateName(data.userId)}</td>
         <td className="text-right">{data.totalPoints}</td>
       </tr>
     )
@@ -185,7 +206,7 @@ const PlayerTabContent = ({
   const rows = lb.map((data) => {
     return (
       <tr className="[&>td]:py-2 [&>td]:px-6" key={data.userId}>
-        <td>{data.userId}</td>
+        <td>{truncateName(data.userId)}</td>
         <td className="text-right">{data.totalPoints}</td>
       </tr>
     )
