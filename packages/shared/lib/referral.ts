@@ -1,7 +1,7 @@
 import { callFn } from '../lib/firebase'
 
 export const SPORE_MAX_REDEMPTIONS: number[] = [
-  0, 1, 3, 5, 10, 30, 50, 80, 100, 150, 300,
+  0, 1, 3, 5, 10, 30, 50, 80, 100, 150,
 ]
 
 export const SPORE_RANK_NAME: any[] = [
@@ -16,6 +16,10 @@ export const SPORE_RANK_NAME: any[] = [
   'Shroominati', // >=100
   'Shroomartian', // >=150
 ]
+
+const isMaxRedemptionsReached = (count: number): boolean => {
+  return count >= SPORE_MAX_REDEMPTIONS[SPORE_MAX_REDEMPTIONS.length - 1]
+}
 
 export const getRankFromScore = (count: number): number => {
   let rank = 0
@@ -34,6 +38,12 @@ export const getRankNameFromScore = (count: number): string => {
 
 export const getNextRankFromScore = (count: number) => {
   const rank: number = getRankFromScore(count)
+  if (isMaxRedemptionsReached(count)) {
+    return {
+      current: count,
+      next: 999999,
+    }
+  }
   return {
     current: count,
     next: SPORE_MAX_REDEMPTIONS[rank + 1],
