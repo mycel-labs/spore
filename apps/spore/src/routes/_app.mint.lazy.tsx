@@ -34,7 +34,6 @@ function Mint() {
   const [faAddress, setFaAddress] = useState<string>('')
   const [recipientAddress, setRecipientAddress] = useState<string>('')
   const [mintTxHash, setMintTxHash] = useState<string>('')
-  const [mintTxHashBase, setMintTxHashBase] = useState<string>('')
   const [mintButtonStatus, setMintButtonStatus] = useState<
     'idle' | 'minting' | 'minted'
   >('idle')
@@ -82,7 +81,7 @@ function Mint() {
       console.error('Invalid accountId')
       return
     }
-    const networks: Network[] = ['sepolia', 'baseSepolia']
+    const networks: Network[] = ['sepolia']
     for (const network of networks) {
       setMintButtonStatus('minting')
       const body: MintRequest = {
@@ -92,8 +91,7 @@ function Mint() {
       }
       try {
         const resp = await mint(body)
-        if (network === 'sepolia') setMintTxHash(resp.txHash)
-        else setMintTxHashBase(resp.txHash)
+        setMintTxHash(resp.txHash)
       } catch (error) {
         console.error(`Failed to mint NFT on ${network}:`, error)
       }
@@ -263,13 +261,13 @@ function Mint() {
                   !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
                 }
                 isLoading={mintPending}
-                success={!!mintTxHash && !!mintTxHashBase}
+                success={!!mintTxHash}
               >
                 Mint
               </Button>
               {mintButtonStatus !== 'idle' && (
                 <div className="text-sm p-4 pt-6 pb-0">
-                  {(!mintTxHash || !mintTxHashBase) && (
+                  {!mintTxHash && (
                     <p>
                       <span role="img" aria-label="waiting">
                         ⏳
@@ -277,7 +275,7 @@ function Mint() {
                       Minting...
                     </p>
                   )}
-                  {mintTxHash && mintTxHashBase && (
+                  {mintTxHash && (
                     <div className="flex flex-col md:flex-row md:m-4 md:mb-6 justify-center items-center">
                       <div className="md:w-1/3 w-1/2">
                         <ProfileImg rank={1} />
@@ -306,21 +304,6 @@ function Mint() {
                       )}
                     </div>
                   </p>
-                  <div>
-                    <span>Base Sepolia: </span>
-                    {mintTxHashBase && (
-                      <a
-                        className="text-blue-500 underline"
-                        href={`https://sepolia.basescan.org/tx/${mintTxHashBase}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {isMobile()
-                          ? shortAddress(mintTxHashBase, 8, 10)
-                          : shortAddress(mintTxHashBase, 10, 16)}
-                      </a>
-                    )}
-                  </div>
                 </div>
               )}
             </li>
