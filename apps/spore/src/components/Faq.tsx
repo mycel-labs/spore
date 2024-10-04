@@ -17,9 +17,8 @@ export default function AccordionDemo() {
           Mycel&apos;s Transferable Account, NFTs can be minted across different
           chains. For example, you could mint NFTs on the Ethereum mainnet even
           if you only have BNB token on the BNB chain. It works across any
-          chain. (Spore only supports Sepolia and Base Sepolia. But we plan to
-          support the BTC testnet soon.) Learn more about Transferable Account
-          (TA) 👇
+          chain. (Spore only supports Holesky. But we plan to support the BTC
+          testnet soon.) Learn more about Transferable Account (TA) 👇
           <div className="text-sm text-blue-500 underline font-bold m-2 ml-0">
             <a
               href="https://medium.com/@mycel/introduction-to-transferable-account-c764ee982fa4"

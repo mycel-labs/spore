@@ -41,11 +41,10 @@ function Mint() {
     useCreateAccount()
   const { mutateAsync: mint, isPending: mintPending } = useMint()
 
-  const sepolia = { id: 11155111 }
-  const hasBalanceSepolia =
-    evmChainId === sepolia.id && balance && balance > BigInt(5e15) // 0.005 ETH
+  const holesky = { id: 17000 }
+  const hasBalanceHolesky =
+    evmChainId === holesky.id && balance && balance > BigInt(5e15) // 0.005 ETH
 
-  // handleDepositETH is a function to deposit SepETH to TA on Sepolia
   async function handleCreateTA() {
     const account = await createAccount()
     if (account) {
@@ -58,8 +57,8 @@ function Mint() {
   }
 
   async function handleDepositETH() {
-    switchEvmNetworkAsync(sepolia.id)
-    if (evmChainId === sepolia.id) {
+    switchEvmNetworkAsync(holesky.id)
+    if (evmChainId === holesky.id) {
       // send 1 wei to TA
       if (/^0x[a-fA-F0-9]{40}$/.test(faAddress)) {
         const TA = faAddress as `0x${string}`
@@ -68,7 +67,7 @@ function Mint() {
           to: TA,
           value: amount,
           gas: BigInt(21000),
-          chainId: sepolia.id,
+          chainId: holesky.id,
         })
       } else {
         console.error('Invalid faAddress:', faAddress)
@@ -81,7 +80,7 @@ function Mint() {
       console.error('Invalid accountId')
       return
     }
-    const networks: Network[] = ['sepolia']
+    const networks: Network[] = ['holesky']
     for (const network of networks) {
       setMintButtonStatus('minting')
       const body: MintRequest = {
@@ -92,6 +91,7 @@ function Mint() {
       try {
         const resp = await mint(body)
         setMintTxHash(resp.txHash)
+        console.log(`Minted NFT on ${network}:`, resp.txHash)
       } catch (error) {
         console.error(`Failed to mint NFT on ${network}:`, error)
       }
@@ -105,19 +105,19 @@ function Mint() {
         <h2 className="text-center text-3xl font-bold pt-8 centerline">Mint</h2>
         <div className="pb-4">
           <p className="text-center text-sm px-8 pt-4">
-            This feature allows you to mint NFTs on Sepolia and Base Sepolia
-            with SUAVE Rigil Testnet powered by Transferable Account (TA).
+            This feature allows you to mint NFTs on Holesky with SUAVE Toliman
+            Testnet powered by Transferable Account (TA).
           </p>
           <div className="text-center text-sm px-8">
             For information of Rigil Testnet, see:
           </div>
           <div className="text-center text-sm px-8 text-blue-500 underline font-bold">
             <a
-              href="https://suave-alpha.flashbots.net/rigil"
+              href="https://suave-alpha.flashbots.net/toliman"
               target="_blank"
               rel="noreferrer"
             >
-              🔗 Rigil Testnet Chain info
+              🔗 Toliman Testnet Chain info
             </a>
           </div>
           <p className="text-center text-sm px-8 pt-4">
@@ -152,13 +152,13 @@ function Mint() {
             </li>
             <li>
               Deposit SepETH to TA
-              {!hasBalanceSepolia && evmChainId === sepolia.id ? (
+              {!hasBalanceHolesky && evmChainId === holesky.id ? (
                 <div className="text-sm m-4 font-bold">
                   <p>⚠️ Your balance is quite low.</p>
                   <span>You can get sepETH from : </span>
                   <a
                     className="text-blue-500 underline"
-                    href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
+                    href="https://cloud.google.com/application/web3/faucet/ethereum/holesky"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -175,9 +175,9 @@ function Mint() {
                 isLoading={receiptLoading}
                 success={receiptSuccess}
               >
-                {evmChainId === sepolia.id
+                {evmChainId === holesky.id
                   ? 'Deposit'
-                  : 'Change network to Sepolia'}
+                  : 'Change network to Holesky'}
               </Button>
               {hash && (
                 <div className="text-sm m-4 mt-6">
@@ -209,7 +209,7 @@ function Mint() {
                     {' '}
                     <a
                       className="text-blue-500 underline"
-                      href={`https://sepolia.etherscan.io/tx/${hash}`}
+                      href={`https://holesky.etherscan.io/tx/${hash}`}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -289,11 +289,11 @@ function Mint() {
                   )}
                   <p>
                     <div>
-                      <span>Sepolia: </span>
+                      <span>Holesky: </span>
                       {mintTxHash && (
                         <a
                           className="text-blue-500 underline"
-                          href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
+                          href={`https://holesky.etherscan.io/tx/${mintTxHash}`}
                           target="_blank"
                           rel="noreferrer"
                         >

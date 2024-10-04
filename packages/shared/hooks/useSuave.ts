@@ -21,12 +21,12 @@ export type GetSignatureResponse = {
   s: string
 }
 
-export type Network = 'sepolia' | 'baseSepolia'
+export type Network = 'holesky'
 
 export type MintRequest = {
   recipient: string
   accountId: string
-  network?: Network // if empty, default to sepolia
+  network?: Network // if empty, default to holesky
 }
 
 export type MintResponse = {
