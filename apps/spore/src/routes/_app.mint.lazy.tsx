@@ -109,7 +109,7 @@ function Mint() {
             Testnet powered by Transferable Account (TA).
           </p>
           <div className="text-center text-sm px-8">
-            For information of Rigil Testnet, see:
+            For information of Toliman Testnet, see:
           </div>
           <div className="text-center text-sm px-8 text-blue-500 underline font-bold">
             <a
