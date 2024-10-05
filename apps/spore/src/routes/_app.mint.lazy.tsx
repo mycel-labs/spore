@@ -151,11 +151,11 @@ function Mint() {
               )}
             </li>
             <li>
-              Deposit SepETH to TA
+              Deposit Holesky ETH to TA
               {!hasBalanceHolesky && evmChainId === holesky.id ? (
                 <div className="text-sm m-4 font-bold">
                   <p>⚠️ Your balance is quite low.</p>
-                  <span>You can get sepETH from : </span>
+                  <span>You can get holesky ETH from : </span>
                   <a
                     className="text-blue-500 underline"
                     href="https://cloud.google.com/application/web3/faucet/ethereum/holesky"
@@ -186,7 +186,7 @@ function Mint() {
                       <span role="img" aria-label="success">
                         ⏳
                       </span>{' '}
-                      Waiting for transaction to be confirmed...
+                      Waiting for the transaction to be confirmed...
                     </p>
                   )}
                   {receiptError && (
