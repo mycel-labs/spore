@@ -57,7 +57,7 @@ function Mint() {
   }
 
   async function handleDepositETH() {
-    switchEvmNetworkAsync(holesky.id)
+    await switchEvmNetworkAsync(holesky.id)
     if (evmChainId === holesky.id) {
       // send 1 wei to TA
       if (/^0x[a-fA-F0-9]{40}$/.test(faAddress)) {
