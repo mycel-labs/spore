@@ -307,7 +307,7 @@ export const useWallet = () => {
     args: [evmAddressWagmi],
   })
 
-  console.log(nftBalance)
+  console.log(`nftBalance: ${nftBalance}`)
 
   const hasMintedNFT = useMemo(() => {
     return (
