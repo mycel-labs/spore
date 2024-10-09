@@ -31,7 +31,7 @@ function Mint() {
     hasMintedNFT,
   } = useWallet()
 
-  console.log('hasMintedNFT', hasMintedNFT)
+  console.log(`hasMintedNFT: ${hasMintedNFT}`)
 
   const [accountId, setAccountId] = useState<string>('')
   const [faAddress, setFaAddress] = useState<string>('')
