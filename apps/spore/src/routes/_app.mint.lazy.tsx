@@ -41,9 +41,10 @@ function Mint() {
     useCreateAccount()
   const { mutateAsync: mint, isPending: mintPending } = useMint()
 
-  const holesky = { id: 17000 }
-  const hasBalanceHolesky =
-    evmChainId === holesky.id && balance && balance > BigInt(5e15) // 0.005 ETH
+  const sepolia = { id: 11155111 }
+  const hasBalanceSepolia =
+    evmChainId === sepolia.id && balance && balance > BigInt(5e15) // 0.005 ETH
+  console.log('evmChainId', evmChainId)
 
   async function handleCreateTA() {
     const account = await createAccount()
@@ -57,8 +58,8 @@ function Mint() {
   }
 
   async function handleDepositETH() {
-    await switchEvmNetworkAsync(holesky.id)
-    if (evmChainId === holesky.id) {
+    await switchEvmNetworkAsync(sepolia.id)
+    if (evmChainId === sepolia.id) {
       // send 1 wei to TA
       if (/^0x[a-fA-F0-9]{40}$/.test(faAddress)) {
         const TA = faAddress as `0x${string}`
@@ -67,7 +68,7 @@ function Mint() {
           to: TA,
           value: amount,
           gas: BigInt(21000),
-          chainId: holesky.id,
+          chainId: sepolia.id,
         })
       } else {
         console.error('Invalid faAddress:', faAddress)
@@ -80,7 +81,7 @@ function Mint() {
       console.error('Invalid accountId')
       return
     }
-    const networks: Network[] = ['holesky']
+    const networks: Network[] = ['sepolia']
     for (const network of networks) {
       setMintButtonStatus('minting')
       const body: MintRequest = {
@@ -105,7 +106,7 @@ function Mint() {
         <h2 className="text-center text-3xl font-bold pt-8 centerline">Mint</h2>
         <div className="pb-4">
           <p className="text-center text-sm px-8 pt-4">
-            This feature allows you to mint NFTs on Holesky with SUAVE Toliman
+            This feature allows you to mint NFTs on Sepolia with SUAVE Toliman
             Testnet powered by Transferable Account (TA).
           </p>
           <div className="text-center text-sm px-8">
@@ -151,14 +152,14 @@ function Mint() {
               )}
             </li>
             <li>
-              Deposit Holesky ETH to TA
-              {!hasBalanceHolesky && evmChainId === holesky.id ? (
+              Deposit Sepolia ETH to TA
+              {!hasBalanceSepolia && evmChainId === sepolia.id ? (
                 <div className="text-sm m-4 font-bold">
                   <p>⚠️ Your balance is quite low.</p>
-                  <span>You can get holesky ETH from : </span>
+                  <span>You can get sepolia ETH from : </span>
                   <a
                     className="text-blue-500 underline"
-                    href="https://cloud.google.com/application/web3/faucet/ethereum/holesky"
+                    href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -175,9 +176,9 @@ function Mint() {
                 isLoading={receiptLoading}
                 success={receiptSuccess}
               >
-                {evmChainId === holesky.id
+                {evmChainId === sepolia.id
                   ? 'Deposit'
-                  : 'Change network to Holesky'}
+                  : 'Change network to Sepolia'}
               </Button>
               {hash && (
                 <div className="text-sm m-4 mt-6">
@@ -209,7 +210,7 @@ function Mint() {
                     {' '}
                     <a
                       className="text-blue-500 underline"
-                      href={`https://holesky.etherscan.io/tx/${hash}`}
+                      href={`https://sepolia.etherscan.io/tx/${hash}`}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -289,11 +290,11 @@ function Mint() {
                   )}
                   <p>
                     <div>
-                      <span>Holesky: </span>
+                      <span>Sepolia: </span>
                       {mintTxHash && (
                         <a
                           className="text-blue-500 underline"
-                          href={`https://holesky.etherscan.io/tx/${mintTxHash}`}
+                          href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
                           target="_blank"
                           rel="noreferrer"
                         >

@@ -21,7 +21,7 @@ export type GetSignatureResponse = {
   s: string
 }
 
-export type Network = 'holesky'
+export type Network = 'sepolia'
 
 export type MintRequest = {
   recipient: string
