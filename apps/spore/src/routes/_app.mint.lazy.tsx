@@ -133,7 +133,7 @@ function Mint() {
       <div className="text-center text-2xl font-extrabold m-4">
         <div className="pb-4">
           <p>🎊 Congratulations!🎉</p>
-          <p>Your NFT is now minted!</p>
+          <p>You own a Spore NFT!</p>
         </div>
         <div className="mt-4 flex justify-center items-center">
           <ProfileImg rank={1} />
