@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { shortAddress } from '@/lib/wallets'
 import { useWallet } from '@/hooks/useWallet'
 import { isMobile } from '@/lib/utils'
+import { useEffect } from 'react'
 
 export const Route = createLazyFileRoute('/_app/mint')({
   component: Mint,
@@ -31,8 +32,6 @@ function Mint() {
     hasMintedNFT,
   } = useWallet()
 
-  console.log(`hasMintedNFT: ${hasMintedNFT}`)
-
   const [accountId, setAccountId] = useState<string>('')
   const [faAddress, setFaAddress] = useState<string>('')
   const [recipientAddress, setRecipientAddress] = useState<string>('')
@@ -47,6 +46,16 @@ function Mint() {
   const sepolia = { id: 11155111 }
   const hasBalanceSepolia =
     evmChainId === sepolia.id && balance && balance > BigInt(5e15) // 0.005 ETH
+
+  const [showNetworkMask, setShowNetworkMask] = useState(true)
+
+  useEffect(() => {
+    if (evmChainId === sepolia.id) {
+      setShowNetworkMask(false)
+    } else {
+      setShowNetworkMask(true)
+    }
+  }, [evmChainId])
 
   async function handleCreateTA() {
     const account = await createAccount()
@@ -101,6 +110,23 @@ function Mint() {
     }
     setMintButtonStatus('minted')
   }
+
+  const NetworkMask = (
+    <div className="absolute inset-0 bg-black bg-opacity-50 z-10 flex items-center justify-center rounded-xl">
+      <div className="bg-light p-8 m-8 rounded-xl text-center border-4 border-white">
+        <h3 className="text-xl font-bold mb-4">Network Change Required</h3>
+        <p className="mb-4">
+          This feature is only available on the Sepolia testnet.
+        </p>
+        <Button
+          className="btn bg-secondary w-full h-14 mt-2"
+          onClick={() => switchEvmNetworkAsync(sepolia.id)}
+        >
+          Switch to Sepolia
+        </Button>
+      </div>
+    </div>
+  )
 
   const MintedNFTMessage = (
     <div className="p-4">
@@ -200,7 +226,7 @@ function Mint() {
             >
               {evmChainId === sepolia.id
                 ? 'Deposit'
-                : 'Change network to Sepolia'}
+                : 'Switch network to Sepolia'}
             </Button>
             {hash && (
               <div className="text-sm m-4 mt-6">
@@ -337,7 +363,8 @@ function Mint() {
 
   return (
     <div className="py-8 space-y-8">
-      <div className="bg-light overlay-dot-ll rounded-xl">
+      <div className="bg-light overlay-dot-ll rounded-xl relative">
+        {showNetworkMask && NetworkMask}
         <h2 className="text-center text-3xl font-bold pt-8 centerline">Mint</h2>
         {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage}
         {/* {ReadyToMintMessage} */}
