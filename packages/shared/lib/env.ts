@@ -5,6 +5,7 @@ let rpcURL = ''
 let prefix = ''
 let firebaseAPIKey = ''
 let firebaseProjectId = ''
+let isMaintenance = false
 
 const isNodeEnvironment = typeof process !== 'undefined'
 
@@ -16,6 +17,7 @@ if (isNodeEnvironment && !!process.env.NEXT_RUNTIME) {
   firebaseAPIKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? ''
   firebaseProjectId =
     process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? 'spore-testnet'
+  isMaintenance = process.env.NEXT_PUBLIC_IS_MAINTENANCE ?? false
 } else {
   isDev = import.meta.env.DEV
   apiURL = import.meta.env.VITE_API_COSMOS ?? 'http://localhost:1317'
@@ -24,6 +26,7 @@ if (isNodeEnvironment && !!process.env.NEXT_RUNTIME) {
   firebaseAPIKey = import.meta.env.VITE_FIREBASE_API_KEY ?? ''
   firebaseProjectId =
     import.meta.env.VITE_FIREBASE_PROJECT_ID ?? 'spore-testnet'
+  isMaintenance = import.meta.env.VITE_IS_MAINTENANCE ?? false
 }
 
 export const env = {
@@ -33,4 +36,5 @@ export const env = {
   prefix,
   firebaseAPIKey,
   firebaseProjectId,
+  isMaintenance,
 }
