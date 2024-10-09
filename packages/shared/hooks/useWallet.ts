@@ -10,6 +10,7 @@ import {
   useSwitchChain as useSwitchChainWagmi,
   useSendTransaction,
   useWaitForTransactionReceipt,
+  useReadContract,
 } from 'wagmi'
 import { LocalWallet, onboarding } from '@dydxprotocol/v4-client-js'
 import { DirectSecp256k1HdWallet, OfflineSigner } from '@cosmjs/proto-signing'
@@ -274,6 +275,45 @@ export const useWallet = () => {
     })()
   }, [evmAddress, evmDerivedAddresses, signerWagmi, mycelAddress])
 
+  // mint
+  // TODO: use env variable
+  const contractAddress = '0x1Dc168B47bE84d64C493b61120CB03167650Df2A'
+  const contractABI = [
+    {
+      constant: true,
+      inputs: [
+        {
+          name: 'owner',
+          type: 'address',
+        },
+      ],
+      name: 'balanceOf',
+      outputs: [
+        {
+          name: '',
+          type: 'uint256',
+        },
+      ],
+      payable: false,
+      stateMutability: 'view',
+      type: 'function',
+    },
+  ]
+
+  const { data: nftBalance } = useReadContract({
+    address: contractAddress,
+    abi: contractABI,
+    functionName: 'balanceOf',
+    args: [evmAddressWagmi],
+  })
+
+  const hasMintedNFT = useMemo(() => {
+    return (
+      (typeof nftBalance === 'number' || typeof nftBalance === 'bigint') &&
+      nftBalance > 0
+    )
+  }, [nftBalance])
+
   return {
     // Wallet connection
     isConnected: isConnectedWagmi,
@@ -311,5 +351,7 @@ export const useWallet = () => {
     localMycelWallet,
     mycelOfflineSigner,
     mycelAccount: mycelAccounts?.[0],
+    // mint
+    hasMintedNFT,
   }
 }
