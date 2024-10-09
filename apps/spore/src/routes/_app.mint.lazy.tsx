@@ -103,9 +103,16 @@ function Mint() {
   }
 
   const MintedNFTMessage = (
-    <div className="text-center text-xl font-bold text-green-500">
-      🎉 You have minted NFT!
-      <ProfileImg rank={1} />
+    <div className="p-4">
+      <div className="text-center text-2xl font-extrabold m-4">
+        <div className="pb-4">
+          <p>🎊 Congratulations!🎉</p>
+          <p>Your NFT is now minted!</p>
+        </div>
+        <div className="mt-4 flex justify-center items-center">
+          <ProfileImg rank={1} />
+        </div>
+      </div>
     </div>
   )
 
