@@ -28,7 +28,10 @@ function Mint() {
     receiptError,
     receiptLoading,
     receiptSuccess,
+    hasMintedNFT,
   } = useWallet()
+
+  console.log('hasMintedNFT', hasMintedNFT)
 
   const [accountId, setAccountId] = useState<string>('')
   const [faAddress, setFaAddress] = useState<string>('')
@@ -44,7 +47,6 @@ function Mint() {
   const sepolia = { id: 11155111 }
   const hasBalanceSepolia =
     evmChainId === sepolia.id && balance && balance > BigInt(5e15) // 0.005 ETH
-  console.log('evmChainId', evmChainId)
 
   async function handleCreateTA() {
     const account = await createAccount()
