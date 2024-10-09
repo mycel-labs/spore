@@ -2,7 +2,7 @@ import {
   Chain,
   mainnet,
   sepolia,
-  goerli,
+  holesky,
   polygon,
   polygonMumbai,
   bsc,
@@ -43,7 +43,7 @@ const zetaAthens: Chain = {
 export const chains: Chain[] = [
   mainnet,
   sepolia,
-  goerli,
+  holesky,
   polygon,
   polygonMumbai,
   bsc,
@@ -64,8 +64,8 @@ export const getConnectedNetworkName = (chainId: number) => {
   switch (chainId) {
     case mainnet.id:
       return RegistryNetworkName.ETHEREUM_MAINNET_MAINNET
-    case goerli.id:
-      return RegistryNetworkName.ETHEREUM_TESTNET_GOERLI
+    case holesky.id:
+      return RegistryNetworkName.ETHEREUM_TESTNET_HOLESKY
     case sepolia.id:
       return RegistryNetworkName.ETHEREUM_TESTNET_SEPOLIA
     case polygon.id:
