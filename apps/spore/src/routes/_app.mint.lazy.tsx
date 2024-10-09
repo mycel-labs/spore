@@ -113,6 +113,16 @@ function Mint() {
           <ProfileImg rank={1} />
         </div>
       </div>
+      <div className="text-center text-sm px-8 pt-4">
+        <a
+          className="text-blue-500 underline"
+          href={`https://sepolia.etherscan.io/token/0x1dc168b47be84d64c493b61120cb03167650df2a?a=${evmAddressWagmi}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          🔗 View your NFT on Etherscan
+        </a>
+      </div>
     </div>
   )
 
