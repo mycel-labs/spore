@@ -31,7 +31,7 @@ function Mint() {
   const {
     state,
     sendCreateAccountCCR,
-    // sendSignL1MintApprovalFA,
+    sendSignL1MintApprovalFA,
     mintNFTWithSignature,
   } = useSuave()
 
@@ -259,6 +259,17 @@ function Mint() {
                 </p>
               </div>
             )}
+          </li>
+          <li>
+            Sign Mint Approval
+            <Button
+              className="btn bg-secondary w-full h-14 mt-2"
+              onClick={async () => await sendSignL1MintApprovalFA()}
+              isLoading={state.waitingForReceipt}
+              success={!!state.mintTxHash}
+            >
+              Sign
+            </Button>
           </li>
           <li>
             Mint NFT
