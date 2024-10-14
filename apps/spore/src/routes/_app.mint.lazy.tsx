@@ -46,6 +46,8 @@ function Mint() {
   const hasBalanceSepolia =
     evmChainId === sepolia.id && balance && balance > BigInt(5e15) // 0.005 ETH
 
+  const hasBalanceToliman = state.balance && state.balance > BigInt(1e16) // 0.01 TEETH
+
   const [showNetworkMask, setShowNetworkMask] = useState(true)
 
   const [signButtonDisabled, setSignButtonDisabled] = useState(true)
@@ -170,6 +172,22 @@ function Mint() {
         <ol className="list-decimal text-xl font-title list-inside space-y-6 px-4">
           <li>
             Create Transferable Account (TA)
+            {!hasBalanceToliman ? (
+              <div className="text-sm m-4 font-bold">
+                <p>⚠️ Your balance on Toliman Testnet is quite low.</p>
+                <span>You can get TEETH from : </span>
+                <a
+                  className="text-blue-500 underline"
+                  href="https://faucet.toliman.suave.flashbots.net/"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  🔗 SUAVE Toliman TEEth Faucet
+                </a>
+              </div>
+            ) : (
+              ''
+            )}
             <Button
               className="btn bg-secondary w-full h-14 mt-2"
               onClick={async () => await handleCreateTA()}
@@ -426,7 +444,7 @@ function Mint() {
           <div>
             {showNetworkMask && NetworkMask}
             {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage}
-            {ReadyToMintMessage}
+            {/* {ReadyToMintMessage} */}
           </div>
         )}
       </div>

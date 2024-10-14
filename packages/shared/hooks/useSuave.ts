@@ -78,6 +78,7 @@ export function useSuave() {
     signedMessage: null as Hex | null,
     isSepoliaNetwork: false,
     chainId: null as string | null,
+    balance: null as bigint | null,
   })
 
   useEffect(() => {
@@ -121,6 +122,18 @@ export function useSuave() {
         })
     }
   }, [state.ethereum, state.connected])
+
+  useEffect(() => {
+    if (state.suaveProvider && state.account) {
+      state.suaveProvider
+        .getBalance({
+          address: state.account,
+        })
+        .then((balance) => {
+          setState((prevState) => ({ ...prevState, balance }))
+        })
+    }
+  }, [state.suaveProvider, state.account])
 
   // useEffect(() => {
   //   localStorage.setItem('accountId', state.accountId)
@@ -465,7 +478,7 @@ export function useSuave() {
 
       const receipt = await publicClient.waitForTransactionReceipt({
         hash,
-        timeout: 120000,
+        timeout: 240000,
       })
       console.log('Mint transaction confirmed:', receipt.transactionHash)
 
