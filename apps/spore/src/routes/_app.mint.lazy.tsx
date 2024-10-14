@@ -432,15 +432,15 @@ function Mint() {
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl relative">
         <h2 className="text-center text-3xl font-bold pt-8 centerline">Mint</h2>
-        {env.isMaintenance ? (
+        {/* {env.isMaintenance ? (
           MaintenanceMessage
-        ) : (
-          <div>
-            {showNetworkMask && NetworkMask}
-            {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage}
-            {ReadyToMintMessage}
-          </div>
-        )}
+        ) : ( */}
+        <div>
+          {showNetworkMask && NetworkMask}
+          {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage}
+          {/* {ReadyToMintMessage} */}
+        </div>
+        {/* )} */}
       </div>
     </div>
   )
