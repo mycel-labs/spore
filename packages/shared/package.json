@@ -12,6 +12,7 @@
     "@cosmjs/stargate": "^0.32.2",
     "@cosmjs/tendermint-rpc": "^0.32.2",
     "@dydxprotocol/v4-client-js": "^1.1.22",
+    "@flashbots/suave-viem": "^1.15.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-tabs": "^1.0.4",
