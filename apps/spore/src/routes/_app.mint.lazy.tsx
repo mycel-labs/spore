@@ -132,7 +132,7 @@ function Mint() {
       <div className="text-center text-sm px-8 pt-4">
         <a
           className="text-blue-500 underline"
-          href={`https://sepolia.etherscan.io/token/0xF1d39D3dB7364fe6d38560066685Fe8C0C64630A?a=${evmAddressWagmi}`}
+          href={`https://sepolia.etherscan.io/token/0x843f17358072d0ce2FB387Ef376dc984673f23Ee?a=${evmAddressWagmi}`}
           target="_blank"
           rel="noreferrer"
         >
@@ -368,31 +368,25 @@ function Mint() {
                     </div>
                   </div>
                 )}
-                <p>
-                  <div>
-                    <span>Sepolia: </span>
-                    {state.mintTxSuccess && (
-                      <a
-                        className="text-blue-500 underline"
-                        href={`https://sepolia.etherscan.io/tx/${state.mintTxHash}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {isMobile()
-                          ? shortAddress(
-                              state.mintTxHash as `0x${string}`,
-                              8,
-                              10
-                            )
-                          : shortAddress(
-                              state.mintTxHash as `0x${string}`,
-                              10,
-                              16
-                            )}
-                      </a>
-                    )}
-                  </div>
-                </p>
+                <div>
+                  <span>Sepolia: </span>
+                  {state.mintTxSuccess && (
+                    <a
+                      className="text-blue-500 underline"
+                      href={`https://sepolia.etherscan.io/tx/${state.mintTxHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {isMobile()
+                        ? shortAddress(state.mintTxHash as `0x${string}`, 8, 10)
+                        : shortAddress(
+                            state.mintTxHash as `0x${string}`,
+                            10,
+                            16
+                          )}
+                    </a>
+                  )}
+                </div>
               </div>
             )}
           </li>
@@ -444,7 +438,7 @@ function Mint() {
           <div>
             {showNetworkMask && NetworkMask}
             {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage}
-            {/* {ReadyToMintMessage} */}
+            {ReadyToMintMessage}
           </div>
         )}
       </div>

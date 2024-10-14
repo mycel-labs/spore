@@ -476,11 +476,36 @@ export function useSuave() {
       console.log('Mint transaction sent:', hash)
       updateState({ mintTxHash: hash })
 
-      const receipt = await publicClient.waitForTransactionReceipt({
-        hash,
-        timeout: 240000,
-      })
-      console.log('Mint transaction confirmed:', receipt.transactionHash)
+      let receipt = null
+      const maxAttempts = 10
+      const attemptInterval = 1000 // 1sec
+
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        try {
+          receipt = await publicClient.waitForTransactionReceipt({
+            hash,
+            timeout: 10000,
+          })
+          console.log('Mint transaction confirmed:', receipt.transactionHash)
+          break
+        } catch (err) {
+          console.warn(`Attempt ${attempt + 1} failed: ${err}`)
+          if (attempt < maxAttempts - 1) {
+            console.log(`Waiting ${attemptInterval / 1000} seconds...`)
+            await new Promise((resolve) => setTimeout(resolve, attemptInterval))
+          } else {
+            throw new Error(
+              'Max attempts reached. Please check the transaction status manually.'
+            )
+          }
+        }
+      }
+
+      if (!receipt) {
+        throw new Error(
+          'Failed to get transaction receipt after multiple attempts'
+        )
+      }
 
       const nftMintedEvent = receipt.logs.find(
         (log) =>
@@ -502,8 +527,11 @@ export function useSuave() {
       }
     } catch (error) {
       console.error('Error in mintNFTWithSignature:', error)
+      updateState({
+        mintTxSuccess: false,
+      })
     }
-  }, [state])
+  }, [state, updateState])
 
   const { data: accountData } = useQuery({
     queryKey: ['account'],
