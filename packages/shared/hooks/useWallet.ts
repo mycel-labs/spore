@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useStore } from '../store/index'
 import {
+  useBalance,
   useBalance as useBalanceWagmi,
   useConnect as useConnectWagmi,
   useDisconnect as useDisconnectWagmi,
@@ -314,6 +315,14 @@ export const useWallet = () => {
     )
   }, [nftBalance])
 
+  const getAddressBalance = useCallback((address: EvmAddress) => {
+    const { data, isError, isLoading } = useBalance({
+      address,
+    })
+
+    return { balance: data?.value, isError, isLoading }
+  }, [])
+
   return {
     // Wallet connection
     isConnected: isConnectedWagmi,
@@ -353,5 +362,6 @@ export const useWallet = () => {
     mycelAccount: mycelAccounts?.[0],
     // mint
     hasMintedNFT,
+    getAddressBalance,
   }
 }

@@ -68,10 +68,13 @@ export function useSuave() {
     suaveProvider: null as ReturnType<typeof getSuaveProvider> | null,
     connected: false,
     account: null as Hex | null,
-    accountId: localStorage.getItem('accountId') || '',
-    taAddress: (localStorage.getItem('taAddress') as Address) || zeroAddress,
+    // accountId: localStorage.getItem('accountId') || '',
+    // taAddress: (localStorage.getItem('taAddress') as Address) || zeroAddress,
+    accountId: null as string | null,
+    taAddress: null as Address | null,
     waitingForReceipt: false,
     mintTxHash: null as Hex | null,
+    mintTxSuccess: false,
     signedMessage: null as Hex | null,
     isSepoliaNetwork: false,
     chainId: null as string | null,
@@ -119,13 +122,13 @@ export function useSuave() {
     }
   }, [state.ethereum, state.connected])
 
-  useEffect(() => {
-    localStorage.setItem('accountId', state.accountId)
-  }, [state.accountId])
+  // useEffect(() => {
+  //   localStorage.setItem('accountId', state.accountId)
+  // }, [state.accountId])
 
-  useEffect(() => {
-    localStorage.setItem('taAddress', state.taAddress)
-  }, [state.taAddress])
+  // useEffect(() => {
+  //   localStorage.setItem('taAddress', state.taAddress)
+  // }, [state.taAddress])
 
   const updateState = useCallback((newState: Partial<typeof state>) => {
     setState((prevState) => ({ ...prevState, ...newState }))
@@ -374,7 +377,7 @@ export function useSuave() {
       const tx = await populateSignL1MintApprovalTx(
         nonce,
         account,
-        state.accountId
+        state.accountId as string
       )
       const receipt = await sendTransactionMutation.mutateAsync(tx)
       console.log(receipt)
@@ -458,8 +461,12 @@ export function useSuave() {
 
       const hash = await walletClient.writeContract(request)
       console.log('Mint transaction sent:', hash)
+      updateState({ mintTxHash: hash })
 
-      const receipt = await publicClient.waitForTransactionReceipt({ hash })
+      const receipt = await publicClient.waitForTransactionReceipt({
+        hash,
+        timeout: 120000,
+      })
       console.log('Mint transaction confirmed:', receipt.transactionHash)
 
       const nftMintedEvent = receipt.logs.find(
@@ -473,16 +480,15 @@ export function useSuave() {
         console.log(
           `NFT minted to ${recipient} with token ID ${BigInt(tokenId)}`
         )
-        alert(`NFT minted successfully! Token ID: ${BigInt(tokenId)}`)
-        updateState({ mintTxHash: receipt.transactionHash })
+        updateState({
+          mintTxHash: receipt.transactionHash,
+          mintTxSuccess: true,
+        })
       } else {
         console.warn('NFTMintedEvent not found in transaction receipt')
       }
     } catch (error) {
       console.error('Error in mintNFTWithSignature:', error)
-      alert(
-        error instanceof Error ? error.message : 'An unknown error occurred'
-      )
     }
   }, [state])
 
