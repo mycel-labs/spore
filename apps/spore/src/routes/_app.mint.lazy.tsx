@@ -1,15 +1,10 @@
 import { createLazyFileRoute } from '@tanstack/react-router'
 import Button from '~/components/Button'
 import ProfileImg from '~/components/ProfileImg'
-import {
-  MintRequest,
-  useCreateAccount,
-  useMint,
-  Network,
-} from '@/hooks/useSuave'
 import { useState } from 'react'
 import { shortAddress } from '@/lib/wallets'
 import { useWallet } from '@/hooks/useWallet'
+import { useSuave } from '@/hooks/useSuave'
 import { isMobile } from '@/lib/utils'
 import { useEffect } from 'react'
 import { env } from '@/lib/env'
@@ -30,19 +25,22 @@ function Mint() {
     receiptError,
     receiptLoading,
     receiptSuccess,
-    hasMintedNFT,
+    // hasMintedNFT,
   } = useWallet()
+
+  const {
+    state,
+    sendCreateAccountCCR,
+    // sendSignL1MintApprovalFA,
+    mintNFTWithSignature,
+  } = useSuave()
 
   const [accountId, setAccountId] = useState<string>('')
   const [faAddress, setFaAddress] = useState<string>('')
   const [recipientAddress, setRecipientAddress] = useState<string>('')
-  const [mintTxHash, setMintTxHash] = useState<string>('')
   const [mintButtonStatus, setMintButtonStatus] = useState<
     'idle' | 'minting' | 'minted'
   >('idle')
-  const { mutateAsync: createAccount, isPending: createAccountPending } =
-    useCreateAccount()
-  const { mutateAsync: mint, isPending: mintPending } = useMint()
 
   const sepolia = { id: 11155111 }
   const hasBalanceSepolia =
@@ -59,11 +57,11 @@ function Mint() {
   }, [evmChainId])
 
   async function handleCreateTA() {
-    const account = await createAccount()
-    if (account) {
-      console.log('Account created:', account)
-      setAccountId(account.accountId)
-      setFaAddress(account.address)
+    await sendCreateAccountCCR()
+    if (state.account) {
+      console.log('Account created:', state.account)
+      setAccountId(state.accountId)
+      setFaAddress(state.taAddress)
     } else {
       console.error('Failed to create account')
     }
@@ -89,25 +87,16 @@ function Mint() {
   }
 
   async function handleMintNFT() {
-    if (!accountId) {
+    if (!state.account) {
       console.error('Invalid accountId')
       return
     }
-    const networks: Network[] = ['sepolia']
-    for (const network of networks) {
-      setMintButtonStatus('minting')
-      const body: MintRequest = {
-        recipient: recipientAddress,
-        accountId,
-        network,
-      }
-      try {
-        const resp = await mint(body)
-        setMintTxHash(resp.txHash)
-        console.log(`Minted NFT on ${network}:`, resp.txHash)
-      } catch (error) {
-        console.error(`Failed to mint NFT on ${network}:`, error)
-      }
+    setMintButtonStatus('minting')
+    try {
+      await mintNFTWithSignature()
+      console.log(`Minted NFT on sepolia:`, 'test')
+    } catch (error) {
+      console.error(`Failed to mint NFT on sepolia:`, error)
     }
     setMintButtonStatus('minted')
   }
@@ -186,8 +175,8 @@ function Mint() {
             <Button
               className="btn bg-secondary w-full h-14 mt-2"
               onClick={async () => await handleCreateTA()}
-              isLoading={createAccountPending}
-              success={!!accountId}
+              isLoading={state.waitingForReceipt}
+              success={!!state.account}
             >
               Create
             </Button>
@@ -310,14 +299,14 @@ function Mint() {
                 !recipientAddress ||
                 !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
               }
-              isLoading={mintPending}
-              success={!!mintTxHash}
+              isLoading={state.waitingForReceipt}
+              success={!!state.mintTxHash}
             >
               Mint
             </Button>
             {mintButtonStatus !== 'idle' && (
               <div className="text-sm p-4 pt-6 pb-0">
-                {!mintTxHash && (
+                {!state.mintTxHash && (
                   <p>
                     <span role="img" aria-label="waiting">
                       ⏳
@@ -325,7 +314,7 @@ function Mint() {
                     Minting...
                   </p>
                 )}
-                {mintTxHash && (
+                {state.mintTxHash && (
                   <div className="flex flex-col md:flex-row md:m-4 md:mb-6 justify-center items-center">
                     <div className="md:w-1/3 w-1/2">
                       <ProfileImg rank={1} />
@@ -340,16 +329,16 @@ function Mint() {
                 <p>
                   <div>
                     <span>Sepolia: </span>
-                    {mintTxHash && (
+                    {state.mintTxHash && (
                       <a
                         className="text-blue-500 underline"
-                        href={`https://sepolia.etherscan.io/tx/${mintTxHash}`}
+                        href={`https://sepolia.etherscan.io/tx/${state.mintTxHash}`}
                         target="_blank"
                         rel="noreferrer"
                       >
                         {isMobile()
-                          ? shortAddress(mintTxHash, 8, 10)
-                          : shortAddress(mintTxHash, 10, 16)}
+                          ? shortAddress(state.mintTxHash, 8, 10)
+                          : shortAddress(state.mintTxHash, 10, 16)}
                       </a>
                     )}
                   </div>
@@ -404,8 +393,8 @@ function Mint() {
         ) : (
           <div>
             {showNetworkMask && NetworkMask}
-            {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage}
-            {/* {ReadyToMintMessage} */}
+            {/* {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage} */}
+            {ReadyToMintMessage}
           </div>
         )}
       </div>

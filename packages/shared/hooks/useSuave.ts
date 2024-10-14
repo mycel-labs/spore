@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from 'react'
-import './App.css'
 import {
   http,
   createPublicClient,
@@ -62,7 +61,7 @@ function extractSignatureFromSignedMessage(signedMessage: Hex): {
   return { r, s, v }
 }
 
-export function useSuaveNFT() {
+export function useSuave() {
   // State management
   const [state, setState] = useState({
     ethereum: null as any,
@@ -72,6 +71,7 @@ export function useSuaveNFT() {
     accountId: localStorage.getItem('accountId') || '',
     taAddress: (localStorage.getItem('taAddress') as Address) || zeroAddress,
     waitingForReceipt: false,
+    mintTxHash: null as Hex | null,
     signedMessage: null as Hex | null,
     isSepoliaNetwork: false,
     chainId: null as string | null,
@@ -474,6 +474,7 @@ export function useSuaveNFT() {
           `NFT minted to ${recipient} with token ID ${BigInt(tokenId)}`
         )
         alert(`NFT minted successfully! Token ID: ${BigInt(tokenId)}`)
+        updateState({ mintTxHash: receipt.transactionHash })
       } else {
         console.warn('NFTMintedEvent not found in transaction receipt')
       }

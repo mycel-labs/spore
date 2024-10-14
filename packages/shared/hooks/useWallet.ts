@@ -277,7 +277,7 @@ export const useWallet = () => {
 
   // mint
   // TODO: use env variable
-  const contractAddress = '0x1Dc168B47bE84d64C493b61120CB03167650Df2A'
+  const contractAddress = '0xF1d39D3dB7364fe6d38560066685Fe8C0C64630A'
   const contractABI = [
     {
       constant: true,
