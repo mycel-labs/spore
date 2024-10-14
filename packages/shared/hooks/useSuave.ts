@@ -131,24 +131,23 @@ export function useSuaveNFT() {
     setState((prevState) => ({ ...prevState, ...newState }))
   }, [])
 
+  const { data: chainId } = useQuery({
+    queryKey: ['chainId'],
+    queryFn: async () => {
+      if (!state.ethereum) return null
+      return await state.ethereum.request({ method: 'eth_chainId' })
+    },
+    enabled: !!state.ethereum,
+  })
+
   useEffect(() => {
-    if (state.ethereum) {
-      const handleChainChanged = (chainId: string) => {
-        updateState({
-          isSepoliaNetwork: chainId === `0x${sepolia.id.toString(16)}`,
-          chainId: chainId,
-        })
-      }
-
-      state.ethereum.on('chainChanged', handleChainChanged)
-
-      state.ethereum.request({ method: 'eth_chainId' }).then(handleChainChanged)
-
-      return () => {
-        state.ethereum.removeListener('chainChanged', handleChainChanged)
-      }
+    if (chainId) {
+      updateState({
+        isSepoliaNetwork: chainId === `0x${sepolia.id.toString(16)}`,
+        chainId: chainId,
+      })
     }
-  }, [state.ethereum, updateState])
+  }, [chainId, updateState])
 
   const switchToSepolia = useCallback(async () => {
     try {
@@ -180,8 +179,8 @@ export function useSuaveNFT() {
     []
   )
 
-  const sendTransaction = useCallback(
-    async (tx: TransactionRequestSuave) => {
+  const sendTransactionMutation = useMutation({
+    mutationFn: async (tx: TransactionRequestSuave) => {
       const { account, suaveProvider } = state
       if (!account || !suaveProvider) {
         throw new Error('Account or provider not available')
@@ -204,8 +203,14 @@ export function useSuaveNFT() {
 
       return receipt
     },
-    [state, updateState]
-  )
+    onSuccess: () => {
+      updateState({ waitingForReceipt: false })
+    },
+    onError: (error) => {
+      console.error('Transaction error:', error)
+      updateState({ waitingForReceipt: false })
+    },
+  })
 
   const populateCreateAndApproveAccountTx = useCallback(
     async (nonce: number) => {
@@ -281,7 +286,7 @@ export function useSuaveNFT() {
       })
 
       const tx = await populateCreateAndApproveAccountTx(nonce)
-      const receipt = await sendTransaction(tx)
+      const receipt = await sendTransactionMutation.mutateAsync(tx)
 
       if (receipt.status === 'success') {
         const eventTopic = keccak256(toBytes('AddressApproved(string,address)'))
@@ -347,7 +352,12 @@ export function useSuaveNFT() {
     } finally {
       updateState({ waitingForReceipt: false })
     }
-  }, [state, populateCreateAndApproveAccountTx, sendTransaction, updateState])
+  }, [
+    state,
+    populateCreateAndApproveAccountTx,
+    sendTransactionMutation,
+    updateState,
+  ])
 
   const sendSignL1MintApprovalFA = useCallback(async () => {
     try {
@@ -366,7 +376,7 @@ export function useSuaveNFT() {
         account,
         state.accountId
       )
-      const receipt = await sendTransaction(tx)
+      const receipt = await sendTransactionMutation.mutateAsync(tx)
       console.log(receipt)
 
       if (receipt.status === 'success') {
@@ -399,7 +409,12 @@ export function useSuaveNFT() {
     } finally {
       updateState({ waitingForReceipt: false })
     }
-  }, [state, populateSignL1MintApprovalTx, sendTransaction, updateState])
+  }, [
+    state,
+    populateSignL1MintApprovalTx,
+    sendTransactionMutation,
+    updateState,
+  ])
 
   const mintNFTWithSignature = useCallback(async () => {
     try {
@@ -469,6 +484,22 @@ export function useSuaveNFT() {
       )
     }
   }, [state])
+
+  const { data: accountData } = useQuery({
+    queryKey: ['account'],
+    queryFn: async () => {
+      if (!state.ethereum) return null
+      const accounts = await state.ethereum.request({ method: 'eth_accounts' })
+      return accounts.length > 0 ? (accounts[0] as Hex) : null
+    },
+    enabled: !!state.ethereum,
+  })
+
+  useEffect(() => {
+    if (accountData) {
+      updateState({ account: accountData })
+    }
+  }, [accountData, updateState])
 
   return {
     state,
