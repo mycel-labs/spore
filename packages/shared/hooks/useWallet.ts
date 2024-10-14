@@ -354,6 +354,5 @@ export const useWallet = () => {
     mycelAccount: mycelAccounts?.[0],
     // mint
     hasMintedNFT,
-    getAddressBalance,
   }
 }
