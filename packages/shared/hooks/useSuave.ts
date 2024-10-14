@@ -114,7 +114,10 @@ export function useSuave() {
               })
               .then((result: any) => {
                 console.log('result', result)
-                if (result[0].parentCapability === 'eth_accounts') {
+                if (
+                  result.length > 0 &&
+                  result[0].parentCapability === 'eth_accounts'
+                ) {
                   setState((prevState) => ({ ...prevState, connected: true }))
                 }
               })

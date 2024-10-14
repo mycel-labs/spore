@@ -315,14 +315,6 @@ export const useWallet = () => {
     )
   }, [nftBalance])
 
-  const getAddressBalance = useCallback((address: EvmAddress) => {
-    const { data, isError, isLoading } = useBalance({
-      address,
-    })
-
-    return { balance: data?.value, isError, isLoading }
-  }, [])
-
   return {
     // Wallet connection
     isConnected: isConnectedWagmi,
