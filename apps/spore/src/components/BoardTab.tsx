@@ -28,6 +28,7 @@ export default function BoardTab() {
   const {
     data: individualLeaderBoardData,
     isLoading: isIndividualLeaderBoardLoading,
+    error: individualLeaderBoardError,
   } = useGetIndividualLeaderBoard()
 
   const errorLB: LeaderBoard[] = [
@@ -38,7 +39,9 @@ export default function BoardTab() {
   ]
 
   const lb: LeaderBoard[] =
-    !isIndividualLeaderBoardLoading && individualLeaderBoardData
+    !isIndividualLeaderBoardLoading &&
+    individualLeaderBoardData &&
+    !individualLeaderBoardError
       ? individualLeaderBoardData
       : errorLB
 
