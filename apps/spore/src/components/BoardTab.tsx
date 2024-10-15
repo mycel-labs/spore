@@ -75,7 +75,11 @@ const PlayerTabContent = ({
   })
   return (
     <>
-      <h2 className="centerline font-bold text-3xl py-4">Leaderboard</h2>
+      {isMobile() ? (
+        <h2 className="centerline font-bold text-2xl py-4">Leaderboard</h2>
+      ) : (
+        <h2 className="centerline font-bold text-3xl py-4">Leaderboard</h2>
+      )}
       {isLoading ? (
         <div className="m-8">
           <LoaderCircle />
