@@ -34,7 +34,6 @@ function Mint() {
     mintNFTWithSignature,
   } = useSuave()
 
-  const [recipientAddress] = useState<string>(evmAddressWagmi as `0x${string}`)
   const [mintButtonStatus, setMintButtonStatus] = useState<
     'idle' | 'minting' | 'minted'
   >('idle')
@@ -313,26 +312,25 @@ function Mint() {
             </p>
             <p className="text-md font-bold px-8 pb-2">
               {isMobile()
-                ? shortAddress(recipientAddress, 6)
-                : shortAddress(recipientAddress, 16)}
+                ? shortAddress(evmAddressWagmi as `0x${string}`, 6)
+                : shortAddress(evmAddressWagmi as `0x${string}`, 16)}
             </p>
-            {!/^0x[a-fA-F0-9]{40}$/.test(recipientAddress) &&
-              recipientAddress && (
-                <p className="text-red-500 text-right text-sm p-2">
-                  <span role="img" aria-label="success">
-                    ❌
-                  </span>{' '}
-                  Invalid Ethereum address format
-                </p>
-              )}
+            {!/^0x[a-fA-F0-9]{40}$/.test(evmAddressWagmi as `0x${string}`) && (
+              <p className="text-red-500 text-right text-sm p-2">
+                <span role="img" aria-label="success">
+                  ❌
+                </span>{' '}
+                Invalid Ethereum address format
+              </p>
+            )}
             <Button
               className="btn bg-secondary w-full h-14 mt-2"
               onClick={async () => await handleMintNFT()}
               disabled={
                 !state.taAddress ||
                 !state.signedMessage ||
-                !recipientAddress ||
-                !/^0x[a-fA-F0-9]{40}$/.test(recipientAddress)
+                !evmAddressWagmi ||
+                !/^0x[a-fA-F0-9]{40}$/.test(evmAddressWagmi as `0x${string}`)
               }
               isLoading={
                 !!state.signedMessage &&
