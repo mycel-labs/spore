@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { shortAddress } from '@/lib/wallets'
 import { useWallet } from '@/hooks/useWallet'
 import { useSuave } from '@/hooks/useSuave'
+import { toast } from '@/components/ui/sonner'
 import { isMobile } from '@/lib/utils'
 import { useEffect } from 'react'
 
@@ -86,6 +87,9 @@ function Mint() {
   async function handleMintNFT() {
     if (!state.accountId) {
       console.error('Invalid accountId')
+      toast(
+        '⚠️ Failed to get transferable account ID, please reload the page and try again from the start.'
+      )
       return
     }
     setMintButtonStatus('minting')
@@ -93,6 +97,10 @@ function Mint() {
       await mintNFTWithSignature()
     } catch (error) {
       console.error(`Failed to mint NFT on sepolia:`, error)
+      setMintButtonStatus('idle')
+      toast(
+        '⚠️ Failed to mint NFT, please reload the page and try again from the start.'
+      )
     }
     setMintButtonStatus('minted')
   }
