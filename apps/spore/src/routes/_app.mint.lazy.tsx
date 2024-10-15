@@ -7,7 +7,6 @@ import { useWallet } from '@/hooks/useWallet'
 import { useSuave } from '@/hooks/useSuave'
 import { isMobile } from '@/lib/utils'
 import { useEffect } from 'react'
-import { env } from '@/lib/env'
 
 export const Route = createLazyFileRoute('/_app/mint')({
   component: Mint,
@@ -35,9 +34,7 @@ function Mint() {
     mintNFTWithSignature,
   } = useSuave()
 
-  const [recipientAddress, setRecipientAddress] = useState<string>(
-    evmAddressWagmi as `0x${string}`
-  )
+  const [recipientAddress] = useState<string>(evmAddressWagmi as `0x${string}`)
   const [mintButtonStatus, setMintButtonStatus] = useState<
     'idle' | 'minting' | 'minted'
   >('idle')
@@ -395,54 +392,18 @@ function Mint() {
     </>
   )
 
-  const MaintenanceMessage = (
-    <div className="p-4">
-      <div className="text-center text-2xl font-extrabold m-4">
-        <p className="pb-4">🚧 Temporary Maintenance 🚧</p>
-        <p className="text-xl mt-4">
-          We&apos;re currently upgrading this feature to serve you better.
-        </p>
-        <p className="text-xl mt-4">Thank you for your patience!</p>
-        <p className="text-base mt-4">
-          For the latest updates, follow us on{' '}
-          <a
-            href="https://x.com/mycelmycel"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline"
-          >
-            X (Twitter)
-          </a>{' '}
-          or join our{' '}
-          <a
-            href="https://discord.com/invite/mycelland"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline"
-          >
-            Discord
-          </a>{' '}
-          community.
-        </p>
-      </div>
+  const MainComponent = (
+    <div>
+      {showNetworkMask && NetworkMask}
+      {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage}
     </div>
   )
-
-  console.log(`env.isMaintenance: ${env.isMaintenance}`)
 
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl relative">
         <h2 className="text-center text-3xl font-bold pt-8 centerline">Mint</h2>
-        {env.isMaintenance ? (
-          MaintenanceMessage
-        ) : (
-          <div>
-            {showNetworkMask && NetworkMask}
-            {hasMintedNFT ? MintedNFTMessage : ReadyToMintMessage}
-            {/* {ReadyToMintMessage} */}
-          </div>
-        )}
+        {MainComponent}
       </div>
     </div>
   )
