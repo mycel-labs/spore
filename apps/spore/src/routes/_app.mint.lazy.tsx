@@ -428,6 +428,8 @@ function Mint() {
     </div>
   )
 
+  console.log(env.isMaintenance)
+
   return (
     <div className="py-8 space-y-8">
       <div className="bg-light overlay-dot-ll rounded-xl relative">
