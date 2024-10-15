@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { useStore } from '../store/index'
 import {
+  useBalance,
   useBalance as useBalanceWagmi,
   useConnect as useConnectWagmi,
   useDisconnect as useDisconnectWagmi,
@@ -277,7 +278,7 @@ export const useWallet = () => {
 
   // mint
   // TODO: use env variable
-  const contractAddress = '0x1Dc168B47bE84d64C493b61120CB03167650Df2A'
+  const contractAddress = '0x843f17358072d0ce2FB387Ef376dc984673f23Ee'
   const contractABI = [
     {
       constant: true,
