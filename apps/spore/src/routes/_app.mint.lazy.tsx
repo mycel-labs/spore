@@ -197,6 +197,7 @@ function Mint() {
               onClick={async () => await handleCreateTA()}
               isLoading={!state.accountId && state.waitingForReceipt}
               success={!!state.accountId}
+              disabled={!hasBalanceToliman}
             >
               Create
             </Button>
