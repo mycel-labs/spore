@@ -81,6 +81,8 @@ export function useSuave() {
     balance: null as bigint | null,
   })
 
+  const [balanceUpdateTrigger, setBalanceUpdateTrigger] = useState(0)
+
   useEffect(() => {
     if (!state.suaveProvider) {
       setState((prevState) => ({
@@ -127,16 +129,26 @@ export function useSuave() {
   }, [state.ethereum, state.connected])
 
   useEffect(() => {
-    if (state.suaveProvider && state.account) {
-      state.suaveProvider
-        .getBalance({
-          address: state.account,
-        })
-        .then((balance) => {
+    const fetchBalance = async () => {
+      if (state.suaveProvider && state.account) {
+        try {
+          const balance = await state.suaveProvider.getBalance({
+            address: state.account,
+          })
+          console.log(`balance: ${balance}`)
           setState((prevState) => ({ ...prevState, balance }))
-        })
+        } catch (error) {
+          console.error('Failed to fetch balance:', error)
+        }
+      }
     }
-  }, [state.suaveProvider, state.account])
+
+    fetchBalance()
+  }, [state.suaveProvider, state.account, balanceUpdateTrigger])
+
+  const refreshBalance = useCallback(() => {
+    setBalanceUpdateTrigger((prev) => prev + 1)
+  }, [])
 
   // useEffect(() => {
   //   localStorage.setItem('accountId', state.accountId)
@@ -559,5 +571,6 @@ export function useSuave() {
     sendCreateAccountCCR,
     sendSignL1MintApprovalFA,
     mintNFTWithSignature,
+    refreshBalance,
   }
 }

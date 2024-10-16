@@ -33,6 +33,7 @@ function Mint() {
     sendCreateAccountCCR,
     sendSignL1MintApprovalFA,
     mintNFTWithSignature,
+    refreshBalance,
   } = useSuave()
 
   const [mintButtonStatus, setMintButtonStatus] = useState<
@@ -60,6 +61,25 @@ function Mint() {
       setShowNetworkMask(true)
     }
   }, [evmChainId])
+
+  async function handleGetTEETH() {
+    window.open('https://faucet.toliman.suave.flashbots.net/', '_blank')
+
+    const intervalId = setInterval(() => {
+      refreshBalance()
+    }, 5000)
+
+    setTimeout(() => {
+      clearInterval(intervalId)
+    }, 300000)
+  }
+
+  async function handleGetSepoliaETH() {
+    window.open(
+      'https://cloud.google.com/application/web3/faucet/ethereum/sepolia',
+      '_blank'
+    )
+  }
 
   async function handleCreateTA() {
     await sendCreateAccountCCR()
@@ -177,17 +197,15 @@ function Mint() {
           <li>
             Create Transferable Account (TA)
             {!hasBalanceToliman ? (
-              <div className="text-sm m-4 font-bold">
+              <div className="text-sm m-4 font-bold border border-dark border-dashed rounded-md p-4">
                 <p>⚠️ Your balance on Toliman Testnet is quite low.</p>
-                <span>You can get TEETH from : </span>
-                <a
-                  className="text-blue-500 underline"
-                  href="https://faucet.toliman.suave.flashbots.net/"
-                  target="_blank"
-                  rel="noreferrer"
+                <p>You can get TEETH from : </p>
+                <Button
+                  className="btn bg-secondary w-full h-14 my-2"
+                  onClick={() => handleGetTEETH()}
                 >
                   🔗 SUAVE Toliman TEEth Faucet
-                </a>
+                </Button>
               </div>
             ) : (
               ''
@@ -197,6 +215,7 @@ function Mint() {
               onClick={async () => await handleCreateTA()}
               isLoading={!state.accountId && state.waitingForReceipt}
               success={!!state.accountId}
+              disabled={!hasBalanceToliman}
             >
               Create
             </Button>
@@ -214,17 +233,15 @@ function Mint() {
           <li>
             Deposit Sepolia ETH to TA
             {!hasBalanceSepolia && evmChainId === sepolia.id ? (
-              <div className="text-sm m-4 font-bold">
+              <div className="text-sm m-4 font-bold border border-dark border-dashed rounded-md p-4">
                 <p>⚠️ Your balance is quite low.</p>
                 <span>You can get sepolia ETH from : </span>
-                <a
-                  className="text-blue-500 underline"
-                  href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
-                  target="_blank"
-                  rel="noreferrer"
+                <Button
+                  className="btn bg-secondary w-full h-14 my-2"
+                  onClick={() => handleGetSepoliaETH()}
                 >
                   🔗 Google Cloud Faucet
-                </a>
+                </Button>
               </div>
             ) : (
               ''
@@ -232,7 +249,7 @@ function Mint() {
             <Button
               className="btn bg-secondary w-full h-14 mt-2"
               onClick={async () => await handleDepositETH()}
-              disabled={!state.taAddress}
+              disabled={!state.taAddress || !hasBalanceSepolia}
               isLoading={receiptLoading}
               success={receiptSuccess}
             >
